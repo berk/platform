@@ -1,0 +1,49 @@
+<style>
+  .app_fields {
+    margin-top:20px;
+    font-size:12px;
+    border: 1px dotted #ccc; 
+    padding:10px; 
+    background: #F0F2F7;
+    margin-bottom:20px; 
+    margin-left:10px;
+    margin-right:10px; 
+  }
+
+  .app_fields th {
+    padding-top:5px;
+    padding-left:10px;
+    padding-right:15px;
+    white-space: nowrap;
+  }
+
+  .app_fields td {
+    padding-top:5px;
+    padding-right:15px;
+  }
+  
+  .comments {
+    color: #666;
+    font-size: 10px;
+  }
+</style>
+
+<div class="module page_title lengthy">
+  <div class="inner">
+    <div class="hd">
+      <h1><%= tr('Editing "{app_name}"', 'API', :app_name => @app.name) %></h1>
+    </div>
+  </div>
+</div>
+
+<div class="app_fields">
+	<% form_for(@app, :url => {:action => :update, :id => @app.id}, :html => {:method => :post, :multipart=>true}) do |form| %>
+	  <%= render :partial=>'form', :locals=>{:form=>form} %>
+	  
+	  <div style="text-align:center; padding:15px;">
+	    <%= submit_tag trl('Save', 'Client application action label'), :class=>'button super blue large' %>
+	    <%=tr("or")%> <%=link_to(tr("Cancel"), :action => :index, :id => @app.id)%>
+	  </div>
+	<% end %>
+</div>
+

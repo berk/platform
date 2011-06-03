@@ -1,0 +1,143 @@
+<style>
+  .apps_header {
+    padding:10px;
+    font-size:14px;
+    border: 1px dotted #ccc;
+    background:#F0F2F7;
+    color:#666;
+		font-weight:bold;
+  }
+  
+  .apps_body {
+  	margin-top:5px;
+    padding:0px;
+    font-size:14px;
+    color:#666;
+  }
+	
+  .cat_item {
+    padding-left:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+  }
+  
+  .cat_item_selected {
+    background:#406790;
+    color:white;
+  }
+
+  .cat_item_selected a {
+    color:white;
+  }	
+</style>
+
+<div class="module page_title lengthy">
+  <div class="inner">
+    <div class="hd">
+      <span style="float:right; padding-top:10px;">
+         <%=tr("Have an idea for an app?")%> <%=link_to(tr('Become a developer!', 'Client application action label'), {:controller => "/developers/apps", :action=>:index}) %>
+      </span>
+    	
+      <h1><%= tr('Application Directory', 'Client application section title') %></h1>
+    </div>
+  </div>
+</div>
+
+
+<div class="module page_title lengthy">
+  <div class="inner">
+		<table style="width:100%">
+			<tr>
+				<td>
+					<% form_tag() do %>
+					 <%=text_field_tag(:apps_search, "", :style => "width:195px", :label => "Search Apps")%>
+					<% end %>
+					<div style="border: 1px dotted #ccc; padding-top:10px; margin-top:10px; margin-bottom:15px; background: #f9f8f7; vertical-align:top; width:200px;">
+	          <% @categories.each do |cat| %>
+	            <% if cat == @category %>
+	                <div class="cat_item cat_item_selected">
+	            <% else %>
+	                <div class="cat_item">    
+	            <% end %>
+	              <%=link_to(cat, {:cat=>cat}) %>
+	            </div>
+	          <% end %>						
+					</div>
+				</td>
+				<td>
+						<div style="padding-bottom:20px; ">
+						  <div class="apps_header">
+						    <span style="float:right; font-size:12px;">
+						      Page 1 of 1 &nbsp;
+						      <%=link_to_function('<<', "", :class=>'button super blue small') %>
+						      <%=link_to_function('>>', "", :class=>'button super blue small') %>
+						    </span>
+						    Featured Applications
+						  </div>
+						
+						  <div class="apps_body">
+						  	<table style="width:100%;">
+						  		<tr>
+		                <% @featured_apps.each do |app| %>
+										  <td style="width:33%;">
+		                   <div style="height:100px; border: 1px dotted #ccc; padding:5px; margin:3px;">
+		                      <span style="float:right;padding-left:10px;">
+		                         <%= image_tag(app.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>
+		                      </span> 
+		                      <span style="font-size:14px;">
+		                        <%= link_to(h(app.name), {:action => :view, :id => app.id}) %><br>
+		                      </span>
+		                      <span style="font-size:11px;">
+		                        <%= app.description %>
+		                      </span>
+		                   </div>
+											 </td> 
+		                <% end %>
+						  		</tr>
+						  	</table>
+						  </div>  
+						</div>
+						
+						<div style="padding-bottom:20px;">
+						  <div class="apps_header">
+						    <span style="float:right; font-size:12px;">
+						      Page 1 of 1 &nbsp;
+						      <%=link_to_function('<<', "", :class=>'button super blue small') %>
+						      <%=link_to_function('>>', "", :class=>'button super blue small') %>
+						    </span>
+						    Applications You May Like
+						  </div>
+						
+						  <div class="apps_body">
+                <table style="width:100%;">
+                  <tr>
+                    <% @apps.each_with_index do |app, index| %>
+                      <td style="width:20%;text-align:center">
+                       <div style="height:130px; border: 1px dotted #ccc; padding:5px; margin:3px;">
+		                      <div style="font-size:12px; padding-bottom:10px;">
+		                        <%= link_to(h(app.short_name), {:action => :view, :id => app.id}) %><br>
+		                      </div>
+		                      <div style="">
+		                         <%= image_tag(app.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>
+		                      </div> 
+		                      <div style="font-size:11px; padding-top:10px;">
+		                       <%= app_rank_tag(app, 95) %>
+		                      </div>
+                       </div>
+                       </td> 
+											 <% if (index+1) % 5 == 0 %>
+											   </tr><tr>
+											 <% end %>
+                    <% end %>
+                  </tr>
+                </table>
+						  </div>  
+						</div>			
+				</td>
+			</tr>
+		</table>
+  </div>
+</div>	
+

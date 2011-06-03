@@ -1,0 +1,195 @@
+<table style="width:100%;margin-bottom:20px;">
+	<tr>
+		<td colspan="3">
+		  <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;">
+			   <%=tr('Basic Information', 'Client application section') %>
+			</div>
+		</td>
+	</tr>	
+	<tr>
+		<th>
+			<%=tr('Application Name:', 'Client application field label')%>
+		</td>
+		<td>
+			<%=form.text_field :name, :class=>'xxlong_input'%>
+		</td>	
+		<td class="comments">
+			<%=tr("Name of your application.", 'Client application field comment')%>
+		</td>	
+	</tr>
+  <tr>
+    <th>
+      <%=tr('Description:', 'Client application field label')%>
+    </td>
+    <td>
+      <%=form.text_area :description, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    	<%=tr("Description of your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Icon:', 'Client application field label')%>
+    </th>
+    <td>
+      <div id="icon_field" style="display:none">
+        <%= file_field_tag "new_icon", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_icon' %>
+      </div>
+      <div id="icon_preview"> 
+	    	<span style="float:right; font-size:10px;">
+	    		<%=link_to_function(tr("Change your icon", 'Client application field action'), "$('icon_preview').hide();$('icon_field').show();")%>
+	    	</span>
+	      <%=image_tag(@app.icon_url, :style => "width:16px;height:16px;")%>
+			</div>	
+    </td> 
+    <td class="comments">
+      <%=tr("Appears next to your app name throughout Geni (16x16)", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Logo:', 'Client application field label')%>
+    </th>
+    <td>
+    	<div id="logo_field" style="display:none">
+    		<%= file_field_tag "new_logo", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_logo' %>
+    	</div>
+			<div id="logo_preview">	
+	      <span style="float:right; font-size:10px;">
+	        <%=link_to_function(tr("Change your logo", 'Client application field action'), "$('logo_preview').hide();$('logo_field').show();")%>
+	      </span>
+	      <%=image_tag(@app.logo_url, :style => "width:75px;height:75px;")%>
+			</div>
+    </td> 
+    <td class="comments">
+      <%=tr("Appears in the app directory (75x75)", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Language:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=select_tag("client_application[locale]", options_for_select(@languages, @app.locale || Tr8n::Config.default_locale)) %>
+    </td> 
+    <td class="comments">
+      <%=tr("The native language of your app.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Contact Email:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :contact_email, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("The email address where Geni can contact you or your company", 'Client application field comment')%>
+    </td> 
+  </tr>
+
+	<tr>
+		<th>
+			<%=tr('Site URL:', 'Client application field label')%>
+		</th>
+		<td>
+			<%=form.text_field :url, :class=>'xxlong_input'%>
+		</td>	
+    <td class="comments">
+      <%=tr("Your site or application's URL", 'Client application field comment')%>
+    </td> 
+	</tr>
+  <tr>
+    <th>
+      <%=tr('Support URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :support_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Privacy Policy URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :privacy_policy_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    	<%=tr("All apps must have and display a Privacy Policy.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Terms of Service URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :terms_of_service_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    	<%=tr("The URL to your app's Terms of Service.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <td colspan="3">
+      <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;margin-top:10px;">
+         <%=tr('Geni Integration', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Callback URL:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :callback_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We'll direct users to this URL when they authorize your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	 
+<% if Registry.platform.embedded_apps_enabled? %>
+  <tr>
+    <th>
+      <%=tr('Canvas Page:','Client application field label')%>
+    </th>
+    <td>
+      http://www.geni.com/apps/<%=form.text_field :canvas_name, :class=>'long_input'%>/
+    </td> 
+    <td class="comments">
+      <%=tr("The base URL of your app on Geni", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Canvas URL:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :canvas_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Geni pulls the content for your app's canvas pages from this base URL.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('IFrame Size:','Client application field label')%>
+    </th>
+    <td>
+        <label for="option1" style="vertical-align: middle"><%=form.radio_button :auto_resize, false, :id => "option1", :style=>"vertical-align: top;" %> Show scrollbars</label>
+        <label for="option2" style="vertical-align: middle"><%=form.radio_button :auto_resize, true, :id => "option2", :style=>"vertical-align: top;" %> Auto-resize</label>
+    </td> 
+    <td class="comments">
+      <%=tr("Choose \"Auto-resize\" if you are going to make the iFrame grow to the height of your app's content", 'Client application field comment')%>
+    </td> 
+  </tr>
+<% end %>	
+</table>

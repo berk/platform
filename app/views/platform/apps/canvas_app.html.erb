@@ -1,0 +1,9 @@
+<% if @app %>
+  <div style="margin-bottom:10px;">
+    <iframe src="<%=@app.canvas_url%>" scrolling="<%=@app.auto_resize? ? 'no' : 'auto'%>" style="border:0px;width:100%;height:640px;"></iframe>
+	</div>
+<% else %>
+	<div style="font-size:18px; text-align:center; padding-bottom:20px;">
+		Invalid application name. This application does not exist.
+	</div>
+<% end %>

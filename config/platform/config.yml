@@ -1,0 +1,84 @@
+#############################################################################
+# Platform Configuration
+#
+# Default settings for all environments
+# 
+# You can overload any feature for any environment by changing the 
+# environment settings at the bottom of the file. 
+#
+# Alternatively, you can overload any of the methods of Platform::Config
+#############################################################################
+
+defaults: &defaults
+  enable_platform:              true     
+  enable_app_directory:         true
+  enable_embedded_applications: true
+  
+  #############################################################################
+  # Platform best run with caching enabled
+  # You can configure cache adapter and store parameters by providing the
+  # the name of your class implementation and the store settings. For example:
+  #
+  #
+  # cache_adapter:  ActiveSupport::Cache
+  # cache_store:    memory_store
+  # cache_store:    file_store
+  # cache_store:    drb_store
+  # cache_store:    [mem_cache_store, 'localhost:11211']
+  #
+  # Alternatively you can provide your own implementation of cache by setting
+  # the adapter to your own class.
+  #############################################################################
+  caching:
+    enabled:                  true
+    adapter:                  Tr8n::GeniCacheAdapter
+    version:                  1 # you can change the version to invalidate the cache
+      
+  #############################################################################
+  # By default, Platform will use its own logger. If you set it to false,
+  # it will use default Rails logger.
+  #############################################################################
+  logger:
+    enabled:                  true
+    log_path:                 log/platform.log      # location of the log file
+      
+  #############################################################################
+  # Site Integration Settings
+  #############################################################################
+  site_info:
+    title:                    Geni
+    contact_email:            platform@geni.com
+    default_url:              /home
+    layout:                   default
+    admin_layout:             admin
+    user_info:
+      enabled:                true
+      current_user_method:    current_user.user
+      class_name:             User
+      methods:
+        id:                   id
+        name:                 name
+        link:                 path
+        mugshot:              square_mugshot_url
+        admin:                superuser?
+        guest:                guest?
+        locale:               language
+  
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+  
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+production:
+  <<: *defaults
