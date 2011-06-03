@@ -31,13 +31,17 @@
   .cat_item_selected a {
     color:white;
   }	
+	
+	td {
+		vertical-align:top;
+	}
 </style>
 
 <div class="module page_title lengthy">
   <div class="inner">
     <div class="hd">
       <span style="float:right; padding-top:10px;">
-         <%=tr("Have an idea for an app?")%> <%=link_to(tr('Become a developer!', 'Client application action label'), {:controller => "/developers/apps", :action=>:index}) %>
+         <%=tr("Have an idea for an app?")%> <%=link_to(tr('Become a developer!', 'Client application action label'), {:controller => "/platform/developers/apps", :action=>:index}) %>
       </span>
     	
       <h1><%= tr('Application Directory', 'Client application section title') %></h1>
@@ -50,7 +54,7 @@
   <div class="inner">
 		<table style="width:100%">
 			<tr>
-				<td>
+				<td style="width:220px;">
 					<% form_tag() do %>
 					 <%=text_field_tag(:apps_search, "", :style => "width:195px", :label => "Search Apps")%>
 					<% end %>

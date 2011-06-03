@@ -206,7 +206,7 @@ class Platform::Application < ActiveRecord::Base
   
   def app_url
     return url if canvas_name.blank?      
-    "http://#{SITE}/apps/#{canvas_name}"
+    "http://#{SITE}/platform/apps/#{canvas_name}"
   end
   
   def short_name
