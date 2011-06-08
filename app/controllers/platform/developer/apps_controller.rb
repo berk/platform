@@ -1,5 +1,4 @@
 class Platform::Developer::AppsController < Platform::Developer::BaseController
-  before_filter :validate_developer
 
   def index
     @app = Platform::Application.find(params[:id]) if params[:id]

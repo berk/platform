@@ -1,5 +1,7 @@
 class Platform::Developer::RegistrationController < Platform::Developer::BaseController
 
+  skip_filter :validate_developer
+
   def index
         
   end

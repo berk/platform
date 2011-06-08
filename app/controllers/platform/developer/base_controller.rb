@@ -23,6 +23,8 @@
 
 class Platform::Developer::BaseController < Platform::BaseController
 
+  before_filter :validate_developer
+
 private
 
   def platform_developer_tabs
