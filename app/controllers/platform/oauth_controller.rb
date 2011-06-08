@@ -204,7 +204,7 @@ private
 
   def render_response(response_params)
     response_params[:state] = request_param(:state) if request_param(:state)
-    return render(:json => response_params) if request.json?
+#    return render(:json => response_params) if request.json?
     
     if redirect_url.blank?
       @error = trl(opts[:error_description])
