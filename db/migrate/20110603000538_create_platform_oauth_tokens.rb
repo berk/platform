@@ -9,6 +9,8 @@ class CreatePlatformOauthTokens < ActiveRecord::Migration
       t.string    :secret,          :limit => 50
       t.string    :verifier,        :limit => 20
       t.string    :callback_url
+      t.string    :scope
+      t.timestamp :valid_to
       t.timestamp :authorized_at, :invalidated_at
       t.timestamps
     end

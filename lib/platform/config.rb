@@ -24,7 +24,12 @@ class Platform::Config
 
   def self.models
     [
-      Platform::Developer, Platform::Application
+      Platform::ApplicationDeveloper, Platform::ApplicationMetric,
+      Platform::ApplicationPermission, Platform::ApplicationUser,
+      Platform::CategoryItem, Platform::Category, 
+      Platform::ForumMessage, Platform::ForumTopic,
+      Platform::Permission, Platform::Rating,
+      Platform::Developer, Platform::Application, 
     ]
   end
   
@@ -34,7 +39,60 @@ class Platform::Config
       cls.delete_all
     end
 
+    puts "Initializing default categories..."
+    init_categories(Platform::Category.root, default_categories)
+
+    init_default_applications
+
     puts "Done."
+  end
+  
+  def self.system_user
+    return nil unless site_info[:system_user_id]
+    @system_user ||= user_class_name.constantize.find_by_id(site_info[:system_user_id])
+  end
+
+  def self.system_developer
+    @system_developer ||= Platform::Developer.find_or_create(Platform::Config.system_user)
+  end
+  
+  def self.init_default_applications
+    puts "Initializing default applications..."
+    unless system_developer
+      puts "Cannot initialize default application because system user id is not specified in the config."
+      return
+    end
+  
+    default_applications.each do |keyword, description|
+      category_keywords = description.delete("category_keywords")
+      icon_path = description.delete("icon_path")
+      logo_path = description.delete("logo_path")
+
+      description[:url].gsub!("{SITE}", SITE)
+      description[:privacy_policy_url].gsub!("{SITE}", SITE)
+      description[:terms_of_service_url].gsub!("{SITE}", SITE)
+      app = Platform::Application.create(description.merge(:developer => system_developer))
+      app.store_icon(File.new("#{root}/#{icon_path}", "r")) if icon_path 
+      app.store_logo(File.new("#{root}/#{logo_path}", "r")) if logo_path 
+      
+      puts "Initialized #{app.name}."
+      app.approve!
+    end    
+  end
+
+  def self.init_categories(parent, categories) 
+    categories.each do |keyword, info|
+      cat = Platform::Category.create(:parent => parent, :keyword => keyword, :name => info[:name], :position => info[:position])
+      init_categories(cat, info[:categories]) if info[:categories]
+    end
+  end
+
+  def self.default_applications
+    @default_applications ||= load_yml("/config/platform/data/default_applications.yml", nil)
+  end
+
+  def self.default_categories
+    @default_categories ||= load_yml("/config/platform/data/default_categories.yml", nil)
   end
 
   def self.root
@@ -129,13 +187,21 @@ class Platform::Config
   def self.site_title
     site_info[:title] 
   end
-
+  
   def self.default_url
     site_info[:default_url]
   end
 
   def self.site_layout
     site_info[:layout]
+  end
+
+  def self.media_directory
+    site_info[:media_directory]
+  end
+
+  def self.media_path
+    "#{root}/public#{media_directory}"
   end
 
   def self.helpers
@@ -273,5 +339,9 @@ class Platform::Config
     guest_user?
   end
   #########################################################
+
+  def self.silhouette_image(user)
+    "/platform/images/photo_silhouette.gif"
+  end
 
 end

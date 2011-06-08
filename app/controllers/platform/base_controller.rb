@@ -1,5 +1,7 @@
 class Platform::BaseController < ApplicationController
 
+  helper :platform
+
   if Platform::Config.helpers.any?
     helper *Platform::Config.helpers
   end
@@ -46,6 +48,13 @@ class Platform::BaseController < ApplicationController
     Platform::Config.current_user_is_developer?
   end
   helper_method :platform_current_user_is_developer?
+  
+  def use_mobile_layout?
+    return false if request.user_agent.blank?
+    ua = request.user_agent.downcase
+    ['iphone', 'android'].any? {|agent| ua.index(agent)}
+  end
+  helper_method :use_mobile_layout?
   
 private
 
@@ -97,20 +106,6 @@ private
   def validate_guest_user
     if platform_current_user_is_guest?
       trfe("You must be a registered user in order to access this section of the site.")
-      return redirect_to_site_default_url
-    end
-  end
-
-  # make sure that the current user is a translator
-  def validate_current_developer
-    unless platform_current_user_is_developer?
-      return redirect_to("/platform/developers/registration")
-    end
-  end
-
-  def validate_admin
-    unless platform_current_user_is_admin?
-      trfe("You must be an admin in order to view this section of the site")
       return redirect_to_site_default_url
     end
   end

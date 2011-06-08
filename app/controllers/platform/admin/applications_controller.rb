@@ -1,38 +1,50 @@
 class Platform::Admin::ApplicationsController < Platform::Admin::BaseController
 
   def index
-    @apps = ClientApplication.filter(:params => params)
+    @apps = Platform::Application.filter(:params => params)
   end
 
   def view
-    @app = ClientApplication.find(params[:app_id])  
+    @app = Platform::Application.find(params[:app_id])  
   end
   
   def tokens
-    @tokens = AccessToken.filter(:params => params, :filter => AccessTokenFilter)
+    @tokens = Platform::Oauth::AccessToken.filter(:params => params)
   end
 
-  def enable_app
-    app = ClientApplication.find(params[:app_id])  
-    app.enable!
+  def block
+    app = Platform::Application.find(params[:app_id])  
+    app.block!
     redirect_to(:action => :view, :app_id => app.id)
   end
 
-  def disable_app
-    app = ClientApplication.find(params[:app_id])  
-    app.disable!
+  def unblock
+    app = Platform::Application.find(params[:app_id])  
+    app.unblock!
+    redirect_to(:action => :view, :app_id => app.id)
+  end
+
+  def approve
+    app = Platform::Application.find(params[:app_id])  
+    app.approve!
+    redirect_to(:action => :view, :app_id => app.id)
+  end
+
+  def reject
+    app = Platform::Application.find(params[:app_id])  
+    app.reject!
     redirect_to(:action => :view, :app_id => app.id)
   end
 
   def set_permission
-    app = ClientApplication.find(params[:app_id])  
+    app = Platform::Application.find(params[:app_id])  
     app.set_permission(params[:perm], true)
     app.save
     redirect_to(:action => :view, :app_id => app.id)
   end
 
   def remove_permission
-    app = ClientApplication.find(params[:app_id])  
+    app = Platform::Application.find(params[:app_id])  
     app.set_permission(params[:perm], false)
     app.save
     redirect_to(:action => :view, :app_id => app.id)

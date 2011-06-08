@@ -1,0 +1,17 @@
+<td style="padding:5px; width:50px;"> 
+  <%=platform_user_mugshot_tag(message.user, :linked => true)%>
+</td>
+<td style="padding:5px; width:150px;">
+  <%=platform_user_tag(message.user, :linked => true)%>
+  <div style="color:grey;font-size:10px;"><%=message.created_at.trl(:date_time) %></div>
+  <div style="font-size:10px;">
+    <% if message.user == platform_current_user %>  
+      <%=link_to(tr("Delete", "Link to delete forum message"), {:controller => '/platform/forum', :action => :delete_message, :message_id => message.id}, {:confirm => trl("Are you sure you want to delete this message?")})%>
+		<% else %>	
+      <%=link_to_function(tr("Report", "Link to report an abusive forum message"), "tr8nLightbox.show('/tr8n/translator/lb_report?message_id=#{message.id}', {width:600, height:340});")%>
+    <% end %>
+  </div>
+</td>
+<td style="padding:5px; width:700px;">
+  <%=message.toHTML %>
+</td>

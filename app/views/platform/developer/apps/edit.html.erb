@@ -1,0 +1,19 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+<div class="apps_header">
+  <%= tr('Editing "{app_name}"', 'API', :app_name => @app.name) %> 
+</div>
+
+<div class="app_fields">
+	<% form_for(:application, @app, :url => {:action => :update, :id => @app.id}, :html => {:method => :post, :multipart=>true}) do |form| %>
+	  <%= render :partial=>'form', :locals=>{:form=>form} %>
+	  
+	  <div style="text-align:center; padding:15px;">
+	    <%= submit_tag trl('Save', 'Client application action label'), :class=>'button super blue large' %>
+	    <%=tr("or")%> <%=link_to(tr("Cancel"), :action => :index, :id => @app.id)%>
+	  </div>
+	<% end %>
+</div>
+
+
+<%= render :partial => "/platform/developer/common/footer" %>

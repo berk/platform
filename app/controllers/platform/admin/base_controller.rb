@@ -40,7 +40,8 @@ private
   def platform_admin_tabs
     [
         {"title" => "Applications", "description" => "Admin tab", "controller" => "applications"},
-        {"title" => "Developers", "description" => "Admin tab", "controller" => "developers"}
+        {"title" => "Developers", "description" => "Admin tab", "controller" => "developers"},
+        {"title" => "Categories", "description" => "Admin tab", "controller" => "categories"}
     ]
   end
   helper_method :platform_admin_tabs

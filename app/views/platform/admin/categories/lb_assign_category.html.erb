@@ -1,0 +1,52 @@
+<div id="option_light_box">
+    <% form_for(:category, @category, :url =>  {:controller => :gifts_admin, :action => :update_category}, :html => {:method => 'post', :method => :post, :class=> "lightbox"}) do |form| %>
+    <div class="content">
+        <%= form.hidden_field :parent_id %>
+        <%= form.hidden_field :id %>
+        <fieldset>
+            <legend>
+                <strong>Category Details</strong>
+            </legend>
+            <table class="admin_table">
+                <tr>
+                    <th width="150px">
+                        Id:
+                    </th>
+                    <td>
+                        <%=@category.id %>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150px">
+                        Parent Category:
+                    </th>
+                    <td>
+                        <%=@parent.name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Name:
+                    </th>
+                    <td>
+                        <%= form.text_field :name, :size=>"50" %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Keyword:
+                    </th>
+                    <td>
+                        <%= form.text_field :keyword, :size=>"50" %>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+    </div>
+    <div class="buttons">
+        <input type="submit" name="submit" value="Save" />
+      &nbsp;&nbsp;
+      <input onclick="cancelEditCategory();" type="button" value="Cancel" />
+    </div>
+  <% end %>
+</div>

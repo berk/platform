@@ -1,0 +1,185 @@
+<script type="text/javascript" src="/javascripts/dragresize.js"></script>
+<style type="text/css">
+
+/* Apply the element you want to drag/resize */
+.drsElement {
+ position: absolute;
+ border: 1px solid #333;
+}
+
+/*
+ The main mouse handle that moves the whole element.
+ You can apply to the same tag as drsElement if you want.
+*/
+.drsMoveHandle {
+ height: 20px;
+ background-color: #CCC;
+ border-bottom: 1px solid #666;
+ cursor: move;
+}
+
+/*
+ The DragResize object name is automatically applied to all generated
+ corner resize handles, as well as one of the individual classes below.
+*/
+.dragresize {
+ position: absolute;
+ width: 5px;
+ height: 5px;
+ font-size: 1px;
+ background: #EEE;
+ border: 1px solid #333;
+}
+
+/*
+ Individual corner classes - required for resize support.
+ These are based on the object name plus the handle ID.
+*/
+.dragresize-tl {
+ top: -8px;
+ left: -8px;
+ cursor: nw-resize;
+}
+.dragresize-tm {
+ top: -8px;
+ left: 50%;
+ margin-left: -4px;
+ cursor: n-resize;
+}
+.dragresize-tr {
+ top: -8px;
+ right: -8px;
+ cursor: ne-resize;
+}
+
+.dragresize-ml {
+ top: 50%;
+ margin-top: -4px;
+ left: -8px;
+ cursor: w-resize;
+}
+.dragresize-mr {
+ top: 50%;
+ margin-top: -4px;
+ right: -8px;
+ cursor: e-resize;
+}
+
+.dragresize-bl {
+ bottom: -8px;
+ left: -8px;
+ cursor: sw-resize;
+}
+.dragresize-bm {
+ bottom: -8px;
+ left: 50%;
+ margin-left: -4px;
+ cursor: s-resize;
+}
+.dragresize-br {
+ bottom: -8px;
+ right: -8px;
+ cursor: se-resize;
+}
+</style>
+
+
+<div id="categoryAssigner" class="drsElement" style="display:none; position:absolute; left:100px; top:100px; width:500px; height:320px; background-color:white; border:6px lightgrey solid;">
+<span class="drsMoveHandle">
+<table width="100%">
+  <tr style="background-color:lightgrey">
+    <td align="left"><strong><span id="categoryAssignerTitle"></span></strong></td>
+    <td align="right"><a href="#" onClick="hideCategoryAssigner()">Close</a></td>
+  </tr>
+</table>
+</span>
+<iframe id="categoryAssignerFrame" name="categoryAssignerFrame" style="width:100%; height:95%; border:0px" src="/admin/categories_admin/loading_assigner"> </iframe>
+<br>
+</div>
+
+<script type="text/javascript">
+var selectedCategoriesDiv = null;
+var selectedItemId = null;
+var selectedItemType = null;
+
+function showCategoryAssigner(rootKeyword, title, type, id, catDiv) {
+  selectedCategoriesDiv = $(catDiv);
+  selectedItemId = id;
+  selectedItemType = type;
+
+  screenW = screen.width;
+  screenH = screen.height;
+  width = 500;
+  height = 320;
+
+  $("categoryAssignerTitle").innerHTML = title;
+  window.frames.categoryAssignerFrame.setToLoading();
+
+  $("categoryAssigner").style.left = ((screenW - width)/2) + "px";
+  $("categoryAssigner").style.top = ((screenH - height -200)/2 + window.pageYOffset) + "px" ;
+  $("categoryAssigner").style.width = width + "px";
+  $("categoryAssigner").style.height = height + "px";
+  $("categoryAssigner").show();
+
+  $("categoryAssignerFrame").src = "/admin/categories_admin/category_assigner?root_keyword=" + rootKeyword + "&item_type=" + type + "&item_id=" + id;
+}
+
+function hideCategoryAssigner() {
+  $("categoryAssigner").hide();
+}
+
+function setCategoriesBoxToLoading() {
+   if (selectedCategoriesDiv==null)
+    return;
+
+   selectedCategoriesDiv.innerHTML = selectedCategoriesDiv.innerHTML + " <img alt=\"Spinner\" src=\"/images/spinner.gif?1215809373\" />";
+}
+
+function updateCategoriesBox(responseText) {
+   if (selectedCategoriesDiv==null)
+    return;
+
+   selectedCategoriesDiv.innerHTML = responseText;
+}
+
+function assignCategory(category_id, flag) {
+  action = (flag) ? "assign" : "destroy"
+
+  setCategoriesBoxToLoading();
+
+  new Ajax.Request('/admin/categories_admin/assign_category', {
+    method: 'get',
+    parameters: {
+      'job': action,
+      'item_id': selectedItemId,
+      'item_type': selectedItemType,
+      'category_id': category_id
+    },
+  onSuccess: function(transport){
+    updateCategoriesBox(transport.responseText);
+  },
+  onFailure: function(transport){
+    selectedCategoriesDiv.innerHTML = transport.responseText;
+  }
+  });
+}
+
+var dragresize = new DragResize('dragresize', {});
+
+dragresize.isElement = function(elm)
+{
+ if (elm.className && elm.className.indexOf('drsElement') > -1) return true;
+};
+dragresize.isHandle = function(elm)
+{
+ if (elm.className && elm.className.indexOf('drsMoveHandle') > -1) return true;
+};
+
+dragresize.ondragfocus = function() { };
+dragresize.ondragstart = function(isResize) { };
+dragresize.ondragmove = function(isResize) { };
+dragresize.ondragend = function(isResize) { };
+dragresize.ondragblur = function() { };
+dragresize.apply(document);
+</script>
+

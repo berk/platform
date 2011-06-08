@@ -1,0 +1,22 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%= will_filter(@apps) %>
+<%= will_filter_table_tag(@apps, :columns => [
+  [:id, lambda{|app| link_to(app.id, :action => :view, :app_id => app.id)}],
+  [:developer_id, lambda{|app| link_to(app.developer.name, "")}],
+  :name,
+  [:url, lambda{|app| link_to(app.url, app.url)}],
+  [:permissions, lambda{|app| app.permissions.blank? ? "" : app.permissions.split(',').join(', ') }],
+  [:keys, lambda{|app| "<strong>key:</strong> #{app.key}<br><strong>secret:</strong> #{app.secret}"}],
+  :state,
+  :created_at,
+  [:actions, lambda{|app|
+      html = [] 
+      html << link_to("view", :action => :view, :app_id => app.id)
+      html << link_to("access tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>app.id} )
+      html.join(" | ")
+  }]
+]) %>
+
+<%= render :partial => "/platform/admin/common/footer" %>

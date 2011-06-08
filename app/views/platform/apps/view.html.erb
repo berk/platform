@@ -1,156 +1,71 @@
-<style>
-  .apps_header {
-    padding:10px;
-    font-size:14px;
-    border: 1px dotted #ccc;
-    background:#F0F2F7;
-    color:#666;
-    font-weight:bold;
-  }
-  
-  .apps_body {
-    margin-top:5px;
-    padding:0px;
-    font-size:14px;
-    color:#666;
-  }
-  
-  .cat_item {
-    padding-left:10px;
-    padding-top:5px;
-    padding-bottom:5px;
-    font-size:12px;
-    border-bottom: 1px dotted #ccc;
-  }
-  
-  .cat_item_selected {
-    background:#406790;
-    color:white;
-  }
+<%= render :partial => "/platform/apps/app_header" %>
 
-  .cat_item_selected a {
-    color:white;
-  } 
-</style>
-
-<div class="module page_title lengthy">
-  <div class="inner">
-    <div class="hd">
-      <span style="float:right;">
-         <%=link_to(tr('Launch Application', 'Client application action label'), @app.app_url, :class=>'button super blue medium') %>
-      </span>
-      
-      <h1><%= @app.name %></h1>
-    </div>
-  </div>
+<div style="padding-left:10px;">
+	<% if params[:sec] == 'Info' %>
+		  <div class="apps_header" style="">
+		    <%=tr("Basic Information")%>
+		  </div>
+		  <div class="apps_section">
+		    <table style="width:100%;">
+		      <tr>
+		      	<th style="width:110px; text-align:left;">
+		      		<%=tr("Description:")%>
+		      	</th>
+						<td>
+							<%=@app.description%>
+						</td>
+		      </tr>
+					<% if @app.developer.about %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Developer Info:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.about%>
+		        </td>
+		      </tr>
+					<% end %>
+					<% if @app.developer.name %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Developer Name:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.name%>
+		        </td>
+		      </tr>
+					<% end %>
+					<% if @app.developer.url %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Website:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.url%>
+		        </td>
+		      </tr>
+					<% end %>
+		    </table>
+		  </div>
+	  <%= render :partial => "/platform/ratings/list" %>
+	<% end %>
+	
+	<% if params[:sec] == 'Reviews' %>
+	  <%= render :partial => "/platform/ratings/list" %>
+	<% end %>	
+	
+	<% if params[:sec] == 'Discussions' %>
+	  <% if @topic %>
+	    <%= render :partial => "/platform/forum/topic" %>
+		<% else %>  
+		  <% if params[:mode] == 'create' %>
+	      <%= render :partial => "/platform/forum/new_topic", :locals => {:include_cancel_button => true} %>
+			<% else %> 
+	      <%= render :partial => "/platform/forum/topics" %>
+			<% end %>	
+		<% end %>	
+	<% end %> 
 </div>
 
-
-<div class="module page_title lengthy">
-  <div class="inner">
-    <table style="width:100%">
-      <tr>
-        <td style="width:200px;">
-				  <div style="text-align:center; border:1px dotted #ccc;padding:10px;">
-				    <%= image_tag(@app.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>  
-				  </div>
-					
-          <div style="border: 1px dotted #ccc; margin-top:10px; padding-top:10px; margin-bottom:10px; background: #f9f8f7; vertical-align:top; ">
-            <% @sections.each do |cat| %>
-              <% if cat == @section %>
-                  <div class="cat_item cat_item_selected">
-              <% else %>
-                  <div class="cat_item">    
-              <% end %>
-                <%=link_to(cat, {:sec=>cat}) %>
-              </div>
-            <% end %>           
-          </div>
-					
-          <div style="text-align:center; border:1px dotted #ccc; padding:10px; margin-top:5px;">
-					  Review Summary<br>
-						<%= app_rank_tag(@app, 95) %>
-						<br>
-						Based on 1000 reviews
-					</div>
-
-          <div style="text-align:center; border:1px dotted #ccc; padding:10px; margin-top:10px;">
-            10000<br>
-            monthly active users
-          </div>
-					
-        </td>
-        <td>
-            <div style="padding-bottom:20px; padding-left:10px;">
-              <div class="apps_header">
-                Basic Information
-              </div>
-		          <div style="text-align:center; border:1px dotted #ccc; padding:10px;border-top:0px;">
-                <table style="width:100%;">
-                  <tr>
-                  	<td style="width:100px;">
-                  		<%=tr("Description:")%>
-                  	</td>
-										<td>
-											<%=@app.description%>
-										</td>
-                  </tr>
-                  <tr>
-                    <td style="width:100px;">
-                      <%=tr("Developer Info:")%>
-                    </td>
-                    <td>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="width:100px;">
-                      <%=tr("Developer Name:")%>
-                    </td>
-                    <td>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="width:100px;">
-                      <%=tr("Website:")%>
-                    </td>
-                    <td>
-                    </td>
-                  </tr>
-                </table>
-		          </div>
-            </div>
+<%= render :partial => "/platform/apps/app_footer" %>
 						
-            <div style="padding-bottom:20px; padding-left:10px;">
-              <div class="apps_header">
-                Reviews
-              </div>
-              <div style="text-align:center; border:1px dotted #ccc; padding:10px;border-top:0px;">
-                 <div style="background: #f9f8f7; padding:10px;">							   
-								   <table style="width:100%" cellpadding="5px">
-								   	 <tr>
-								   	 	 <td style="width:80px;text-align:right">Rating:</td>
-											 <td>
-											 	 <%=image_tag("/tr8n/images/rating_star0.png")%>
-                         <%=image_tag("/tr8n/images/rating_star0.png")%>
-                         <%=image_tag("/tr8n/images/rating_star0.png")%>
-                         <%=image_tag("/tr8n/images/rating_star0.png")%>
-                         <%=image_tag("/tr8n/images/rating_star0.png")%>
-											 </td>
-								   	 </tr>
-	                   <tr>
-	                     <td style="text-align:right">Message:</td>
-											 <td>
-                         <%=text_area_tag(:review, "", :style=>"width:98%")%>
-											 </td>
-	                   </tr>
-								   </table>
-                   <%=link_to(tr('Submit Review', 'Client application action label'), "", :class=>'button super blue medium') %>
-								 </div>
-						  </div>	
-            </div> 						
-        </td>
-      </tr>
-    </table>
-  </div>
-</div>  
-

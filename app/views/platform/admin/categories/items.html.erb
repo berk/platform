@@ -1,0 +1,102 @@
+<%= stylesheet_link_tag("/wf/stylesheets/will_filter.css") -%>
+
+<% if @children %>
+	<div style="border-bottom:1px dotted #ccc; font-size: 12px;padding:5px; background:#eee;">
+	 <%=platform_toggler_tag("sub_categories_container")%> Sub Categories (<%=@children.size%>)
+	</div>
+  <div id="sub_categories_container">
+		<% if @children.size == 0 %>
+		  <div style="padding:10px;">None found</div>
+		<% else %>
+
+			<table class='wf_results_table'>
+			  <thead>
+			    <tr>
+			        <th class="" style="">
+			          <div class="table_head_container">Name</div>
+			        </th>
+              <th class="" style="">
+                <div class="table_head_container">Keyword</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Position</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Count</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Actions</div>
+              </th>
+			    </tr>
+			  </thead>
+				<tbody>  
+				  <%
+				    @children.each_with_index do |child, index|
+				        child_name = child.name.gsub("'", "\\'")
+				  %>
+				  <tr class='data_row <%=(index % 2 == 0) ? "wf_row_even" : "wf_row_odd"%>'>
+				    <td style="padding:3px;"><%=link_to_function(child_name, "javascript:openSubCategory(\"#{child.id}\", \"#{child_name}\");")%></td>
+				    <td style="padding:3px;"><%=child.keyword%></td>
+            <td style="padding:3px;"><%=child.position%></td>
+				    <td style="padding:3px;"><%=child.children.size%></td>
+				    <td style="padding:3px;text-align:right">
+				     <%=link_to_function("Edit", "editCategory('#{child.id}', '#{@parent.id}');")%>
+				    | <%=link_to_function("Delete", "deleteCategory('#{child.id}');")%>
+				    &nbsp;
+				    </td>
+				  </tr>
+				  <%  end %>
+        </tbody>				
+		  </table>
+		<%  end %>
+	</div>	
+<%  end %>
+
+<% if @items %>
+	<div style="border-bottom:1px dotted #ccc; font-size: 12px;padding:5px; background:#eee; margin-top:10px;">
+	 <%=platform_toggler_tag("items_container")%> Applications (<%=@items.size%>)
+	</div>
+	
+	<div id="items_container">
+		<% if @items.size == 0 %>
+		  <div style="padding:10px;">None found</div>
+		<% else %>
+		  <table width="100%" border=0>
+		    <tr style="background-color:lightgrey">
+		      <td width="1%">&nbsp;</td>
+		      <td width="2%">&nbsp;</td>
+		      <td width="10%"><strong>Icon</strong></td>
+		      <td width="25%"><strong>Type</strong></td>
+		      <td width="35%"><strong>Name</strong></td>
+		      <td width="20%"><strong>Actions</strong></td>
+		    </tr>
+		  <%
+		    @items.each_with_index do |cat_item, index|
+		      next unless cat_item.item
+		      bg_color = (index % 2 == 0) ? "white" : "#EEEEEE"
+		  %>
+		  <tr style="background-color:<%=bg_color%>">
+		      <td>&nbsp;</td>
+		    <td><%=cat_item.position%></td>
+		    <td>
+		      <%= item_icon(cat_item) %>
+		    </td>
+		    <td>
+		      <%=cat_item.item_type%>
+		    </td>
+		    <td>
+		      <%=cat_item.item.name%>
+		    </td>
+		    <td style="text-size:7px"><nobr>
+		    <%=link_to_function("Edit", "editCategoryItem('#{cat_item.id}');")%>
+		    &nbsp;|&nbsp;
+		    <%=link_to_function("Remove", "unassignedObject('#{cat_item.item_type}', '#{cat_item.item_id}')")%>
+		    &nbsp;
+		    </nobr>
+		    </td>
+		  </tr>
+		  <%  end %>
+		  </table>
+		<%  end %>
+  </div>
+<%  end %>

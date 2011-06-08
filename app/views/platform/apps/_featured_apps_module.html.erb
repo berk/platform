@@ -1,0 +1,42 @@
+<% if apps.any? %>
+<% 
+  block_width = "#{100/per_row}%"
+  block_height ||= "130px;"
+%> 
+    <div class="apps_header">
+      <span style="float:right; font-size:12px; font-weight:normal">
+        Page 1 of 1 &nbsp;
+        <%=link_to_function('<<', "", :class=>'button super blue small') %>
+        <%=link_to_function('>>', "", :class=>'button super blue small') %>
+      </span>
+      <%=title%>
+    </div>
+    <div class="apps_body">
+      <table style="width:100%;">
+        <tr>
+          <% apps.each_with_index do |app, index| %>
+            <td style="width:<%=block_width%>;text-align:left">
+                   <div style="height:100px; border: 1px dotted #ccc; padding:5px; margin:3px;">
+                      <span style="float:right;padding-left:10px;">
+                         <%= link_to(image_tag(app.logo_url), {:action => :view, :id => app.id}) %>
+                      </span> 
+                      <span style="font-size:14px;">
+                        <%= link_to(h(app.name), {:action => :view, :id => app.id}) %><br>
+                      </span>
+                      <span style="font-size:11px;">
+                        <%= app.description %>
+                      </span>
+                   </div>
+             </td> 
+             <% if (index+1) % per_row == 0 %>
+               </tr><tr>
+             <% end %>
+          <% end %>
+					<% 0.upto(per_row - (apps.size % per_row) -1).each do  %>
+					   <td style="width:<%=block_width%>;">&nbsp;</td>
+					<% end %>
+        </tr>
+      </table>
+    </div>  
+<% end %> 
+					

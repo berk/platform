@@ -1,0 +1,24 @@
+<div class="apps_header">
+  <%=tr("Reply to This Discussion") %>
+	<a name="reply_message">&nbsp;</a>
+</div>
+
+<div class="section_box colored">
+  <% form_tag({:controller => '/platform/forum', :action => :new_message, :topic_id => @topic.id, :app_id => @app.id}, {:method => :post, :id => "forum_topic_form"}) do %>
+    <table style="width:99%">
+      <tr>
+        <td style="width:80px; text-align:right; padding-right:10px; font-weight:bold;">
+          <%=tr("Your Reply:") %>
+        </td>
+        <td>
+          <%=text_area_tag(:message, "", :style=>"width:99%; height:70px")%>
+        </td>
+      </tr>
+    </table>
+    
+    <div style="padding-top:20px; padding-bottom:10px;text-align:center">
+        <%=link_to_function(tr('Reply to This Discussion', 'Client application action label'), "Platform.Effects.submit('forum_topic_form')", :class=>'button super blue medium') %>
+    </div>
+  <% end %>
+  
+</div>  

@@ -1,4 +1,3 @@
-require 'oauth'
 class Platform::Application < ActiveRecord::Base
   set_table_name :platform_applications
   
@@ -6,8 +5,9 @@ class Platform::Application < ActiveRecord::Base
   include Platform::SimpleStringPermissions
 
   belongs_to :developer, :class_name => "Platform::Developer"
-  has_many :application_developers, :class_name => "Platform::ApplicationDeveloper"
-  has_many :application_metrics, :class_name => "Platform::ApplicationMetric"
+  has_many :application_developers, :class_name => "Platform::ApplicationDeveloper", :dependent => :destroy
+  has_many :application_metrics, :class_name => "Platform::ApplicationMetric", :dependent => :destroy
+  has_many :application_users, :class_name => "Platform::ApplicationUser", :dependent => :destroy
   
   has_many :tokens,           :class_name => "Platform::Oauth::OauthToken"
   has_many :access_tokens,    :class_name => "Platform::Oauth::AccessToken"
@@ -41,27 +41,32 @@ class Platform::Application < ActiveRecord::Base
   state :blocked 
   
   event :submit do
-    transitions :from => :new, :to => :submitted
-    transitions :from => :rejected, :to   => :submitted
+    transitions :from => :new,        :to => :submitted
+    transitions :from => :rejected,   :to => :submitted
   end
   
   event :block do
-    transitions :from => :new, :to          => :blocked
-    transitions :from => :submitted, :to    => :blocked
-    transitions :from => :approved, :to     => :blocked
-    transitions :from => :rejected, :to     => :blocked
+    transitions :from => :new,        :to => :blocked
+    transitions :from => :submitted,  :to => :blocked
+    transitions :from => :approved,   :to => :blocked
+    transitions :from => :rejected,   :to => :blocked
+  end
+
+  event :unblock do
+    transitions :from => :blocked,    :to => :new
   end
 
   event :approve do
-    transitions :from => :submitted, :to    => :approved
+    transitions :from => :new,        :to => :approved
+    transitions :from => :submitted,  :to => :approved
   end
 
   event :reject do
-    transitions :from => :submitted, :to    => :rejected
+    transitions :from => :submitted,  :to => :rejected
   end
   
   def self.find_token(token_key)
-    token = OauthToken.find_by_token(token_key, :include => :client_application)
+    token = Platform::Oauth::OauthToken.find_by_token(token_key, :include => :client_application)
     if token && token.authorized?
       token
     else
@@ -69,23 +74,23 @@ class Platform::Application < ActiveRecord::Base
     end
   end
 
-  def self.verify_request(request, options = {}, &block)
-    begin
-      signature = OAuth::Signature.build(request, options, &block)
-      return false unless OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
-      value = signature.verify
-      value
-    rescue OAuth::Signature::UnknownSignatureMethod => e
-      false
-    end
-  end
+#  def self.verify_request(request, options = {}, &block)
+#    begin
+#      signature = ::OAuth::Signature.build(request, options, &block)
+#      return false unless Platform::Oauth::OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
+#      value = signature.verify
+#      value
+#    rescue ::OAuth::Signature::UnknownSignatureMethod => e
+#      false
+#    end
+#  end
 
   def last_token_for_user(user)
-    OauthToken.find(:first, :conditions => ["client_application_id = ? and user_id = ?", self.id, user.id], :order => "updated_at desc")
+    Platform::Oauth::OauthToken.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id], :order => "updated_at desc")
   end
 
   def valid_tokens_for_user(user)
-    OauthToken.find(:all, :conditions => ["client_application_id = ? and user_id = ? and invalidated_at is null", self.id, user.id])
+    Platform::Oauth::OauthToken.find(:all, :conditions => ["application_id = ? and user_id = ? and invalidated_at is null", self.id, user.id])
   end
 
   def rate_limited(value=true)
@@ -170,37 +175,25 @@ class Platform::Application < ActiveRecord::Base
     [:no_rate_limit, :grant_type_password, :unlimited_models, :add_without_premium]
   end
   
-  def enable!
-    update_attributes(:enabled => true)
-  end
-
-  def disable!
-    update_attributes(:enabled => false)
-  end
-  
   def icon_url
     return "/platform/images/default_app_icon.gif" unless icon
-    icon.media_url(:icon)
+    icon.url
   end
   
   def store_icon(file)
-    self.icon = Image.create
-    self.icon.content_type = "image/gif"
-    self.icon.write(file)
-    self.icon.save
+    self.icon = Platform::Media::Image.create
+    self.icon.write(file, :size => 16)
     self.save
   end
 
   def logo_url
     return "/platform/images/default_app_logo.gif" unless logo
-    logo.media_url(:logo)
+    logo.url
   end
 
   def store_logo(file)
-    self.logo = Image.create
-    self.logo.content_type = "image/gif"
-    self.logo.write(file)
-    self.logo.save
+    self.logo = Platform::Media::Image.create
+    self.logo.write(file, :size => 75)
     self.save
   end
   
@@ -212,6 +205,40 @@ class Platform::Application < ActiveRecord::Base
   def short_name
     return name if name.length < 15
     "#{name[0..15]}..."
+  end
+
+  def self.featured_for_category(category, page = 1, per_page = 20)
+    conditions = [" (state='approved') "]
+    if category and category.keyword != 'all'
+      conditions[0] << " and " unless conditions[0].blank?
+      conditions = ["(id in (select item_id from category_items where category_id = ?))", category.id]
+    end
+    
+    paginate(:conditions => conditions, :page => page, :per_page => per_page)
+  end
+  
+  def self.for_category(category, page = 1, per_page = 20)
+    conditions = [" (state='approved') "]
+    if category and category.keyword != 'all'
+      conditions[0] << " and " unless conditions[0].blank?
+      conditions = ["(id in (select item_id from category_items where category_id = ?))", category.id]
+    end
+    
+    paginate(:conditions => conditions, :page => page, :per_page => per_page)
+  end
+  
+  def update_rank!
+    total_rank = (rating_count == 0) ? 0 : (rating_sum/rating_count)
+    self.update_attributes(:rank => total_rank)
+    total_rank
+  end
+  
+  def rating_count
+    @rating_count ||= Platform::Rating.count(:id, :conditions => ["object_type = ? and object_id = ?", self.class.name, self.id])
+  end
+
+  def rating_sum
+    @rating_sum ||= Platform::Rating.sum(:value, :conditions => ["object_type = ? and object_id = ?", self.class.name, self.id])
   end
   
 protected
@@ -225,7 +252,9 @@ protected
   after_create :notify_admins
   def notify_admins
     return unless Registry.api.admin_email?
-    message = "#{Platform::Config.current_user.profile.name} (#{Platform::Config.current_user.admin_link}) has created an app called #{name} (#{admin_link})."
+    return unless Platform::Config.current_user
+    
+    message = "#{Platform::Config.current_user.name} (#{Platform::Config.current_user.admin_link}) has created an app called #{name} (#{admin_link})."
     SystemNotifier.deliver_to_admin(message, :subject => 'Client Application Created', :to => Registry.api.admin_email)
   end
 

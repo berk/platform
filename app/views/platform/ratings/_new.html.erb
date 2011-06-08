@@ -1,0 +1,68 @@
+ <div class="section_box colored">
+   <% form_tag({:controller => '/platform/ratings', :action => :submit_app_rating, :app_id => app.id}, {:id => :app_rating_form}) do %>
+     <%=hidden_field_tag(:rating_value, '0')%>                 
+     <table style="width:100%" cellpadding="5px">
+       <tr>
+         <td style="width:60px;text-align:right; padding:3px;">Rating:</td>
+         <td style="text-align:left; padding:3px;">
+           <div onMouseOut="ratingBlockMouseOut()">
+             <% html = []
+                1.upto(5) do |index|
+                  html << image_tag("/tr8n/images/rating_star0.png", :id => "rating#{index}", :onMouseOver => "ratingMouseOver(#{index})", :onMouseOut => "ratingMouseOut(#{index})",  :onClick => "ratingSelected(#{index})", :style => "cursor:pointer")     
+                end
+             %>
+             <%=html.join("")%>
+           </div>
+         </td>
+       </tr>
+       <tr>
+         <td style="text-align:right; padding:3px;">Review:</td>
+         <td style=" padding:3px;">
+           <%=text_area_tag(:rating_comment, "", :style=>"width:98%")%>
+         </td>
+       </tr>
+     </table>
+     <div style="text-align:center;padding:10px;">
+      <%=link_to_function(tr('Submit Review', 'Client application action label'), "Platform.Effects.submit('app_rating_form')", :class=>'button super blue medium') %>
+     </div>
+   <% end %>
+ </div>
+
+ 
+<script>
+  var selectedRating = 0;
+  
+  function ratingMouseOver(index) {
+    for (i=1; i<=index; i++) {
+      Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+    }
+  }
+  
+  function ratingBlockMouseOut() {
+    for (i=1; i<=5; i++) {
+      Platform.element('rating' + i).src = "/tr8n/images/rating_star0.png";
+    }
+    
+    if (selectedRating != 0) {
+      for (i=1; i<=selectedRating; i++) {
+        Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+      }     
+    }
+  }
+
+  function ratingMouseOut(index) {
+  }
+
+  function ratingSelected(index) {
+    selectedRating = index;
+    Platform.element('rating_value').value = index;
+    
+    for (i=1; i<=5; i++) {
+      if (i <= selectedRating)
+        Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+      else  
+        Platform.element('rating' + i).src = "/tr8n/images/rating_star0.png";
+    }     
+  }
+
+</script> 
