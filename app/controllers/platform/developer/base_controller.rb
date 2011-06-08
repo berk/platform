@@ -33,8 +33,8 @@ private
         {"title" => "Applications", "description" => "Developer tab", "controller" => "apps"},
         {"title" => "Discussions", "description" => "Developer tab", "controller" => "forum"},
         {"title" => "Issues", "description" => "Developer tab", "controller" => "issues"},
-        {"title" => "Resources", "description" => "Developer tab", "controller" => "resources"},
-        {"title" => "Blog", "description" => "Developer tab", "controller" => "blog"}
+        {"title" => "Help", "description" => "Developer tab", "controller" => "help"}
+#        {"title" => "Blog", "description" => "Developer tab", "controller" => "blog"}
     ]
   end
   helper_method :platform_developer_tabs
