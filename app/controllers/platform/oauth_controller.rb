@@ -139,7 +139,7 @@ private
       return render_response(:error_description => "invalid redirection url. it must match the url used for the code request.", :error => :invalid_request)
     end
     
-    token = Platform::Oauth::Oauth2Token.create(:application=>client_application, :user=>verifier.user, :scope=>verifier.scope)
+    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>verifier.user, :scope=>verifier.scope)
     Platform::ApplicationUser.touch(client_application)
     return render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
   end
@@ -151,7 +151,7 @@ private
       return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
     end
     
-    token = Platform::Oauth::Oauth2Token.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
+    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
     render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
   end
 
@@ -160,7 +160,7 @@ private
   def oauth2_authorize_code
     if request.post?
       if params[:authorize] == '1'
-        code = Platform::Oauth::Oauth2Verifier.create(:application=>client_application, :user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
+        code = Platform::Oauth::VerifierToken.create(:application=>client_application, :user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
         Platform::ApplicationUser.touch(client_application)
         return render_response(:code => code.code, :expires_in => (code.valid_to.to_i - Time.now.to_i))
       end
@@ -179,7 +179,7 @@ private
   def oauth2_authorize_token
     if request.post?
       if params[:authorize] == '1'
-        token = Platform::Oauth::Oauth2Token.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
+        token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
         Platform::ApplicationUser.touch(client_application)
         return render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
       end

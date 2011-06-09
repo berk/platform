@@ -32,9 +32,7 @@ private
         {"title" => "Dashboard", "description" => "Developer tab", "controller" => "dashboard"},
         {"title" => "Applications", "description" => "Developer tab", "controller" => "apps"},
         {"title" => "Discussions", "description" => "Developer tab", "controller" => "forum"},
-        {"title" => "Issues", "description" => "Developer tab", "controller" => "issues"},
         {"title" => "Help", "description" => "Developer tab", "controller" => "help"}
-#        {"title" => "Blog", "description" => "Developer tab", "controller" => "blog"}
     ]
   end
   helper_method :platform_developer_tabs

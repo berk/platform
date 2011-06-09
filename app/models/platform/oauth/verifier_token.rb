@@ -1,4 +1,4 @@
-class Platform::Oauth::Oauth2Verifier < Platform::Oauth::OauthToken
+class Platform::Oauth::VerifierToken < Platform::Oauth::OauthToken
 
   validates_presence_of :user
 

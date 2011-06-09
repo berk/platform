@@ -1,0 +1,36 @@
+<div style="text-align:center; width:100%; border:1px dotted #ccc; background-color:white;">
+  <div style="font-size:14px; padding:3px;"> 
+    <%=tr("Daily New Users", "Dashboard section header") %>
+  </div>
+  
+  <!-- %= daily_new_users_chart(app)% -->
+  <div id="daily_new_users_chart_<%=app.id%>">
+  </div>
+	
+  <script type="text/javascript">
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Year');
+    data.addColumn('number', 'New Users');
+    data.addRows(6);
+    data.setValue(0, 0, '06/04');
+    data.setValue(0, 1, 220);
+    data.setValue(1, 0, '06/05');
+    data.setValue(1, 1, 315);
+    data.setValue(2, 0, '06/06');
+    data.setValue(2, 1, 425);
+    data.setValue(3, 0, '06/07');
+    data.setValue(3, 1, 437);
+    data.setValue(4, 0, '06/08');
+    data.setValue(4, 1, 500);
+    data.setValue(5, 0, '06/09');
+    data.setValue(5, 1, 512);
+
+    var chart = new google.visualization.LineChart(document.getElementById("daily_new_users_chart_<%=app.id%>"));
+    chart.draw(data, {width: 450, height: 200});
+  </script>
+
+
+  <div style="margin:10px; color:#ccc; text-align:center; width:100%;">
+      <%=tr("The stats are calculated near realtime", "Dashboard section header")%>
+  </div>
+</div>
