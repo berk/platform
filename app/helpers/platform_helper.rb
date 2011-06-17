@@ -1,5 +1,10 @@
 module PlatformHelper
 
+  def platform_user_login_tag(opts = {})
+    opts[:class] ||= 'tr8n_right_horiz_list'
+    render(:partial => '/platform/common/user_login', :locals => {:opts => opts})    
+  end
+
   def platform_toggler_tag(content_id, label = "", open = true)
     html = "<span id='#{content_id}_open' "
     html << "style='display:none'" unless open

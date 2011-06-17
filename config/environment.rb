@@ -1,18 +1,23 @@
-RAILS_GEM_VERSION = '2.3.11' unless defined? RAILS_GEM_VERSION
-
-# Bootstrap the Rails environment, frameworks, and default configuration
-require File.join(File.dirname(__FILE__), 'boot')
+# Load the rails application
+require File.expand_path('../application', __FILE__)
 require 'pp'
+gem 'will_filter'
+gem 'tr8n'
 
-Rails::Initializer.run do |config|
-  config.time_zone = 'UTC'
-
-  config.action_controller.session = {
-    :session_key => '_platform_session',
-    :secret => '09ae61ae208e3df7066ff7d514533fcd'
-  }
+Rails.configuration.after_initialize do
+  
+  ["../lib/core_ext/**",
+   "../lib/platform",
+   "../lib",
+   "../app/models/platform"
+  ].each do |dir|
+      Dir[File.expand_path("#{File.dirname(__FILE__)}/#{dir}/*.rb")].sort.each do |file|
+        pp file 
+        require_or_load file
+      end
+  end
+  
 end
 
-$KCODE = 'UTF8'
-
-
+# Initialize the rails application
+PlatformEngine::Application.initialize!

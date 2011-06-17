@@ -94,16 +94,21 @@
                 </td>
                 <td style="align-vertical:top;">
                   <div style="font-size:18px;padding-bottom:15px;"><%=@app.name%></div>
-                  <div style="font-size:12px;color:#666;">Directory Status:
-                    <% if @app.approved? %>  
-                       <span style='color:green'>approved</span>
-                    <% elsif @app.submitted? %>
-                       <span style='color:#ADAD00'>submitted</span>
-                    <% else %>
-                       <span style='color:red'>not submitted</span>
-                    <% end %>  
-                  </div>
-                  <div style="font-size:10px;color:#999;">Once you have completed your app, you may submit it to the App Directory.</div>
+		
+		              <% if Platform::Config.enable_app_directory? %>
+	                  <div style="font-size:12px;color:#666;">Directory Status:
+	                    <% if @app.approved? %>  
+	                       <span style='color:green'>approved</span>
+	                    <% elsif @app.submitted? %>
+	                       <span style='color:#ADAD00'>submitted</span>
+	                    <% else %>
+	                       <span style='color:red'>not submitted</span>
+	                    <% end %>  
+	                  </div>
+										<% unless @app.approved? %>  
+	                     <div style="font-size:10px;color:#999;">Once you have completed your app, you may submit it to the App Directory.</div>
+										<% end %>	 
+									<% end %>	
                 </td>
               </tr>
             </table> 
@@ -251,36 +256,39 @@
 	            </div> 
             </div>
              
+            <% if Platform::Config.enable_mobile_applications? %>
 						 
-            <div style="background-color:#F0F2F7;padding:5px;margin-bottom:10px;margin-top:10px;">
-              <span style='float:right'>
-                <%=link_to("edit", :action => :edit, :id => @app.id)%>
-              </span>
-              <%= platform_toggler_tag("mobile_section") %> 
-              <%=tr('Mobile Application', 'Client application section')%>
-            </div>
-            
-            <div id="mobile_section">
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('Application Type:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.mobile_application_type%></div>
-              </div>
-              
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('iOS Bundle ID:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.ios_bundle_id%></div>
-              </div>
-							
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('iTunes App Store ID:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.itunes_app_store_id%></div>
-              </div>
-							
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('Android Hash Key:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.android_key_hash%></div>
-              </div>
-            </div>						 
+	            <div style="background-color:#F0F2F7;padding:5px;margin-bottom:10px;margin-top:10px;">
+	              <span style='float:right'>
+	                <%=link_to("edit", :action => :edit, :id => @app.id)%>
+	              </span>
+	              <%= platform_toggler_tag("mobile_section") %> 
+	              <%=tr('Mobile Application', 'Client application section')%>
+	            </div>
+	            
+	            <div id="mobile_section">
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('Application Type:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.mobile_application_type%></div>
+	              </div>
+	              
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('iOS Bundle ID:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.ios_bundle_id%></div>
+	              </div>
+								
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('iTunes App Store ID:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.itunes_app_store_id%></div>
+	              </div>
+								
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('Android Hash Key:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.android_key_hash%></div>
+	              </div>
+	            </div>						 
+						 
+						 <% end %>
 						 
           </div>
       </td>

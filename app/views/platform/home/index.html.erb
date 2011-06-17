@@ -1,0 +1,16 @@
+<div style="text-align:center; padding:20px;">
+   <%=image_tag("/platform/images/platform5.png", :style => "height:100px;")%>
+</div>
+
+<h2 class="underscore content_hd">
+  <%=tr('Welcome to Platform Engine') %>
+</h2>
+
+<div class="content_bd">
+  <h3><%=tr("If you are trying out Platform functionality, here are some helpful links to get started:")%></h3>
+  <ul style="list-style-type:decimal; margin-left:30px; font-size:14px;">
+    <li><%= link_to(tr("Register for a test developer account (this account is local and only used for testing this site)"), "/platform/login/register")%></li>
+		<li><%= link_to(tr("Take a look at your dashboard and see your application stats"), "/platform/developer/dashboard")%></li>
+    <li><%= link_to(tr("View help"), "/platform/developer/help")%></li>
+  </ul>
+</div>

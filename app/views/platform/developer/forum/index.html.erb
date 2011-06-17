@@ -1,6 +1,6 @@
 <%= render :partial => "/platform/developer/common/header" %>
 
-<div class="section_box" style="margin-bottom:10px; background-color:#EFF8FF; margin-top:0px;">
+<!-- div class="section_box" style="margin-bottom:10px; background-color:#EFF8FF; margin-top:0px;">
   <% form_tag({:action => :index}, {:method => :get, :id => "translations_search_form"}) do %>
       <div style="float:right">
         <button type="submit" class="translator_btn translator_small_btn" onClick="Tr8n.Effects.submit('translations_search_form'); return false;">
@@ -10,7 +10,7 @@
       
       <%=text_field_tag(:search, params[:search], {:style => "width:90%;font-size:12px;height:20px"})%><br>
   <% end %>
-</div>
+</div -->
   
 		
 <% unless @topics.empty? %>

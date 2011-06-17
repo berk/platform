@@ -29,7 +29,7 @@ class Platform::Admin::BaseController < Platform::BaseController
 
   before_filter :validate_admin
   
-  layout Platform::Config.site_info[:admin_layout]
+  layout Platform::Config.admin_layout
   
 private
 

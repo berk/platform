@@ -168,7 +168,7 @@
     </td> 
   </tr>
 	 
-<% if Registry.platform.embedded_apps_enabled? %>
+<% if Platform::Config.enable_embedded_applications? %>
   <tr>
     <th>
       <%=tr('Canvas Page:','Client application field label')%>
@@ -217,6 +217,7 @@
   </tr>
 <% end %>
 
+<% if Platform::Config.enable_mobile_applications? %>
   <tr>
     <td colspan="3">
       <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;margin-top:10px;">
@@ -269,5 +270,6 @@
       <%=tr("We will use it for extra security during authentication.", 'Client application field comment')%>
     </td> 
   </tr>
+<% end %>
 	
 </table>

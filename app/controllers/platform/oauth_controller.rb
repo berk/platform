@@ -1,8 +1,9 @@
 class Platform::OauthController < Platform::BaseController
+  
   include SslRequirement
-  ssl_required :authorize, :request_token, :invalidate_token, :token, :validate_token
-  skip_filter :limit_walks
-  skip_filter :init_own_profile, :only => [:validate_token, :invalidate]
+  ssl_required :authorize, :request_token, :invalidate_token, :validate_token, :revoke, :invalidate
+
+  skip_before_filter :validate_guest_user  
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.1
   # supports response_type = code, token 
@@ -38,6 +39,7 @@ class Platform::OauthController < Platform::BaseController
   # supported grant_type = authorization_code, password
   # unsupported grant_types = client_credentials, refresh_token
   def request_token
+    pp params
     if request_param(:client_id).blank?
       return render_response(:error_description => "client_id must be provided", :error => :invalid_request)
     end
@@ -58,6 +60,13 @@ class Platform::OauthController < Platform::BaseController
       if request_param(:code).blank?
         return render_response(:error_description => "code must be provided", :error => :invalid_request)
       end
+      if redirect_url.blank?
+        return render_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url field", :error => :invalid_request)
+      end
+      
+      unless is_redirect_url_valid?(redirect_url)
+        return render_response(:error_description => "redirect_uri cannot point to a different server than from the one it sent a request", :error => :invalid_request)
+      end
     elsif request_param(:grant_type) == "password"
       if request_param(:username).blank?
         return render_response(:error_description => "username must be provided", :error => :invalid_request)
@@ -65,14 +74,6 @@ class Platform::OauthController < Platform::BaseController
       if request_param(:password).nil?
         return render_response(:error_description => "password must be provided", :error => :invalid_request)
       end
-    end
-    
-    if redirect_url.blank?
-      return render_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url field", :error => :invalid_request)
-    end
-    
-    unless is_redirect_url_valid?(redirect_url)
-      return render_response(:error_description => "redirect_uri cannot point to a different server than from the one it sent a request", :error => :invalid_request)
     end
 
     send("oauth2_request_token_#{request_param(:grant_type)}")
@@ -152,9 +153,8 @@ private
     end
     
     token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
-    render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
+    render_response({:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i)}, {:type => :json})
   end
-
 
   # authorize with response_type = code
   def oauth2_authorize_code
@@ -202,12 +202,14 @@ private
     true
   end
 
-  def render_response(response_params)
+  def render_response(response_params, opts = {})
     response_params[:state] = request_param(:state) if request_param(:state)
-#    return render(:json => response_params) if request.json?
+    
+    # we need to support json and redirect based method as well
+    return render(:text => response_params.to_json) if opts[:type] == :json
     
     if redirect_url.blank?
-      @error = trl(opts[:error_description])
+      @error = trl(response_params[:error_description])
       return render_action("authorize_failure")
     end
 
@@ -224,7 +226,7 @@ private
   end
   
   def render_action(action)
-    if use_mobile_layout?
+    if mobile_device?
       return render(:action => "#{action}_mobile", :layout => false)
     end
     

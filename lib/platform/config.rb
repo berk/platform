@@ -129,6 +129,10 @@ class Platform::Config
     config[:enable_embedded_applications]
   end
 
+  def self.enable_mobile_applications?
+    config[:enable_mobile_applications]
+  end
+
   def self.default_app_icon
     "/platform/images/default_app_icon.gif"
   end
@@ -193,7 +197,11 @@ class Platform::Config
   end
 
   def self.site_layout
-    site_info[:layout]
+    site_info[:platform_layout]
+  end
+
+  def self.admin_layout
+    site_info[:admin_layout]
   end
 
   def self.media_directory
@@ -342,6 +350,18 @@ class Platform::Config
 
   def self.silhouette_image(user)
     "/platform/images/photo_silhouette.gif"
+  end
+
+  def self.features
+    @features ||= begin
+      defs = load_yml("/config/platform/site/features.yml")
+      feats = []
+      defs[:enabled_features].each do |key|
+        defs[key][:key] = key
+        feats << defs[key] 
+      end
+      feats
+    end
   end
 
 end

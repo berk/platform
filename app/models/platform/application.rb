@@ -31,7 +31,6 @@ class Platform::Application < ActiveRecord::Base
 
   attr_accessor :token_callback_url
 
-  #19851 - Application directory flow
   acts_as_state_machine :initial => :new
   state :new
   state :submitted

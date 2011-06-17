@@ -1,28 +1,28 @@
 class Platform::BaseController < ApplicationController
 
-  helper :platform
-
-  if Platform::Config.helpers.any?
-    helper *Platform::Config.helpers
-  end
-
-  if Platform::Config.skip_before_filters.any?
-    skip_before_filter *Platform::Config.skip_before_filters
-  end
+  before_filter :init_platform
+  before_filter :validate_platform_enabled
+  before_filter :validate_guest_user
 
   if Platform::Config.before_filters.any?
     before_filter *Platform::Config.before_filters
   end
   
-  if Platform::Config.after_filters.any?
-    after_filter *Platform::Config.after_filters
+  if Platform::Config.skip_before_filters.any?
+    skip_before_filter *Platform::Config.skip_before_filters
   end
   
-  before_filter :init_platform
-  before_filter :validate_platform_enabled
-  before_filter :validate_guest_user
-  
+  if Platform::Config.after_filters.any?    
+    after_filter *Platform::Config.after_filters
+  end
+
   layout Platform::Config.site_layout
+
+  helper :platform
+  
+  if Platform::Config.helpers.any?
+    helper *Platform::Config.helpers 
+  end
 
   def platform_current_user
     Platform::Config.current_user
@@ -49,12 +49,13 @@ class Platform::BaseController < ApplicationController
   end
   helper_method :platform_current_user_is_developer?
   
-  def use_mobile_layout?
+  def mobile_device?
     return false if request.user_agent.blank?
     ua = request.user_agent.downcase
     ['iphone', 'android'].any? {|agent| ua.index(agent)}
   end
-  helper_method :use_mobile_layout?
+  helper_method :mobile_device?
+  
   
 private
 
@@ -68,8 +69,8 @@ private
         raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
       end
     else
-      site_current_user = Platform::Developer.find_by_id(session[:platform_developer_id]) if session[:platform_developer_id]
-      site_current_user = Platform::Developer.new unless site_current_user
+      site_current_user = Platform::User.find_by_id(session[:platform_user_id]) if session[:platform_user_id]
+      site_current_user = Platform::User.new unless site_current_user
     end
     
     # initialize request thread variables

@@ -1,0 +1,36 @@
+all:
+  position: 1   
+  name: "All Apps"
+  categories: 
+    all_business: 
+      position: 1   
+      name: "Business"
+    all_education: 
+      position: 2   
+      name: "Education"
+    all_entertainment: 
+      position: 3   
+      name: "Entertainment"
+    all_games: 
+      position: 4   
+      name: "Games"
+    all_fun: 
+      position: 5   
+      name: "Just For Fun"
+    all_lifestyle: 
+      position: 6   
+      name: "Lifestyle"
+    all_utilities: 
+      position: 7   
+      name: "Utilities"
+
+external_websites:
+  position: 3   
+  name: "External Websites"
+desktop:
+  position: 4   
+  name: "Desktop"
+mobile:
+  position: 5   
+  name: "Mobile"
+      

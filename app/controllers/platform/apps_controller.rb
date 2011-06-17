@@ -1,8 +1,8 @@
 class Platform::AppsController < Platform::BaseController
 
   def index
-    unless Registry.platform.apps_directory_enabled?
-      return redirect_to(:controller=>"/platform/developers/apps", :action=>"index")
+    unless Platform::Config.enable_app_directory?
+      return redirect_to(:controller=>"/platform/developer/apps", :action=>"index")
     end
   
     @categories = Platform::Category.root.children

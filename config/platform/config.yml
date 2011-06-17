@@ -13,6 +13,7 @@ defaults: &defaults
   enable_platform:              true     
   enable_app_directory:         true
   enable_embedded_applications: true
+  enable_mobile_applications:   true
   
   #############################################################################
   # Platform best run with caching enabled
@@ -30,7 +31,7 @@ defaults: &defaults
   # the adapter to your own class.
   #############################################################################
   caching:
-    enabled:                  true
+    enabled:                  false
     adapter:                  Tr8n::GeniCacheAdapter
     version:                  1 # you can change the version to invalidate the cache
       
@@ -48,12 +49,12 @@ defaults: &defaults
   site_info:
     title:                    Geni
     contact_email:            platform@geni.com
-    default_url:              /home
-    layout:                   default
-    admin_layout:             admin
+    default_url:              /platform/home
+    platform_layout:          platform
+    admin_layout:             platform_admin
     user_info:
-      enabled:                true
-      current_user_method:    current_user.user
+      enabled:                false
+      current_user_method:    current_user
       class_name:             User
       methods:
         id:                   id

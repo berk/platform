@@ -1,0 +1,18 @@
+google:
+  name: "Google"
+  description: "Google Search Engine"
+  url: "http://www.google.com"
+  contact_email: apps@platform.com
+  category_keywords: ["all"]
+  icon_path: "/public/platform/images/apps/app_icon.png"  
+  logo_path: "/public/platform/images/apps/app_logo.png"  
+
+yahoo:
+  name: "Yahoo"
+  description: "Yahoo Search Engine"
+  url: "http://www.yahoo.com"
+  contact_email: apps@platform.com
+  category_keywords: ["all"]
+  icon_path: "/public/platform/images/apps/app_icon.png"  
+  logo_path: "/public/platform/images/apps/app_logo.png"  
+    

@@ -28,12 +28,11 @@ class Platform::Developer::BaseController < Platform::BaseController
 private
 
   def platform_developer_tabs
-    [
-        {"title" => "Dashboard", "description" => "Developer tab", "controller" => "dashboard"},
-        {"title" => "Applications", "description" => "Developer tab", "controller" => "apps"},
-        {"title" => "Discussions", "description" => "Developer tab", "controller" => "forum"},
-        {"title" => "Help", "description" => "Developer tab", "controller" => "help"}
-    ]
+    @tabs ||= begin 
+      tabs = Platform::Config.features.clone
+      # we may need to do some extra filtering here
+      tabs
+    end
   end
   helper_method :platform_developer_tabs
 

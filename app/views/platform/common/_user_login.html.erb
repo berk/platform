@@ -1,0 +1,11 @@
+<ul class="<%=opts[:class]%>" style="<%=opts[:style]%>">
+<% if !Platform::Config.current_user or Platform::Config.current_user_is_guest? %>
+  <li><%=link_to(trl("Login", "Platform user login link"), "/platform/login")%></li>
+<% else %>
+  <li><%=tr("Welcome {user}!", "", :user => [Platform::Config.current_user, :name]) %></li>
+  <li><%=link_to(trl("Logout", "Platform user logout link"), "/platform/login/out")%></li>
+<% end %>
+<% if Tr8n::Config.enabled? and (Tr8n::Config.open_registration_mode? or Tr8n::Config.current_user_is_translator?) %>
+  <li><%= tr8n_language_selector_tag %></li>
+<% end %>
+</ul>
