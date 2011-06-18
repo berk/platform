@@ -30,6 +30,12 @@ class Platform::Config
       Platform::ForumMessage, Platform::ForumTopic,
       Platform::Permission, Platform::Rating,
       Platform::Developer, Platform::Application, 
+      Platform::PlatformUser, Platform::PlatformAdmin,
+      Platform::Oauth::OauthToken, 
+      Platform::Media::Media, Platform::Media::Image,
+      Platform::ApplicationLog, Platform::RollupLog, 
+      Platform::PlatformUser, Platform::PlatformAdmin,
+      Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
     ]
   end
   
@@ -48,6 +54,11 @@ class Platform::Config
   end
   
   def self.system_user
+    if user_class_name == "Platform::PlatformUser"
+      @system_user ||= Platform::PlatformUser.first || Platform::PlatformUser.create(:name => "System User")
+      return @system_user
+    end
+    
     return nil unless site_info[:system_user_id]
     @system_user ||= user_class_name.constantize.find_by_id(site_info[:system_user_id])
   end
@@ -68,9 +79,6 @@ class Platform::Config
       icon_path = description.delete("icon_path")
       logo_path = description.delete("logo_path")
 
-      description[:url].gsub!("{SITE}", SITE)
-      description[:privacy_policy_url].gsub!("{SITE}", SITE)
-      description[:terms_of_service_url].gsub!("{SITE}", SITE)
       app = Platform::Application.create(description.merge(:developer => system_developer))
       app.store_icon(File.new("#{root}/#{icon_path}", "r")) if icon_path 
       app.store_logo(File.new("#{root}/#{logo_path}", "r")) if logo_path 
@@ -88,11 +96,11 @@ class Platform::Config
   end
 
   def self.default_applications
-    @default_applications ||= load_yml("/config/platform/data/default_applications.yml", nil)
+    @default_applications ||= load_yml("/config/platform/data/default_applications.yml")
   end
 
   def self.default_categories
-    @default_categories ||= load_yml("/config/platform/data/default_categories.yml", nil)
+    @default_categories ||= load_yml("/config/platform/data/default_categories.yml")
   end
 
   def self.root
@@ -259,7 +267,7 @@ class Platform::Config
   
   def self.user_class_name
     return site_user_info[:class_name] if site_user_info_enabled?
-    "Platform::Developer"  
+    "Platform::PlatformUser"  
   end
 
   def self.user_class

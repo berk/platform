@@ -32,7 +32,7 @@ defaults: &defaults
   #############################################################################
   caching:
     enabled:                  false
-    adapter:                  Tr8n::GeniCacheAdapter
+    adapter:                  "Tr8n::GeniCacheAdapter"
     version:                  1 # you can change the version to invalidate the cache
       
   #############################################################################
@@ -41,29 +41,28 @@ defaults: &defaults
   #############################################################################
   logger:
     enabled:                  true
-    log_path:                 log/platform.log      # location of the log file
+    log_path:                 "log/platform.log"      # location of the log file
       
   #############################################################################
   # Site Integration Settings
   #############################################################################
   site_info:
-    title:                    Geni
-    contact_email:            platform@geni.com
-    default_url:              /platform/home
-    platform_layout:          platform
-    admin_layout:             platform_admin
+    title:                    "Geni"
+    contact_email:            "platform@geni.com"
+    default_url:              "/platform/home"
+    platform_layout:          "platform"
+    admin_layout:             "platform_admin"
     user_info:
-      enabled:                false
-      current_user_method:    current_user
-      class_name:             User
+      enabled:                true
+      current_user_method:    "current_user"
+      class_name:             "Platform::PlatformUser"
       methods:
-        id:                   id
-        name:                 name
-        link:                 path
-        mugshot:              square_mugshot_url
-        admin:                superuser?
-        guest:                guest?
-        locale:               language
+        id:                   "id"
+        name:                 "name"
+        link:                 "path"
+        mugshot:              "mugshot"
+        admin:                "admin?"
+        guest:                "guest?"
   
 #############################################################################
 # Environment Settings

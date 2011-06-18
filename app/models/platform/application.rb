@@ -13,8 +13,8 @@ class Platform::Application < ActiveRecord::Base
   has_many :access_tokens,    :class_name => "Platform::Oauth::AccessToken", :dependent => :destroy
   has_many :verifier_tokens,  :class_name => "Platform::Oauth::VerifierToken", :dependent => :destroy
 
-  belongs_to :icon, :class_name => "Platform::Media::Image", :foreign_key => "icon_id", :dependent => :destroy
-  belongs_to :logo, :class_name => "Platform::Media::Image", :foreign_key => "logo_id", :dependent => :destroy
+  belongs_to :icon, :class_name => "Platform::Media::Image", :foreign_key => "icon_id"
+  belongs_to :logo, :class_name => "Platform::Media::Image", :foreign_key => "logo_id"
 
   validates_presence_of :name, :url, :key, :secret, :contact_email
   validates_uniqueness_of :key
@@ -64,7 +64,7 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def self.find_token(token_key)
-    token = Platform::Oauth::OauthToken.find_by_token(token_key, :include => :client_application)
+    token = Platform::Oauth::OauthToken.find_by_token(token_key, :include => :application)
     if token && token.authorized?
       token
     else
@@ -238,14 +238,13 @@ protected
     self.secret = Platform::Helper.generate_key(40)[0,40]
   end
 
-  # Ticket 19680
-  after_create :notify_admins
-  def notify_admins
-    return unless Registry.api.admin_email?
-    return unless Platform::Config.current_user
-    
-    message = "#{Platform::Config.current_user.name} (#{Platform::Config.current_user.admin_link}) has created an app called #{name} (#{admin_link})."
-    SystemNotifier.deliver_to_admin(message, :subject => 'Client Application Created', :to => Registry.api.admin_email)
-  end
+#  after_create :notify_admins
+#  def notify_admins
+#    return unless Registry.api.admin_email?
+#    return unless Platform::Config.current_user
+#    
+#    message = "#{Platform::Config.current_user.name} (#{Platform::Config.current_user.admin_link}) has created an app called #{name} (#{admin_link})."
+#    SystemNotifier.deliver_to_admin(message, :subject => 'Client Application Created', :to => Registry.api.admin_email)
+#  end
 
 end

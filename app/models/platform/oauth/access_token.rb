@@ -1,7 +1,7 @@
 class Platform::Oauth::AccessToken < Platform::Oauth::OauthToken
   validates_presence_of :user_id, :secret
   before_create :set_authorized_at
-
+  
   # Implement this to return a hash or array of the capabilities the access token has
   # This is particularly useful if you have implemented user defined permissions.
   # def capabilities

@@ -39,6 +39,7 @@ module PlatformHelper
       end 
     end
     html << "</span>"
+    html.html_safe
   end
 
   def platform_rating_tag(rating, opts = {})
@@ -57,6 +58,7 @@ module PlatformHelper
       end 
     end
     html << "</span>"
+    html.html_safe
   end
   
   def platform_spinner_tag(id = "spinner", label = nil, cls='spinner')
@@ -90,6 +92,8 @@ module PlatformHelper
     else  
       img_tag
     end
+    
+    img_tag.html_safe
   end  
 
 end

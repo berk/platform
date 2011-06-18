@@ -11,7 +11,7 @@
                   html << image_tag("/tr8n/images/rating_star0.png", :id => "rating#{index}", :onMouseOver => "ratingMouseOver(#{index})", :onMouseOut => "ratingMouseOut(#{index})",  :onClick => "ratingSelected(#{index})", :style => "cursor:pointer")     
                 end
              %>
-             <%=html.join("")%>
+             <%=html.join("").html_safe%>
            </div>
          </td>
        </tr>

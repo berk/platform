@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110617021201) do
+ActiveRecord::Schema.define(:version => 20110617011540) do
 
   create_table "platform_admins", :force => true do |t|
     t.integer  "user_id"
@@ -21,56 +21,221 @@ ActiveRecord::Schema.define(:version => 20110617021201) do
 
   add_index "platform_admins", ["user_id"], :name => "index_platform_admins_on_user_id"
 
-# Could not dump table "platform_application_developers" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_application_developers", :force => true do |t|
+    t.integer  "application_id"
+    t.integer  "developer_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_application_logs" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_application_developers", ["application_id"], :name => "index_platform_application_developers_on_application_id"
+  add_index "platform_application_developers", ["developer_id"], :name => "index_platform_application_developers_on_developer_id"
 
-# Could not dump table "platform_application_metrics" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_application_logs", :force => true do |t|
+    t.integer  "application_id"
+    t.integer  "user_id"
+    t.string   "event"
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_application_permissions" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_application_logs", ["application_id"], :name => "index_platform_application_logs_on_application_id"
 
-# Could not dump table "platform_application_users" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_application_metrics", :force => true do |t|
+    t.string   "type"
+    t.integer  "application_id"
+    t.integer  "active_user_count"
+    t.date     "metric_date"
+    t.integer  "new_user_count"
+    t.integer  "canvas_view_count"
+    t.integer  "canvas_avg_view_response_time"
+    t.integer  "canvas_error_count"
+    t.integer  "api_call_count"
+    t.integer  "api_avg_response_time"
+    t.integer  "api_error_count"
+    t.integer  "oauth_impression_count"
+    t.integer  "oauth_accept_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_applications" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_application_metrics", ["application_id"], :name => "index_platform_application_metrics_on_application_id"
 
-# Could not dump table "platform_categories" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_application_permissions", :force => true do |t|
+    t.integer  "application_id"
+    t.integer  "permission_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_category_items" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_application_permissions", ["application_id"], :name => "index_platform_application_permissions_on_application_id"
 
-# Could not dump table "platform_developers" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_application_users", :force => true do |t|
+    t.integer  "application_id", :null => false
+    t.integer  "user_id",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_forum_messages" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_application_users", ["application_id"], :name => "index_platform_application_users_on_application_id"
+  add_index "platform_application_users", ["user_id"], :name => "index_platform_application_users_on_user_id"
 
-# Could not dump table "platform_forum_topics" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_applications", :force => true do |t|
+    t.integer  "developer_id"
+    t.string   "name"
+    t.text     "description"
+    t.string   "state",                    :default => "new"
+    t.string   "locale"
+    t.string   "url"
+    t.string   "support_url"
+    t.string   "callback_url"
+    t.string   "contact_email"
+    t.string   "privacy_policy_url"
+    t.string   "terms_of_service_url"
+    t.string   "permissions"
+    t.string   "key"
+    t.string   "secret"
+    t.integer  "icon_id"
+    t.integer  "logo_id"
+    t.string   "canvas_name"
+    t.string   "canvas_url"
+    t.boolean  "auto_resize"
+    t.boolean  "auto_login"
+    t.string   "mobile_application_type"
+    t.string   "ios_bundle_id"
+    t.string   "itunes_app_store_id"
+    t.string   "android_key_hash"
+    t.integer  "rank"
+    t.boolean  "auto_signin"
+    t.string   "deauthorize_callback_url"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_media" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_applications", ["developer_id"], :name => "index_platform_applications_on_developer_id"
+  add_index "platform_applications", ["key"], :name => "index_platform_applications_on_key", :unique => true
 
-# Could not dump table "platform_oauth_nonces" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_categories", :force => true do |t|
+    t.string   "type"
+    t.string   "name"
+    t.string   "keyword"
+    t.integer  "position"
+    t.date     "enable_on"
+    t.date     "disable_on"
+    t.integer  "parent_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_oauth_tokens" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_categories", ["parent_id"], :name => "index_platform_categories_on_parent_id"
 
-# Could not dump table "platform_permissions" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_category_items", :force => true do |t|
+    t.integer  "category_id", :null => false
+    t.string   "item_type"
+    t.integer  "item_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
-# Could not dump table "platform_ratings" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  add_index "platform_category_items", ["category_id"], :name => "index_platform_category_items_on_category_id"
+  add_index "platform_category_items", ["item_type", "item_id"], :name => "index_platform_category_items_on_item_type_and_item_id"
 
-# Could not dump table "platform_rollup_logs" because of following StandardError
-#   Unknown type 'serial_primary_key' for column 'id'
+  create_table "platform_developers", :force => true do |t|
+    t.integer  "user_id",    :limit => 8, :null => false
+    t.string   "name",                    :null => false
+    t.text     "about"
+    t.string   "url"
+    t.string   "email"
+    t.string   "phone"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_developers", ["user_id"], :name => "index_platform_developers_on_user_id"
+
+  create_table "platform_forum_messages", :force => true do |t|
+    t.integer  "forum_topic_id", :null => false
+    t.integer  "user_id",        :null => false
+    t.text     "message",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_forum_messages", ["forum_topic_id"], :name => "index_platform_forum_messages_on_forum_topic_id"
+  add_index "platform_forum_messages", ["user_id"], :name => "index_platform_forum_messages_on_user_id"
+
+  create_table "platform_forum_topics", :force => true do |t|
+    t.string   "subject_type"
+    t.integer  "subject_id"
+    t.integer  "user_id",      :null => false
+    t.text     "topic",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_forum_topics", ["subject_type", "subject_id"], :name => "index_platform_forum_topics_on_subject_type_and_subject_id"
+  add_index "platform_forum_topics", ["user_id"], :name => "index_platform_forum_topics_on_user_id"
+
+  create_table "platform_media", :force => true do |t|
+    t.string   "type"
+    t.string   "file_location"
+    t.string   "content_type"
+    t.string   "file_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "platform_oauth_tokens", :force => true do |t|
+    t.string   "type",           :limit => 20
+    t.integer  "user_id",        :limit => 8
+    t.integer  "application_id"
+    t.string   "token",          :limit => 50
+    t.string   "secret",         :limit => 50
+    t.string   "verifier",       :limit => 20
+    t.string   "callback_url"
+    t.string   "scope"
+    t.datetime "valid_to"
+    t.datetime "authorized_at"
+    t.datetime "invalidated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_oauth_tokens", ["token"], :name => "index_platform_oauth_tokens_on_token", :unique => true
+
+  create_table "platform_permissions", :force => true do |t|
+    t.string   "keyword",     :null => false
+    t.text     "description", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_permissions", ["keyword"], :name => "index_platform_permissions_on_keyword"
+
+  create_table "platform_ratings", :force => true do |t|
+    t.integer  "user_id",     :limit => 8, :null => false
+    t.string   "object_type"
+    t.integer  "object_id"
+    t.integer  "value"
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_ratings", ["object_type", "object_id"], :name => "index_platform_ratings_on_object_type_and_object_id"
+  add_index "platform_ratings", ["user_id"], :name => "index_platform_ratings_on_user_id"
+
+  create_table "platform_rollup_logs", :force => true do |t|
+    t.datetime "interval"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "platform_rollup_logs", ["interval"], :name => "index_platform_rollup_logs_on_interval"
 
   create_table "platform_users", :force => true do |t|
     t.string   "name"

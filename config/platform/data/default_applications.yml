@@ -1,18 +1,39 @@
-google:
-  name: "Google"
-  description: "Google Search Engine"
-  url: "http://www.google.com"
-  contact_email: apps@platform.com
-  category_keywords: ["all"]
-  icon_path: "/public/platform/images/apps/app_icon.png"  
-  logo_path: "/public/platform/images/apps/app_logo.png"  
+defaults: &defaults
+  google:
+    name: "Google"
+    description: "Google Search Engine"
+    url: "http://www.google.com"
+    contact_email: "apps@railsplatform.org"
+    category_keywords: ["all"]
+    icon_path: "/public/platform/images/apps/app_icon.gif"  
+    logo_path: "/public/platform/images/apps/app_logo.gif"  
+  
+  yahoo:
+    name: "Yahoo"
+    description: "Yahoo Search Engine"
+    url: "http://www.yahoo.com"
+    contact_email: "apps@railsplatform.org"
+    category_keywords: ["all"]
+    icon_path: "/public/platform/images/apps/app_icon.gif"  
+    logo_path: "/public/platform/images/apps/app_logo.gif"  
 
-yahoo:
-  name: "Yahoo"
-  description: "Yahoo Search Engine"
-  url: "http://www.yahoo.com"
-  contact_email: apps@platform.com
-  category_keywords: ["all"]
-  icon_path: "/public/platform/images/apps/app_icon.png"  
-  logo_path: "/public/platform/images/apps/app_logo.png"  
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+  
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
     

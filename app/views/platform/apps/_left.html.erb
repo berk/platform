@@ -9,7 +9,7 @@
     <% else %>
         <div class="cat_item">    
     <% end %>
-      <%=link_to(cat, {:sec=>cat}) %>
+      <%=link_to(cat, {:id => @app.id, :sec=>cat}) %>
     </div>
   <% end %>           
 </div>

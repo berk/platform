@@ -21,7 +21,9 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::HomeController < ApplicationController
+class Platform::HomeController < Platform::BaseController
+
+  skip_before_filter :validate_guest_user
   
   layout Platform::Config.site_info[:platform_layout]
   

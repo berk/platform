@@ -17,7 +17,7 @@ defaults: &defaults
   save_options: 
     enabled:              true
     user_filters_enabled: false   # if set to true, the filters will be private
-    user_class_name:      User 
+    user_class_name:      "Platform::PlatformUser" 
     current_user_method:  current_user 
 
   export_options:         
@@ -25,24 +25,25 @@ defaults: &defaults
     default_formats:      [html, csv, xml, json]
   
   containers:             # container implementation mapping
-    nil:                  WillFilter::Containers::Nil
-    numeric:              WillFilter::Containers::Numeric
-    numeric_range:        WillFilter::Containers::NumericRange
-    numeric_delimited:    WillFilter::Containers::NumericDelimited
-    date_time_range:      WillFilter::Containers::DateTimeRange
-    single_date:          WillFilter::Containers::SingleDate
-    date:                 WillFilter::Containers::Date
-    date_time:            WillFilter::Containers::DateTime
-    date_range:           WillFilter::Containers::DateRange
-    text:                 WillFilter::Containers::Text
-    text_delimited:       WillFilter::Containers::TextDelimited
-    boolean:              WillFilter::Containers::Boolean
-    list:                 WillFilter::Containers::List
-    filter_list:          WillFilter::Containers::FilterList
+    nil:                  "WillFilter::Containers::Nil"
+    numeric:              "WillFilter::Containers::Numeric"
+    numeric_range:        "WillFilter::Containers::NumericRange"
+    numeric_delimited:    "WillFilter::Containers::NumericDelimited"
+    date_time_range:      "WillFilter::Containers::DateTimeRange"
+    single_date:          "WillFilter::Containers::SingleDate"
+    date:                 "WillFilter::Containers::Date"
+    date_time:            "WillFilter::Containers::DateTime"
+    date_range:           "WillFilter::Containers::DateRange"
+    text:                 "WillFilter::Containers::Text"
+    text_delimited:       "WillFilter::Containers::TextDelimited"
+    boolean:              "WillFilter::Containers::Boolean"
+    list:                 "WillFilter::Containers::List"
+    filter_list:          "WillFilter::Containers::FilterList"
     
   data_types:             # mapping between data types and containers   
     bigint:               [nil, numeric, numeric_range, numeric_delimited]
     numeric:              [nil, numeric, numeric_range, numeric_delimited]
+    serial_primary_key:   [nil, numeric, numeric_range, numeric_delimited]
     smallint:             [nil, numeric, numeric_range, numeric_delimited]
     integer:              [nil, numeric, numeric_range, numeric_delimited]
     int:                  [nil, numeric, numeric_range, numeric_delimited]

@@ -69,8 +69,8 @@ private
         raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
       end
     else
-      site_current_user = Platform::User.find_by_id(session[:platform_user_id]) if session[:platform_user_id]
-      site_current_user = Platform::User.new unless site_current_user
+      site_current_user = Platform::PlatformUser.find_by_id(session[:platform_user_id]) if session[:platform_user_id]
+      site_current_user = Platform::PlatformUser.new unless site_current_user
     end
     
     # initialize request thread variables

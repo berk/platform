@@ -39,7 +39,7 @@ private
   
   def platform_admin_tabs
     [
-        {"title" => "Applications", "description" => "Admin tab", "controller" => "applications"},
+        {"title" => "Applications", "description" => "Admin tab", "controller" => "apps"},
         {"title" => "Developers", "description" => "Admin tab", "controller" => "developers"},
         {"title" => "Categories", "description" => "Admin tab", "controller" => "categories"}
     ]
