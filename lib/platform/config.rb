@@ -141,6 +141,14 @@ class Platform::Config
     config[:enable_mobile_applications]
   end
 
+  def self.enable_developer_agreement?
+    config[:enable_developer_agreement]
+  end
+
+  def self.enable_app_statistics?
+    config[:enable_app_statistics]
+  end
+
   def self.default_app_icon
     "/platform/images/default_app_icon.gif"
   end
@@ -286,6 +294,15 @@ class Platform::Config
   def self.user_name(user)
     begin
       user.send(site_user_info[:methods][:name])
+    rescue Exception => ex
+      Platform::Logger.error("Failed to fetch #{user_class_name} name: #{ex.to_s}")
+      return "Unknown user"
+    end  
+  end
+
+  def self.user_email(user)
+    begin
+      user.send(site_user_info[:methods][:email])
     rescue Exception => ex
       Platform::Logger.error("Failed to fetch #{user_class_name} name: #{ex.to_s}")
       return "Unknown user"

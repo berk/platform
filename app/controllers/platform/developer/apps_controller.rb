@@ -76,8 +76,8 @@ private
       elsif params.has_key?(:application)
         Platform::Application.create(params[:application].merge(:developer => Platform::Config.current_developer))
       else
-        Platform::Application.new
-      end
+        Platform::Application.new(:contact_email => Platform::Config.user_email(Platform::Config.current_user))
+      end 
     end
   end
   

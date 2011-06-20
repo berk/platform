@@ -37,8 +37,10 @@ private
   helper_method :platform_developer_tabs
 
   def validate_developer
-    unless platform_current_user_is_developer?
-      return redirect_to("/platform/developer/registration")
+    if Platform::Config.enable_developer_agreement?
+      unless platform_current_user_is_developer?
+        return redirect_to("/platform/developer/registration")
+      end
     end
   end
   

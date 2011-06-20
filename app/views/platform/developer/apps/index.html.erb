@@ -65,8 +65,8 @@
 </div>
 
 <% if @apps.empty? %>
-<div style="padding-bottom:40px; margin-left:10px;margin-right:10px;text-align:center; font-size: 14px;">
-  <%=tr("You do not have any applications.")%> <%=tr("[link: Click here] to register a new application.", "", :link => ["/platform/developer/apps/new"])%>
+<div style="padding:40px; margin-left:10px;margin-right:10px;text-align:center; font-size: 14px;">
+  <%=tr("You haven't registered any applications yet.")%> <%=tr("[link: Click here] to register a new application.", "", :link => ["/platform/developer/apps/new"])%>
 </div>
 <% else %>
 <div style="padding-bottom:20px; margin-left:0px; margin-right:10px;">
@@ -114,6 +114,7 @@
             </table> 
           </div> 
 
+          <% if Platform::Config.enable_app_statistics? %>
           <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
              <div>
                <table>
@@ -142,12 +143,15 @@
                </table>
              </div>
           </div>
-          
+          <% end %>
+					
           <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
             <div class="app_menu">
               <div><%=link_to("Edit Settings", :action => :edit, :id => @app.id)%></div>
-              <% unless @app.submitted? or @app.approved? %>  
-              <div><%=link_to("Submit to App Directory", {:action => :submit, :id => @app.id}, {:confirm => "Are you sure you want to submit this application to the app directory?"})%></div>
+              <% if Platform::Config.enable_app_directory? %>
+                <% unless @app.submitted? or @app.approved? %>  
+                <div><%=link_to("Submit to App Directory", {:action => :submit, :id => @app.id}, {:confirm => "Are you sure you want to submit this application to the app directory?"})%></div>
+                <% end %>
               <% end %>
               <div><%=link_to("Reset Application Secret", {:action => :reset_secret, :id => @app.id}, {:confirm => "Are you sure you want to reset application secret?"})%></div>
               <div><%=link_to("Delete Application", {:action => :delete, :id => @app.id}, {:confirm => "Are you sure you want to delete this application?"})%></div>
