@@ -39,7 +39,6 @@ class Platform::OauthController < Platform::BaseController
   # supported grant_type = authorization_code, password
   # unsupported grant_types = client_credentials, refresh_token
   def request_token
-    pp params
     if request_param(:client_id).blank?
       return render_response(:error_description => "client_id must be provided", :error => :invalid_request)
     end
@@ -123,10 +122,10 @@ private
     request_param(:scope) || "basic"
   end
 
+  # needs to be configured through Platform::Config
   def authenticate_user(username, password)
     User.authenticate(username, password)
   end
-
 
   # request token with grant_type = authorization_code
   def oauth2_request_token_authorization_code
@@ -152,7 +151,7 @@ private
       return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
     end
     
-    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
+    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>user, :scope=>scope)
     render_response({:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i)}, {:type => :json})
   end
 

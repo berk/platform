@@ -9,7 +9,7 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
   end
   
   def tokens
-    @tokens = Platform::Oauth::AccessToken.filter(:params => params)
+    @tokens = Platform::Oauth::OauthToken.filter(:params => params)
   end
 
   def block

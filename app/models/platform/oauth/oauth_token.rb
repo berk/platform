@@ -7,10 +7,11 @@ class Platform::Oauth::OauthToken < ActiveRecord::Base
 #  record_cache :id, :by => :token
 
   belongs_to :application, :class_name => "Platform::Application"
-  belongs_to :user
+  belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
 
   validates_uniqueness_of :token
-  validates_presence_of   :application, :token
+  validates_presence_of   :application
+  validates_presence_of   :token
 
   before_validation :generate_keys, :on => :create
 

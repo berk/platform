@@ -231,6 +231,10 @@ class Platform::Application < ActiveRecord::Base
     @rating_sum ||= Platform::Rating.sum(:value, :conditions => ["object_type = ? and object_id = ?", self.class.name, self.id])
   end
   
+  def reset_secret!
+    update_attributes(:secret => Platform::Helper.generate_key(40)[0,40])
+  end
+  
 protected
 
   def generate_keys

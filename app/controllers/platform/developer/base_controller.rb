@@ -41,6 +41,10 @@ private
       unless platform_current_user_is_developer?
         return redirect_to("/platform/developer/registration")
       end
+    else
+      # automatically register the developer - if registration is disabled
+      Platform::Developer.find_or_create(Platform::Config.current_user)
+      Platform::Config.init(Platform::Config.current_user)
     end
   end
   

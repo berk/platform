@@ -24,18 +24,17 @@ class Platform::Config
 
   def self.models
     [
-      Platform::ApplicationDeveloper, Platform::ApplicationMetric,
-      Platform::ApplicationPermission, Platform::ApplicationUser,
+      Platform::ApplicationDeveloper, Platform::ApplicationPermission, Platform::ApplicationUser,
       Platform::CategoryItem, Platform::Category, 
       Platform::ForumMessage, Platform::ForumTopic,
       Platform::Permission, Platform::Rating,
       Platform::Developer, Platform::Application, 
       Platform::PlatformUser, Platform::PlatformAdmin,
-      Platform::Oauth::OauthToken, 
+      Platform::Oauth::OauthToken, Platform::Oauth::AccessToken, 
+      Platform::Oauth::VerifierToken, Platform::Oauth::RefreshToken,
       Platform::Media::Media, Platform::Media::Image,
       Platform::ApplicationLog, Platform::RollupLog, 
-      Platform::PlatformUser, Platform::PlatformAdmin,
-      Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
+      Platform::ApplicationMetric, Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
     ]
   end
   

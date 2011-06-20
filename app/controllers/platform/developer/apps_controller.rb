@@ -56,6 +56,7 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
   end
 
   def reset_secret
+    application.reset_secret!
     trfn('Secret for {app_name} has been reset.', 'Client application controller notice', :app_name => application.name)
     redirect_to :action => :index, :id => application.id 
   end
