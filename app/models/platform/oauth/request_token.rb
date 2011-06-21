@@ -1,10 +1,10 @@
-class Platform::Oauth::VerifierToken < Platform::Oauth::OauthToken
+class Platform::Oauth::RequestToken < Platform::Oauth::OauthToken
 
   validates_presence_of :user
 
   def exchange!(params={})
     Platform::Oauth::OauthToken.transaction do
-      token = Platform::Oauth::Oauth2Token.create!(:user => user, :application => application)
+      token = Platform::Oauth::AccessToken.create!(:user => user, :application => application)
       invalidate!
       token
     end

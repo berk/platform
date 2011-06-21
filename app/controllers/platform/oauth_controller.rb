@@ -8,6 +8,11 @@ class Platform::OauthController < Platform::BaseController
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.1
   # supports response_type = code, token 
   def authorize
+    if Platform::Config.current_user_is_guest?
+      save_login_redirect_params
+      return redirect_to(:controller => "/login")
+    end
+  
     if request_param(:client_id).blank?
       return render_response(:error_description => "client_id must be provided", :error => :invalid_request)
     end
@@ -82,17 +87,16 @@ class Platform::OauthController < Platform::BaseController
   def validate_token
     token = Platform::Oauth::OauthToken.find_by_token(request_param(:access_token))
     if token && token.authorized?
-      render_response(:result => "OK")
+      render_response({:result => "OK"}, {:type => :json})
     else
-      render_response(:error => :invalid_token, :error_description => "token not found")
+      render_response({:error => :invalid_token, :error_description => "token not found"}, {:type => :json})
     end
   end
 
   def invalidate_token
     token = Platform::Oauth::OauthToken.find_by_token(request_param(:access_token))
     token.invalidate! if token
-    
-    render_response(:result => "OK")
+    render_response({:result => "OK"}, {:type => :json})
   end
   
   def xd
@@ -129,7 +133,7 @@ private
 
   # request token with grant_type = authorization_code
   def oauth2_request_token_authorization_code
-    verifier = Platform::Oauth::Oauth2Verifier.find(:first, :conditions => ["application_id = ? and token = ? and valid_to > ?", 
+    verifier = Platform::Oauth::RequestToken.find(:first, :conditions => ["application_id = ? and token = ? and valid_to > ?", 
                                                              client_application.id, request_param(:code), Time.now])
     unless verifier
       return render_response(:error_description => "invalid verification code", :error => :invalid_request)
@@ -139,7 +143,7 @@ private
       return render_response(:error_description => "invalid redirection url. it must match the url used for the code request.", :error => :invalid_request)
     end
     
-    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>verifier.user, :scope=>verifier.scope)
+    token = client_application.create_request_token(:user=>verifier.user, :scope=>verifier.scope)
     Platform::ApplicationUser.touch(client_application)
     return render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
   end
@@ -151,7 +155,7 @@ private
       return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
     end
     
-    token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>user, :scope=>scope)
+    token = client_application.create_access_token(:user=>user, :scope=>scope)
     render_response({:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i)}, {:type => :json})
   end
 
@@ -159,7 +163,7 @@ private
   def oauth2_authorize_code
     if request.post?
       if params[:authorize] == '1'
-        code = Platform::Oauth::VerifierToken.create(:application=>client_application, :user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
+        code = client_application.create_request_token(:user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
         Platform::ApplicationUser.touch(client_application)
         return render_response(:code => code.code, :expires_in => (code.valid_to.to_i - Time.now.to_i))
       end
@@ -178,7 +182,7 @@ private
   def oauth2_authorize_token
     if request.post?
       if params[:authorize] == '1'
-        token = Platform::Oauth::AccessToken.create(:application=>client_application, :user=>Platform::Config.current_user, :scope=>scope)
+        token = client_application.create_access_token(:user=>Platform::Config.current_user, :scope=>scope)
         Platform::ApplicationUser.touch(client_application)
         return render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
       end
@@ -194,7 +198,7 @@ private
   end
 
   def is_redirect_url_valid?(url)
-    if redirect_url == "#{client_application.key}://authorize"
+    if redirect_url == "#{client_application.id}://authorize"
       # make sure the user_agent is an iphone
       return true
     end

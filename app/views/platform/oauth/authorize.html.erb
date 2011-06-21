@@ -14,12 +14,20 @@
       <div style="padding:10px;">
 				<table style="width:100%">
 					<tr>
-						<td>
-							<%=image_tag(Platform::Config.user_mugshot(Platform::Config.current_user), :style => "float:left; padding-right:15px;")%>
-							<div style="font-weight:bold;">Access to my profile information</div>
-							<div style="margin-top:10px; color:#666; padding-right:15px; ">
-                 Includes name, profile picture, gender, family, photos, videos and any information available on my profile or through my user account.
-							</div>
+						<td style="vertical-align:top">
+							<table>
+								<tr>
+									<td style="vertical-align:top">
+							       <%=image_tag(Platform::Config.user_mugshot(Platform::Config.current_user), :style => "padding-right:15px;")%>			
+									</td>
+									<td>
+			              <div style="font-weight:bold;">Access to my profile information</div>
+			              <div style="margin-top:10px; color:#666; padding-right:15px; ">
+			                 Includes name, profile picture, gender, family, photos, videos and any information available on my profile or through my user account.
+			              </div>
+									</td>
+								</tr>
+							</table>
 						</td>
 						<td style="vertical-align:middle">
 							<%=image_tag("/platform/images/oauth/right_grey.png")%>

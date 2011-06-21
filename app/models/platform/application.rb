@@ -154,7 +154,11 @@ class Platform::Application < ActiveRecord::Base
 
   # If your application requires passing in extra parameters handle it here
   def create_request_token(params={})
-    RequestToken.create :client_application => self, :callback_url => token_callback_url || 'oob'
+    Platform::Oauth::RequestToken.create(params.merge(:application => self))
+  end
+
+  def create_access_token(params={})
+    Platform::Oauth::AccessToken.create(params.merge(:application => self))
   end
 
   def admin_link
