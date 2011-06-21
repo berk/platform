@@ -110,7 +110,7 @@ private
   end
 
   def client_application
-    @client_application ||= Platform::Application.find_by_key(request_param(:client_id))
+    @client_application ||= Platform::Application.find_by_key(request_param(:client_id)) || Platform::Application.find_by_id(request_param(:client_id)) 
   end
 
   def redirect_url
@@ -209,7 +209,10 @@ private
     response_params[:state] = request_param(:state) if request_param(:state)
     
     # we need to support json and redirect based method as well
-    return render(:text => response_params.to_json) if opts[:type] == :json
+    
+    if opts[:type] == :json
+      return render(:json => response_params.to_json)
+    end  
     
     if redirect_url.blank?
       @error = trl(response_params[:error_description])

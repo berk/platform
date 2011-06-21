@@ -57,11 +57,15 @@
 		  <table style="width:100%">
 		  	<tr>
 		  		<td style='text-align:left; vertical-align:middle; font-size:10px;'>
-            <%= tr('Not {user}? [link: Login as you].', 'Client application action label', :user => [own_profile, :name], :link => lambda {|label| link_to(label, '/logout')}) %>
+            <%= link_to(tr('Not {user}?', 'Client application action label', :user => [own_profile, :name]), '/logout') %>
 		  		</td>
 					<td style='text-align:right;font-size:10px;'>
-		        <%= link_to_function(trl('Allow', 'Client application action label'), %Q{$('authorize').value = 1; $S('auth_form')}, :class=>'button super blue medium') %>
-		        <%= link_to_function(trl("Don't Allow", 'Client application action label'), %Q{$('authorize').value = 0; $S('auth_form')}, :class=>'button super blue medium') %>
+						 <button onClick="$('authorize').value = 1; $S('auth_form')" style="font-size:13px;">
+						 	<%=trl('Allow', 'Client application action label')%>
+						 </button>
+	           <button onClick="$('authorize').value = 0; $S('auth_form')" style="font-size:13px;">
+	            <%=trl("Don't Allow", 'Client application action label')%>
+	           </button>
 					</td>
 		  	</tr>
 		  </table>

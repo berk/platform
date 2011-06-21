@@ -38,10 +38,10 @@
 	                   <%= image_tag(@client_application.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>
 	                </div> 
 	                <div style="font-size:12px; padding-top:10px;">
-	                  <%= link_to(h(@client_application.name), {:action => :view, :id => @client_application.id}) %><br>
+	                  <%= link_to(h(@client_application.name), {:controller => '/platform/apps', :action => :view, :id => @client_application.id}) %><br>
 	                </div>
 	                <div style="font-size:11px; padding-top:10px;">
-	                 <%= platform_app_rank_tag(@client_application, 95) %>
+	                 <%= platform_app_rank_tag(@client_application) %>
 	                </div>
 	             </div>
 						</td>
