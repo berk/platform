@@ -1,13 +1,8 @@
 <%
   links = []
-  current_tab ||= "Applications"
-  [ ["Applications", {:action => :index}],
-    ["Users", {:action => :users}],
-    ["Access Tokens", {:action => :tokens}],
-    ["Metrics", {:action => :metrics}],
-    ["Permissions", {:action => :permissions}],
-    ["Ratings", {:action => :ratings}],
-    ["API Log", {:action => :log}]
+  current_tab ||= "Topics"
+  [ ["Topics", {:action => :index}],
+    ["Messages", {:action => :messages}]
   ].each do |link|
       if controller.action_name == link.last[:action].to_s
         current_tab = link.first if current_tab.blank?

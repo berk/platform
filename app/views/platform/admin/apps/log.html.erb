@@ -1,0 +1,7 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%= will_filter(@logs) %>
+<%= will_filter_table_tag(@logs) %>
+  
+<%= render :partial => "/platform/admin/common/footer" %>

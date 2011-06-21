@@ -161,6 +161,10 @@ class Platform::Application < ActiveRecord::Base
     Platform::Oauth::AccessToken.create(params.merge(:application => self))
   end
 
+  def create_refresh_token(params={})
+    Platform::Oauth::RefreshToken.create(params.merge(:application => self))
+  end
+
   def admin_link
     "#{DEFAULT_SITE_LINK}/admin/applications/view/#{id}"
   end

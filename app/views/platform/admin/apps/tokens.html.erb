@@ -7,7 +7,7 @@
       :type,
       :token,
       [:user_id, lambda{|token| link_to(token.user ? token.user.name : token.user_id, :controller => "/admin/users", :action => :user, :user => token.user_id)}],
-      [:client_application_id, lambda{|token| link_to(token.client_application ? token.client_application.name : token.client_application_id, {:action => :view, :app_id=>token.client_application_id})}],
+      [:application_id, lambda{|token| link_to(token.application ? token.application.name : token.application_id, {:action => :view, :app_id=>token.application_id})}],
       :created_at,
       :updated_at,
       :authorized_at,

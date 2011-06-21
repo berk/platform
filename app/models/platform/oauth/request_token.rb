@@ -21,7 +21,7 @@ class Platform::Oauth::RequestToken < Platform::Oauth::OauthToken
   protected
 
   def generate_keys
-    self.token = Platform::OAuth::Helper.generate_key(20)[0,20]
+    self.token = Platform::Helper.generate_key(20)[0,20]
     self.valid_to = 10.minutes.from_now
     self.authorized_at = Time.now
   end

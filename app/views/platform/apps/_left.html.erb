@@ -1,5 +1,5 @@
 <div style="text-align:center; border:1px dotted #ccc;padding:10px;">
-  <%= image_tag(@app.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>  
+  <%= link_to(image_tag(@app.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;"), :action => :view, :id => @app.id, :sec => 'Info') %>  
 </div>
 
 <div style="border: 1px dotted #ccc; margin-top:10px; padding-top:10px; margin-bottom:10px; background: #f9f8f7; vertical-align:top; ">

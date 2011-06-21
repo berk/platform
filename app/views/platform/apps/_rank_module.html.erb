@@ -12,7 +12,7 @@
 	    <%= platform_app_rank_tag(app) %> <%=tr("({rank} out of 5)", "", :rank => app.rank)%>
 		</div>
 	  <div style="color:#666; font-size:11px;">
-	    <%=tr("Based on [link: {count||review}]", "", :count => app.rating_count, :link => ["/platform/app/reviews?app_id=#{app.id}"])%>
+	    <%=tr("Based on [link: {count||review}]", "", :count => app.rating_count, :link => ["/platform/apps/view?id=#{app.id}&sec=Reviews"])%>
 		</div>
 	<% end %>		
 </div>

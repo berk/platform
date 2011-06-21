@@ -155,8 +155,9 @@ private
       return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
     end
     
-    token = client_application.create_access_token(:user=>user, :scope=>scope)
-    render_response({:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i)}, {:type => :json})
+    access_token = client_application.create_access_token(:user=>user, :scope=>scope)
+    refresh_token = client_application.create_refresh_token(:user=>Platform::Config.current_user, :scope=>scope)
+    render_response({:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i)}, {:type => :json})
   end
 
   # authorize with response_type = code
@@ -182,9 +183,9 @@ private
   def oauth2_authorize_token
     if request.post?
       if params[:authorize] == '1'
-        token = client_application.create_access_token(:user=>Platform::Config.current_user, :scope=>scope)
         Platform::ApplicationUser.touch(client_application)
-        return render_response(:access_token => token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
+        access_token = client_application.create_access_token(:user=>Platform::Config.current_user, :scope=>scope)
+        return render_response(:access_token => access_token.token, :expires_in => (token.valid_to.to_i - Time.now.to_i))
       end
 
       if client_application.auto_signin?

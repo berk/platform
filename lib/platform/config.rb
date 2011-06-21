@@ -31,7 +31,7 @@ class Platform::Config
       Platform::Developer, Platform::Application, 
       Platform::PlatformUser, Platform::PlatformAdmin,
       Platform::Oauth::OauthToken, Platform::Oauth::AccessToken, 
-      Platform::Oauth::VerifierToken, Platform::Oauth::RefreshToken,
+      Platform::Oauth::RequestToken, Platform::Oauth::RefreshToken,
       Platform::Media::Media, Platform::Media::Image,
       Platform::ApplicationLog, Platform::RollupLog, 
       Platform::ApplicationMetric, Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
@@ -168,6 +168,10 @@ class Platform::Config
   
   def self.site_info
     config[:site_info]
+  end
+
+  def self.api
+    config[:API]
   end
   #########################################################
 
@@ -371,6 +375,14 @@ class Platform::Config
     guest_user?
   end
   #########################################################
+
+  def self.enable_api?
+    api[:enabled]
+  end
+
+  def self.enable_api_log?
+    api[:logging_enabled]
+  end
 
   def self.silhouette_image(user)
     "/platform/images/photo_silhouette.gif"

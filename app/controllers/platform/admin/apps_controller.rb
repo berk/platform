@@ -12,6 +12,26 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
     @tokens = Platform::Oauth::OauthToken.filter(:params => params)
   end
 
+  def users
+    @users = Platform::ApplicationUser.filter(:params => params)
+  end
+
+  def log
+    @logs = Platform::ApplicationLog.filter(:params => params)
+  end
+
+  def metrics
+    @metrics = Platform::ApplicationMetric.filter(:params => params)
+  end
+
+  def permissions
+    @permissions = Platform::ApplicationPermission.filter(:params => params)
+  end
+
+  def ratings
+    @ratings = Platform::Rating.filter(:params => params)
+  end
+
   def block
     app = Platform::Application.find(params[:app_id])  
     app.block!

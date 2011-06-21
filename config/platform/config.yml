@@ -16,6 +16,7 @@ defaults: &defaults
   enable_mobile_applications:   true
   enable_developer_agreement:   true
   enable_app_statistics:        true
+  enable_api_log:               true
   
   #############################################################################
   # Platform best run with caching enabled
@@ -66,7 +67,15 @@ defaults: &defaults
         mugshot:              "mugshot"
         admin:                "admin?"
         guest:                "guest?"
-  
+    
+  #############################################################################
+  # API Settings
+  #############################################################################
+  API:
+    enabled:                  true
+    logging_enabled:          true          
+      
+          
 #############################################################################
 # Environment Settings
 # You can overload any feature defined in the defaults for any environment
