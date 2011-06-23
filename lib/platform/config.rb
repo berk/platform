@@ -23,19 +23,26 @@ class Platform::Config
   end
 
   def self.models
-    [
-      Platform::ApplicationDeveloper, Platform::ApplicationPermission, Platform::ApplicationUser,
-      Platform::CategoryItem, Platform::Category, 
-      Platform::ForumMessage, Platform::ForumTopic,
-      Platform::Permission, Platform::Rating,
-      Platform::Developer, Platform::Application, 
-      Platform::PlatformUser, Platform::PlatformAdmin,
-      Platform::Oauth::OauthToken, Platform::Oauth::AccessToken, 
-      Platform::Oauth::RequestToken, Platform::Oauth::RefreshToken,
-      Platform::Media::Media, Platform::Media::Image,
-      Platform::ApplicationLog, Platform::RollupLog, 
-      Platform::ApplicationMetric, Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
-    ]
+    @models ||= begin 
+      mdls = [
+          Platform::ApplicationDeveloper, Platform::ApplicationPermission, Platform::ApplicationUser,
+          Platform::CategoryItem, Platform::Category, 
+          Platform::ForumMessage, Platform::ForumTopic,
+          Platform::Permission, Platform::Rating,
+          Platform::Developer, Platform::Application, 
+          Platform::Oauth::OauthToken, Platform::Oauth::AccessToken, 
+          Platform::Oauth::RequestToken, Platform::Oauth::RefreshToken,
+          Platform::Media::Media, Platform::Media::Image,
+          Platform::ApplicationLog, Platform::RollupLog, 
+          Platform::ApplicationMetric, Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
+      ]
+      
+      if user_class_name == "Platform::PlatformUser" # used for stand-alone deployment only
+        mdls << [Platform::PlatformUser, Platform::PlatformAdmin] 
+      end  
+      
+      mdls.flatten
+    end
   end
   
   def self.reset_all!
