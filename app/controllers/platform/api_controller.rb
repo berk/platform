@@ -1,7 +1,28 @@
 class Platform::ApiController < ActionController::Base
+  before_filter :ensure_api_enabled, :set_default_format
+  before_filter :authenticate
   before_filter :before_api_call
   after_filter  :after_api_call
   
+  class ApiError < StandardError
+    def status
+      @status ||= self.class.name.split('::').last.sub('Error','').underscore.to_sym
+    end
+    def init_cause(cause)
+      @cause = cause
+      self
+    end
+    def message
+      @cause.try(:message) || super
+    end
+  end
+  class BadRequestError < ApiError ; end
+  class ForbiddenError < ApiError ; end
+  class MethodNotAllowedError < ApiError ; end
+  class ServiceUnavailableError < ApiError ; end
+  class UnauthorizedError < ApiError ; end
+  
+  include SslRequirement
 
 protected
 
@@ -58,6 +79,14 @@ protected
   def enabled?
     Platform::Config.enable_api?
   end
+
+  def ensure_api_enabled
+    raise ServiceUnavailableError.new('API Disabled') unless enabled?
+  end
+
+  def set_default_format
+    request.format = :json if params[:format].nil?
+  end
   
 private
 
@@ -67,11 +96,11 @@ private
 
   def before_api_call
     return unless Platform::Config.enable_api_log?
-    @api_log = Platform::ApplicationLog.create(:application => client_app, :user => Platform::Config.current_user, :event => "#{params[:controller]}-#{params[:action]}", :data => params)
+    @api_log = Platform::ApplicationLog.create(:application => client_app, :user_id => Platform::Config.current_user.try(:id), :event => "#{params[:controller]}-#{params[:action]}", :data => params)
   end
   
   def after_api_call
     return unless Platform::Config.enable_api_log?
-    @api_log.update_attributes(:user => Platform::Config.current_user)    
+    @api_log.update_attributes(:user_id => Platform::Config.current_user.try(:id)) if @api_log    
   end
 end

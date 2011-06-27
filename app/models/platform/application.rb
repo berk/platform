@@ -8,6 +8,7 @@ class Platform::Application < ActiveRecord::Base
   has_many :application_developers, :class_name => "Platform::ApplicationDeveloper", :dependent => :destroy
   has_many :application_metrics, :class_name => "Platform::ApplicationMetric", :dependent => :destroy
   has_many :application_users, :class_name => "Platform::ApplicationUser", :dependent => :destroy
+  has_many :application_logs, :class_name => "Platform::ApplicationLog", :dependent => :destroy
   
   has_many :tokens,           :class_name => "Platform::Oauth::OauthToken", :dependent => :destroy
   has_many :access_tokens,    :class_name => "Platform::Oauth::AccessToken", :dependent => :destroy
