@@ -16,21 +16,18 @@ class Platform::Oauth::OauthToken < ActiveRecord::Base
   before_validation :generate_keys, :on => :create
 
   def invalidated?
-    invalidate! if valid_to && invalidated_at.nil? && Time.now > valid_to
-
-    invalidated_at.try(:<=, Time.now)
+#    invalidate! if valid_to && invalidated_at.nil? && Time.now > valid_to
+#    invalidated_at.try(:<=, Time.now)
+    
+    invalidated_at != nil
   end
 
   def invalidate!
-    update_attribute(:invalidated_at, Time.now)
+    update_attributes(:invalidated_at => Time.now)
   end
 
   def authorized?
     authorized_at && !invalidated?
-  end
-
-  def to_query
-    "oauth_token=#{token}&oauth_token_secret=#{secret}"
   end
 
 protected

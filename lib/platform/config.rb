@@ -292,7 +292,7 @@ class Platform::Config
     user_class_name.constantize
   end
 
-  def self.user_id(user)
+  def self.user_id(user = current_user)
     begin
       user.send(site_user_info[:methods][:id])
     rescue Exception => ex
@@ -301,7 +301,7 @@ class Platform::Config
     end  
   end
 
-  def self.user_name(user)
+  def self.user_name(user = current_user)
     begin
       user.send(site_user_info[:methods][:name])
     rescue Exception => ex
@@ -310,7 +310,7 @@ class Platform::Config
     end  
   end
 
-  def self.user_email(user)
+  def self.user_email(user = current_user)
     begin
       user.send(site_user_info[:methods][:email])
     rescue Exception => ex
@@ -319,7 +319,7 @@ class Platform::Config
     end  
   end
 
-  def self.user_gender(user)
+  def self.user_gender(user = current_user)
     begin
       user.send(site_user_info[:methods][:gender])
     rescue Exception => ex
@@ -328,16 +328,17 @@ class Platform::Config
     end  
   end
 
-  def self.user_mugshot(user)
+  def self.user_mugshot(user = current_user)
     begin
-      user.send(site_user_info[:methods][:mugshot])
+      mugshot_image = user.send(site_user_info[:methods][:mugshot])
     rescue Exception => ex
       Platform::Logger.error("Failed to fetch #{user_class_name} image: #{ex.to_s}")
-      return silhouette_image
     end  
+    
+    mugshot_image || silhouette_image(user)
   end
 
-  def self.user_link(user)
+  def self.user_link(user = current_user)
     begin
       user.send(site_user_info[:methods][:link])
     rescue Exception => ex
@@ -346,7 +347,7 @@ class Platform::Config
     end  
   end
 
-  def self.user_locale(user)
+  def self.user_locale(user = current_user)
     begin
       user.send(site_user_info[:methods][:locale])
     rescue Exception => ex
@@ -391,7 +392,7 @@ class Platform::Config
     api[:logging_enabled]
   end
 
-  def self.silhouette_image(user)
+  def self.silhouette_image(user = current_user)
     "/platform/images/photo_silhouette.gif"
   end
 
