@@ -77,6 +77,10 @@ class Platform::OauthController < Platform::BaseController
         return render_response(:error_description => "redirect_uri cannot point to a different server than from the one it sent a request", :error => :invalid_request)
       end
     elsif request_param(:grant_type) == "password"
+      unless client_application.allow_grant_type_password?
+        return render_response(:error_description => "this application is not authorized to use grant_type password", :error => :unauthorized_application)
+      end
+      
       if request_param(:username).blank?
         return render_response(:error_description => "username must be provided", :error => :invalid_request)
       end
