@@ -21,6 +21,7 @@ class Platform::ApiController < ActionController::Base
   class MethodNotAllowedError < ApiError ; end
   class ServiceUnavailableError < ApiError ; end
   class UnauthorizedError < ApiError ; end
+  class JSONPError < ApiError ; end
   
   include SslRequirement
 

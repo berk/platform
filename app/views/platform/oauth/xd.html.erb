@@ -8,11 +8,13 @@
 			function doFragmentSend() {
 				var
 					location = window.location.toString(),
-					fragment = location.substr(location.indexOf('#') + 1),
+					fragment = location.substr(location.indexOf('?') + 1),
 					params = {},
 					parts = fragment.split('&'),
 					i,
 					pair;
+
+          alert(location);
 				for (i=0; i<parts.length; i++) {
 					pair = parts[i].split('=', 2);
 					params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);

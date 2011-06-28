@@ -1,0 +1,11 @@
+<% form_tag({:controller => '/platform/oauth', :action => :authorize}, :id => 'auth_form') do %>
+  <%= hidden_field_tag "response_type", params[:response_type]%>
+  <%= hidden_field_tag "client_id", params[:client_id]%>
+  <%= hidden_field_tag "redirect_url", params[:redirect_url] || params[:redirect_uri] %>
+  <%= hidden_field_tag "state", params[:state]%>
+  <%= hidden_field_tag "scope", params[:scope]%>
+  <%= hidden_field_tag "origin", params[:origin]%>
+  <%= hidden_field_tag "callback", params[:callback]%>
+  <%= hidden_field_tag "display", params[:display]%>
+  <%= hidden_field_tag 'authorize', 1 %>
+<% end %>

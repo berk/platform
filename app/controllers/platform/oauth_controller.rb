@@ -10,7 +10,7 @@ class Platform::OauthController < Platform::BaseController
   def authorize
     if Platform::Config.current_user_is_guest?
       save_login_redirect_params
-      return redirect_to(:controller => "/login")
+      return redirect_to(:controller => "/login", :display => params[:display])
     end
   
     if request_param(:client_id).blank?
@@ -29,7 +29,7 @@ class Platform::OauthController < Platform::BaseController
       return redirect_with_response(:error_description => "only code and token response types are currently supported", :error => :unsupported_response_type)
     end
     
-    if redirect_url.blank?
+    if redirect_url.blank? and not xd?
       return redirect_with_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url field", :error => :invalid_request)
     end
     
@@ -38,6 +38,10 @@ class Platform::OauthController < Platform::BaseController
     end
     
     send("oauth2_authorize_#{request_param(:response_type)}")
+  end
+
+  def xd?
+    ['popup', 'hidden'].include?(params[:display])
   end
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.2
@@ -68,19 +72,10 @@ class Platform::OauthController < Platform::BaseController
       if request_param(:code).blank?
         return render_response(:error_description => "code must be provided", :error => :invalid_request)
       end
-      
-      if redirect_url.blank?
-        return render_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url field", :error => :invalid_request)
-      end
-      
-      unless redirect_url_valid?(redirect_url)
-        return render_response(:error_description => "redirect_uri cannot point to a different server than from the one it sent a request", :error => :invalid_request)
-      end
     elsif request_param(:grant_type) == "password"
       unless client_application.allow_grant_type_password?
         return render_response(:error_description => "this application is not authorized to use grant_type password", :error => :unauthorized_application)
       end
-      
       if request_param(:username).blank?
         return render_response(:error_description => "username must be provided", :error => :invalid_request)
       end
@@ -106,6 +101,7 @@ class Platform::OauthController < Platform::BaseController
     end
   end
 
+  # add jsonp support
   def invalidate_token
     token = Platform::Oauth::OauthToken.find_by_token(request_param(:access_token))
     token.invalidate! if token
@@ -240,6 +236,8 @@ private
   end
 
   def redirect_url_valid?(url)
+    return true if xd?
+    
     if redirect_url == "#{client_application.id}://authorize"
       # make sure the user_agent is an iphone
       return true
@@ -268,11 +266,17 @@ private
       # pp :before, payload, response_params[:sig]
     end
     
+    # process xd popup
+    if xd?
+      return redirect_to(response_params.merge(:controller => '/platform/oauth', :action => :xd, :origin => params[:origin], :callback => params[:callback]))
+    end
+    
+    # process normal redirect urls
     if redirect_url.blank?
       @error = trl(response_params[:error_description])
       return render_action("authorize_failure")
     end
-
+    
     response_query = begin
       prms = []
       response_params.keys.apply(:to_s).sort.each do |key| 
@@ -305,12 +309,14 @@ private
     render(:json => response_params.to_json)
   end
   
+  def display
+    return params[:display] if params[:display]
+    return 'mobile' if mobile_device?
+    'web'
+  end
+  
   def render_action(action)
-    if mobile_device?
-      return render(:action => "#{action}_mobile", :layout => false)
-    end
-    
-    render(:action => action)
+    render(:action => "#{action}_#{display}")
   end    
 
 end

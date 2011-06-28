@@ -244,6 +244,11 @@ class Platform::Application < ActiveRecord::Base
     update_attributes(:secret => Platform::Helper.generate_key(40)[0,40])
   end
   
+  def authorized_user?(user = Platform::Config.current_user)
+    # finish
+    true
+  end
+  
 protected
 
   def generate_keys
