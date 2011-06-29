@@ -276,9 +276,7 @@ private
     end
     
     # process xd popup
-    if xd?
-      return redirect_to(response_params.merge(:controller => '/platform/oauth', :action => :xd, :origin => params[:origin], :callback => params[:callback]))
-    end
+    return render(:action => :xd, :layout => false) if xd?
     
     # process normal redirect urls
     if redirect_url.blank?
