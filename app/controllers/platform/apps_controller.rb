@@ -68,7 +68,7 @@ class Platform::AppsController < Platform::BaseController
     end
 
     # add all desired params here
-    params[:access_token] = @access_token.token
+    params[:access_token] = @access_token.token if @access_token
     
     query_params = []
     params.each do |key, val|

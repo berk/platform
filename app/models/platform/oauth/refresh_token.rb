@@ -3,11 +3,9 @@ class Platform::Oauth::RefreshToken < Platform::Oauth::OauthToken
   validates_presence_of :user
 
   def exchange!(params={})
-    Platform::Oauth::OauthToken.transaction do
-      token = Platform::Oauth::AccessToken.create!(:user => user, :application => application)
-      invalidate!
-      token
-    end
+    token = Platform::Oauth::AccessToken.create!(:user => user, :application => application)
+    invalidate!
+    token
   end
 
   def redirect_url

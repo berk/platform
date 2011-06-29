@@ -143,7 +143,7 @@
         	 <% html = [] 
               html << link_to("View Access Tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>@app.id})
 
-              ClientApplication.permissions.each do |perm|
+              Platform::Application.permissions.each do |perm|
 	              if @app.has_permission?(perm)
 	                 html << link_to("Remove <strong>'#{perm}'</strong> permission", {:action => :remove_permission, :perm => perm, :app_id => @app.id}, :confirm => "Are you sure you want to remove #{perm} permission?")
 	              else   
