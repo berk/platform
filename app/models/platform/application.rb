@@ -245,8 +245,7 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def authorized_user?(user = Platform::Config.current_user)
-    # finish
-    true
+    Platform::ApplicationUser.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id])
   end
   
 protected

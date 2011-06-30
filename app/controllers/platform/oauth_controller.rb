@@ -276,7 +276,10 @@ private
     end
     
     # process xd popup
-    return render(:action => :xd, :layout => false) if xd?
+    if xd?
+      params.merge!(response_params)
+      return render(:action => :xd, :layout => false)
+    end   
     
     # process normal redirect urls
     if redirect_url.blank?
