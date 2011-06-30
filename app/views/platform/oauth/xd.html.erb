@@ -3,24 +3,10 @@
   <head> 
     <title>XD</title> 
   </head> 
-  <body onload="doFragmentSend()"> 
+  <body onload="sendFragment()"> 
     <script> 
-			function doFragmentSend() {
-				var
-					fragment = "<%=params.to_query%>",
-					params = {},
-					parts = fragment.split('&'),
-					i,
-					pair;
-
-          alert(location);
-				for (i=0; i<parts.length; i++) {
-					pair = parts[i].split('=', 2);
-					params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
-				}
-				
-				(window.opener || window.top).postMessage(fragment, params.origin);
-
+			function sendFragment() {
+				(window.opener || window.top).postMessage("<%=params.to_query%>", "<%= params[:origin] %>");
 			}
     </script> 
   </body> 
