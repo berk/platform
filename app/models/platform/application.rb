@@ -17,12 +17,12 @@ class Platform::Application < ActiveRecord::Base
   belongs_to :icon, :class_name => "Platform::Media::Image", :foreign_key => "icon_id"
   belongs_to :logo, :class_name => "Platform::Media::Image", :foreign_key => "logo_id"
 
-  validates_presence_of :name, :url, :key, :secret, :contact_email
+  validates_presence_of :name, :key, :secret
   validates_uniqueness_of :key
   before_validation_on_create :generate_keys
 
   URL_REGEX = /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
-  validates_format_of :url,                   :with => URL_REGEX
+  validates_format_of :url,                   :with => URL_REGEX, :allow_blank=>true
   validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
   validates_format_of :callback_url,          :with => URL_REGEX, :allow_blank=>true
   validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
@@ -251,8 +251,8 @@ class Platform::Application < ActiveRecord::Base
 protected
 
   def generate_keys
-    self.key = Platform::Helper.generate_key(40)[0,40]
-    self.secret = Platform::Helper.generate_key(40)[0,40]
+    self.key = Platform::Helper.generate_key(40)[0,40] if key.nil?
+    self.secret = Platform::Helper.generate_key(40)[0,40] if secret.nil?
   end
 
 #  after_create :notify_admins
