@@ -94,7 +94,6 @@ class Platform::OauthController < Platform::BaseController
   end
 
 private
-  
   def valid_signature?
     # enable signature verification, always
     return true if request_param(:sig).blank?
@@ -311,6 +310,10 @@ private
     end    
   end
 
+  def jsonp?
+    not params[:callback].blank?
+  end
+
   def render_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
     
@@ -321,7 +324,11 @@ private
     response_params[:scope] = request_param(:scope) if request_param(:scope)
 
     # we need to support json and redirect based method as well
-    render(:json => response_params.to_json)
+    if jsonp?
+      render(:text => "#{params[:callback].strip}(#{response_params.to_json})")
+    else  
+      render(:json => response_params.to_json)
+    end
   end
   
   def display
