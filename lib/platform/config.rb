@@ -315,7 +315,7 @@ class Platform::Config
       user.send(site_user_info[:methods][:email])
     rescue Exception => ex
       Platform::Logger.error("Failed to fetch #{user_class_name} name: #{ex.to_s}")
-      return "Unknown user"
+      return nil
     end  
   end
 

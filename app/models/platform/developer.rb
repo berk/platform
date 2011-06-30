@@ -15,7 +15,7 @@ class Platform::Developer < ActiveRecord::Base
   
   def self.find_or_create(user)
     dev = find(:first, :conditions => ["user_id = ?", user.id])
-    dev = create(:user => user, :name => Platform::Config.user_name(user)) unless dev
+    dev = create(:user => user, :name => Platform::Config.user_name(user), :email => Platform::Config.user_email(user)) unless dev
     dev
   end
   
