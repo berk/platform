@@ -317,13 +317,15 @@ private
   end
   
   def display
-    return params[:display] if params[:display]
-    return 'mobile' if mobile_device?
-    'web'
+    @display ||= params[:display] || (mobile_device? ? 'mobile' : 'web')  
   end
   
   def render_action(action)
-    render(:action => "#{action}_#{display}")
+    if display == 'web'
+      render(:action => "#{action}_#{display}")
+    else      
+      render(:action => "#{action}_#{display}", :layout => false)
+    end
   end    
 
 end
