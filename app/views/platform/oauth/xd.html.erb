@@ -20,9 +20,8 @@
 					params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
 				}
 				
-				if (window.opener) {
-					window.opener.postMessage(fragment, params.origin);
-				}
+				(window.opener || window.top).postMessage(fragment, params.origin);
+
 			}
     </script> 
   </body> 
