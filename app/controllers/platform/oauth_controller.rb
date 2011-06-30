@@ -84,6 +84,11 @@ class Platform::OauthController < Platform::BaseController
     render_response(:result => "OK")
   end
   
+  def deauthorize
+    
+    render_response(:result => "OK")
+  end
+  
   def xd
   	render :layout => false
   end
