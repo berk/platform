@@ -1,7 +1,7 @@
 class Platform::Admin::AppsController < Platform::Admin::BaseController
 
   def index
-    @apps = Platform::Application.filter(:params => params)
+    @apps = Platform::Application.filter(:params => params, :filter => Platform::ApplicationFilter)
   end
 
   def view
@@ -9,27 +9,27 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
   end
   
   def tokens
-    @tokens = Platform::Oauth::OauthToken.filter(:params => params)
+    @tokens = Platform::Oauth::OauthToken.filter(:params => params, :filter => Platform::Oauth::OauthTokenFilter)
   end
 
   def users
-    @users = Platform::ApplicationUser.filter(:params => params)
+    @users = Platform::ApplicationUser.filter(:params => params, :filter => Platform::ApplicationUserFilter)
   end
 
   def log
-    @logs = Platform::ApplicationLog.filter(:params => params)
+    @logs = Platform::ApplicationLog.filter(:params => params, :filter => Platform::ApplicationLogFilter)
   end
 
   def metrics
-    @metrics = Platform::ApplicationMetric.filter(:params => params)
+    @metrics = Platform::ApplicationMetric.filter(:params => params, :filter => Platform::ApplicationMetricFilter)
   end
 
   def permissions
-    @permissions = Platform::ApplicationPermission.filter(:params => params)
+    @permissions = Platform::ApplicationPermission.filter(:params => params, :filter => Platform::ApplicationPermissionFilter)
   end
 
   def ratings
-    @ratings = Platform::Rating.filter(:params => params)
+    @ratings = Platform::Rating.filter(:params => params, :filter => Platform::RatingFilter)
   end
 
   def block

@@ -3,6 +3,7 @@
 
 <%= will_filter(@apps) %>
 <%= will_filter_table_tag(@apps, :columns => [
+  [:icon, lambda{|app| link_to(image_tag(app.icon_url), :action => :view, :app_id => app.id)}, "width:18px;"],  
   [:id, lambda{|app| link_to(app.id, :action => :view, :app_id => app.id)}],
   [:developer_id, lambda{|app| link_to(app.developer.name, "") if app.developer}],
   :name,
@@ -14,7 +15,7 @@
   [:actions, lambda{|app|
       html = [] 
       html << link_to("view", :action => :view, :app_id => app.id)
-      html << link_to("access tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>app.id} )
+      html << link_to("access tokens", {:action => :tokens, :wf_model=>"Platform::Oauth::OauthToken",:wf_c0=>:application_id, :wf_o0=>:is, :wf_v0_0=>app.id} )
       html.join(" | ").html_safe
   }]
 ]) %>
