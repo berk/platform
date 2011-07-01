@@ -41,6 +41,10 @@ class Platform::AppsController < Platform::BaseController
     render :layout => false
   end
  
+  def xd
+    render :layout => false
+  end
+  
   def method_missing(method, *args)
     @app = Platform::Application.find_by_canvas_name(method)
     if @app
@@ -69,6 +73,7 @@ class Platform::AppsController < Platform::BaseController
 
     # add all desired params here
     params[:access_token] = @access_token.token if @access_token
+    params[:t] = Time.now.to_s
     
     query_params = []
     params.each do |key, val|
