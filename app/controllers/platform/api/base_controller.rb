@@ -1,4 +1,4 @@
-class Platform::ApiController < ActionController::Base
+class Platform::Api::BaseController < ActionController::Base
   before_filter :ensure_api_enabled, :set_default_format
   before_filter :authenticate
   before_filter :before_api_call

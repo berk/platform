@@ -179,6 +179,7 @@ class CreatePlatformTables < ActiveRecord::Migration
     create_table :platform_application_users do |t|
       t.integer :application_id,  :null => false
       t.integer :user_id,         :null => false
+      t.text    :data
       t.timestamps
     end
     add_index :platform_application_users, [:application_id]
