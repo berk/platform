@@ -248,6 +248,16 @@ class Platform::Application < ActiveRecord::Base
     Platform::ApplicationUser.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id])
   end
   
+  def deauthorize_user(user = Platform::Config.current_user)
+    valid_tokens_for_user(user).each do |token|
+      token.invalidate!
+    end
+    app_user = Platform::ApplicationUser.for(self, user)
+    app_user.destroy if app_user
+    
+    # ping the deauthorization url - maybe that should be done in a task
+  end
+  
 protected
 
   def generate_keys

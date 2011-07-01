@@ -84,8 +84,13 @@ class Platform::OauthController < Platform::BaseController
     render_response(:result => "OK")
   end
   
+  # should be implemented in the extending class
   def deauthorize
-    
+    render_response(:result => "OK")
+  end
+
+  # should be implemented in the extending class
+  def logout
     render_response(:result => "OK")
   end
   
