@@ -384,6 +384,9 @@ class Platform::Config
   end
   #########################################################
 
+  #########################################################
+  # API
+  #########################################################
   def self.enable_api?
     api[:enabled]
   end
@@ -391,6 +394,28 @@ class Platform::Config
   def self.enable_api_log?
     api[:logging_enabled]
   end
+  
+  def self.api_request_limit
+    api[:request_limit]
+  end
+  
+  def self.api_request_window
+    api[:request_window]
+  end
+  
+  def self.api_cookies_enabled?
+    api[:cookies_enabled]
+  end
+
+  def self.enable_public_api?
+    api[:public_enabled]
+  end
+
+  def self.api_max_models
+    api[:max_models]
+  end
+  
+  #########################################################
 
   def self.silhouette_image(user = current_user)
     "/platform/images/photo_silhouette.gif"

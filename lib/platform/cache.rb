@@ -30,5 +30,24 @@ class Platform::Cache
     return unless enabled?
     cache.delete(versioned_key(key), options)
   end
+
+  def self.increment(key, amount = 1)
+    return unless enabled?
+    cache.increment(versioned_key(key), amount)
+  end
+
+  def self.decrement(key, amount = 1)
+    return unless enabled?
+    cache.decrement(versioned_key(key), amount)
+  end
   
+  def self.set(key, value, options = {})
+    return unless enabled?
+    cache.set(key, value, options)
+  end
+  
+  def self.get(key, options = {})
+    return unless enabled?
+    cache.get(key, options)
+  end
 end
