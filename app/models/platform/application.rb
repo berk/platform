@@ -258,6 +258,11 @@ class Platform::Application < ActiveRecord::Base
     # ping the deauthorization url - maybe that should be done in a task
   end
   
+  # grant type password apps should require signature
+  def requires_signature?
+    false      
+  end
+  
 protected
 
   def generate_keys

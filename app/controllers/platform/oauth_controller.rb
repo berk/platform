@@ -99,6 +99,7 @@ class Platform::OauthController < Platform::BaseController
   end
 
 private
+
   def valid_signature?
     # enable signature verification, always
     return true if request_param(:sig).blank?
@@ -179,9 +180,10 @@ private
       return render_response(:error_description => "password must be provided", :error => :invalid_request)
     end
 
-    if request_param(:sig).blank?
-      return render_response(:error_description => "signature must be provided", :error => :invalid_request)
-    end
+#    do we need to require signature?
+#    if request_param(:sig).blank?
+#      return render_response(:error_description => "signature must be provided", :error => :invalid_request)
+#    end
 
     unless valid_signature?
       return render_response(:error_description => "invalid signature", :error => :invalid_request)

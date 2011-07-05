@@ -24,6 +24,8 @@ class Platform::Api::BaseController < ActionController::Base
   class ServiceUnavailableError < ApiError ; end
   class UnauthorizedError < ApiError ; end
   class JSONPError < ApiError ; end
+  class SignatureError < ApiError ; end
+
   class LoginError < StandardError ; end
   
   include SslRequirement
@@ -79,6 +81,8 @@ private
     else
       redirect_to_login unless allow_public?
     end
+    
+    verify_signature
   end
 
   # should be overloaded by the extending base class
@@ -109,6 +113,26 @@ private
 
   def oauth_attempted?
     access_token_param || request.env['Authorization'] =~ /oauth/i
+  end
+  
+  def verify_signature
+    return unless client_app and client_app.requires_signature?
+
+    # enable signature verification, always
+    if params[:sig].blank?
+      raise SignatureError.new("Missing signature")
+    end
+    
+    payload = ""
+    params.keys.sort.each do |key|
+      next if ['controller', 'action', 'sig'].include?(key.to_s)
+      payload << "#{key}=#{params[key]}"
+    end
+    payload << client_app.secret
+    digested = Digest::MD5.hexdigest(payload)
+    unless digested == params[:sig]
+      raise SignatureError.new("Invalid signature")
+    end
   end
 
   ############################################################################
