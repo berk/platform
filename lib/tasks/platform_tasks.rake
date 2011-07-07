@@ -32,9 +32,10 @@ namespace :platform do
     
     rollup_log = Platform::RollupLog.create(:interval => interval, :started_at => Time.now)  
     
-    # process rollup
-  
-#    Platform::ApplicationLog.find(:all, :conditions =>  )
+    Platform::Application.all.each do |app|
+      Platform::ApplicationLog.find(:all, :conditions => [""])
+      
+    end
   
     rollup_log.update_attributes(:finished_at => Time.now)
     
