@@ -339,7 +339,9 @@ private
   end
   
   def display
-    @display ||= params[:display] || (mobile_device? ? 'mobile' : 'web')  
+    return "mobile" if mobile_device?
+    return params[:display] if params[:display]
+    "web"   
   end
   
   def render_action(action)
