@@ -1,0 +1,68 @@
+<style>
+  .discussions_table {
+    width:100%; background-color:white; border: 1px dotted #ccc;
+  }
+  .discussions_table td {
+    padding:3px;
+  } 
+</style>
+
+<% unless app.recently_updated_discussions.empty? %>
+  <div style="padding-top:10px; font-size:14px; border-bottom:1px solid #ccc; margin-bottom:5px;">
+    <div style="float:right; font-size:12px;">
+       <%=link_to(tr("view all", "Link to view all translation votes"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Discussions')%>
+    </div>
+
+    <%=platform_toggler_tag("discussions_content_#{app.id}", "", false)%>
+    <%=tr("Recent Application Discussions", "Dashboard section header")%>
+    <span style="color:#ccc; font-size:12px;">(<%=tr("last 5", "Last 5 application discussions")%>)</span>
+  </div>
+  
+  <div id="discussions_content_<%=app.id%>" style="display:none">
+    <table class="discussions_table">
+      <tr style="border-bottom:1px solid #ccc;">
+        <td class="topic_header" style="width:200px;"><%=tr("User", "Dashboard section header")%></td>
+        <td class="topic_header" style="width:400px;"><%=tr("Topic", "Dashboard section header")%></td>
+        <td class="topic_header" style=""><%=tr("Last Post", "Dashboard section header")%></td>
+      </tr>  
+    
+      <% app.recently_updated_discussions.each do |topic| %>
+        <% style = "border-bottom:1px dotted #ccc;" unless app.recently_updated_discussions.last == topic %>
+        <tr style="<%=style%>">
+            <td style="text-align:left; vertical-align:top; padding-top:3px;">
+              <table>
+                <tr>
+                  <td style="vertical-align:top;padding-right:2px;">
+                    <%=platform_user_mugshot_tag(topic.user, :linked => true)%>
+                  </td>
+                  <td style="vertical-align:top">
+                    <%=platform_user_tag(topic.user, :linked => true)%>
+                    <div style="color:grey;">
+                        <%=topic.created_at.trl(:date_time) %>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+            <td style="text-align:left; vertical-align:top; padding-top:3px;">
+						  <%=topic.topic%>
+            </td>
+            <td style="text-align:left; vertical-align:top; padding-top:3px;">
+	            <% if topic.last_post %>
+	               <div style="font-size:10px;"><%=topic.last_post.created_at.trl(:date_time) %> 
+	                <% if topic.user %>
+	                  <br><%=tr("by {user}", "Name of the publisher", :user => [topic.user, platform_user_tag(topic.user, :linked => true)])%>
+	                <% end %>
+	               </div> 
+	               <% 
+	                  message = topic.last_post.message[0..60]
+	                  message << "..." if topic.last_post.message.length > 60 
+	               %> 
+	               <div style="font-style:italic; font-size:10px">"<%=link_to(h(message), :controller => '/platform/apps', :action => :view, :id => app.id, :sec => 'Discussions', :topic_id =>topic.id, :last_page => true)%>"</div>
+	            <% end %>
+            </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>  
+<% end %> 

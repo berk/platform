@@ -47,29 +47,41 @@ class CreatePlatformTables < ActiveRecord::Migration
     create_table :platform_application_logs do |t|
       t.integer     :application_id
       t.integer     :user_id
-      t.string      :event 
-      t.text        :data 
+      t.string      :event
+      t.string      :controller
+      t.string      :action
+      t.string      :request_method 
+      t.text        :data
+      t.string      :user_agent
+      t.integer     :duration
+      t.string      :host
+      t.string      :country
+      t.string      :ip
       t.timestamps
     end
-    add_index :platform_application_logs, [:application_id]    
+    add_index :platform_application_logs, [:application_id, :created_at]    
     
     create_table :platform_application_metrics do |t|
-      t.string  :type
-      t.integer :application_id
-      t.integer :active_user_count
-      t.date    :metric_date
-      t.integer :new_user_count
-      t.integer :canvas_view_count
-      t.integer :canvas_avg_view_response_time
-      t.integer :canvas_error_count
-      t.integer :api_call_count
-      t.integer :api_avg_response_time
-      t.integer :api_error_count
-      t.integer :oauth_impression_count
-      t.integer :oauth_accept_count
+      t.string    :type
+      t.timestamp :interval
+      t.integer   :application_id
+      t.integer   :active_user_count
+      t.integer   :new_user_count
       t.timestamps
     end      
-    add_index :platform_application_metrics, :application_id
+    add_index :platform_application_metrics, [:application_id, :interval]
+    
+    create_table :platform_application_usage_metrics do |t|
+      t.string    :type
+      t.timestamp :interval
+      t.integer   :application_id
+      t.string    :event
+      t.integer   :count
+      t.integer   :avg_response_time
+      t.integer   :error_count
+      t.timestamps
+    end      
+    add_index :platform_application_usage_metrics, [:application_id, :interval]
 
     create_table :platform_rollup_logs do |t|
       t.timestamp  :interval 

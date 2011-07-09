@@ -34,7 +34,9 @@ class Platform::Config
           Platform::Oauth::RequestToken, Platform::Oauth::RefreshToken,
           Platform::Media::Media, Platform::Media::Image,
           Platform::ApplicationLog, Platform::RollupLog, 
-          Platform::ApplicationMetric, Platform::DailyApplicationMetric, Platform::TotalApplicationMetric
+          Platform::ApplicationMetric, Platform::DailyApplicationMetric, 
+          Platform::WeeklyApplicationMetric, Platform::MonthlyApplicationMetric, 
+          Platform::TotalApplicationMetric, Platform::ApplicationUsageMetric
       ]
       
       if user_class_name == "Platform::PlatformUser" # used for stand-alone deployment only
@@ -51,9 +53,7 @@ class Platform::Config
       cls.delete_all
     end
 
-    puts "Initializing default categories..."
-    init_categories(Platform::Category.root, default_categories)
-
+    init_default_categories
     init_default_applications
 
     puts "Done."
@@ -72,7 +72,7 @@ class Platform::Config
   def self.system_developer
     @system_developer ||= Platform::Developer.find_or_create(Platform::Config.system_user)
   end
-  
+
   def self.init_default_applications
     puts "Initializing default applications..."
     unless system_developer
@@ -92,6 +92,11 @@ class Platform::Config
       puts "Initialized #{app.name}."
       app.approve!
     end    
+  end
+
+  def self.init_default_categories
+    puts "Initializing default categories..."
+    init_categories(Platform::Category.root, default_categories)
   end
 
   def self.init_categories(parent, categories) 

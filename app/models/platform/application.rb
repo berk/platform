@@ -263,6 +263,22 @@ class Platform::Application < ActiveRecord::Base
     false      
   end
   
+  def last_monthly_metric
+    @last_monthly_metric ||= Platform::MonthlyApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "interval desc")
+  end
+
+  def last_total_metric
+    @last_total_metric ||= Platform::TotalApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "interval desc")
+  end
+  
+  def recently_updated_reviews
+    @recently_updated_reviews ||= Platform::Rating.find(:all, :conditions => ["object_type = ? and object_id = ?", 'Platform::Application', self.id], :order => "updated_at desc", :limit => 5)    
+  end
+
+  def recently_updated_discussions
+    @recently_updated_discussions ||= Platform::ForumTopic.find(:all, :conditions => ["subject_type = ? and subject_id = ?", 'Platform::Application', self.id], :order => "updated_at desc", :limit => 5)    
+  end
+  
 protected
 
   def generate_keys

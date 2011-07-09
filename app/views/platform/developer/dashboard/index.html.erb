@@ -6,9 +6,7 @@
 
 <div class="section_title">
   <div style="float:right; font-size:12px; padding-top:5px;">
-     <%=link_to(tr("edit developer information", "Developer preferences link"), :controller => "/platform/developer", :action => :index)%>
-		  | 
-     <%=link_to(tr("edit dashboard preferences", "Developer preferences link"), :controller => "/platform/developer", :action => :index)%>
+     <%=link_to(tr("edit developer information", "Developer preferences link"), :controller => "/platform/developer", :action => :info)%>
   </div>
   
   <%=tr("{user}'s Dashboard", "Dashboard section title", :user => [platform_current_developer, :name]) %>
@@ -57,25 +55,30 @@
     </table>  
 </div>
 
-  <% platform_current_developer.applications.each do |app| %>
-    <div class="section_title">
-      <div style="float:right; font-size:12px; font-weight:normal; padding-top:5px;">
-        <%=link_to(tr("view", "Language action link"), "")%>
-        | <%=link_to(tr("ratings", "Language action link"), "")%>
-        | <%=link_to(tr("discussions", "Language action link"), "")%>
-        | <%=link_to(tr("configure", "Language action link"), "")%>
-      </div>
-  
-      <%=platform_toggler_tag("app_content_#{app.id}")%>
-      
-      <%=image_tag(app.icon_url, :title=>app.name) %>&nbsp;
-      <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.name%></a>
+<% platform_current_developer.applications.each do |app| %>
+  <div class="section_title">
+    <div style="float:right; font-size:12px; font-weight:normal; padding-top:5px;">
+      <%=link_to(tr("info", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Info')%>
+      | <%=link_to(tr("reviews", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Reviews')%>
+      | <%=link_to(tr("discussions", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Discussions')%>
+      | <%=link_to(tr("configure", "Application action link"), :controller => "/platform/developer/apps", :action => :index, :id => app.id)%>
     </div>
+
+    <%=platform_toggler_tag("app_content_#{app.id}")%>
     
-    <div id="app_content_<%=app.id%>" class="section_box colored">
-      <%=render :partial=>"statistics", :locals => {:app => app}%>
-    </div>
-  <% end %>
+    <%=image_tag(app.icon_url, :title=>app.name) %>&nbsp;
+    <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.name%></a>
+  </div>
+  
+  <div id="app_content_<%=app.id%>" class="section_box colored">
+    <%=render :partial=>"statistics", :locals => {:app => app}%>
+		
+    <%=render :partial=>"reviews", :locals => {:app => app}%>
+
+    <%=render :partial=>"discussions", :locals => {:app => app}%>
+		
+  </div>
+<% end %>
 	
 
 <%= render :partial => "/platform/developer/common/footer" %>

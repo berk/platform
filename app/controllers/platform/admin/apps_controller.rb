@@ -16,14 +16,6 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
     @users = Platform::ApplicationUser.filter(:params => params, :filter => Platform::ApplicationUserFilter)
   end
 
-  def log
-    @logs = Platform::ApplicationLog.filter(:params => params, :filter => Platform::ApplicationLogFilter)
-  end
-
-  def metrics
-    @metrics = Platform::ApplicationMetric.filter(:params => params, :filter => Platform::ApplicationMetricFilter)
-  end
-
   def permissions
     @permissions = Platform::ApplicationPermission.filter(:params => params, :filter => Platform::ApplicationPermissionFilter)
   end

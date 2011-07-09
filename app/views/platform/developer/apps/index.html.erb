@@ -87,6 +87,9 @@
       
      <td style="padding-left:20px; padding-right:0px; background-color:white; vertical-align:top;">
           <div style="border-bottom:1px solid #ccc; padding-bottom:10px;">
+					  <div style="float:right;">
+					  	<%= platform_app_rank_tag(@app) %>
+					  </div> 
             <table>
               <tr>
                 <td style="align-vertical:top; width:90px;">
@@ -114,7 +117,6 @@
             </table> 
           </div> 
 
-          <% if Platform::Config.enable_app_statistics? %>
           <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
              <div>
                <table>
@@ -123,27 +125,32 @@
                       <%=tr("Monthly Active Users", 'Client application label')%>
                     </td>               
                     <td style="color:#666;width:200px;">
-                      <%=tr("People Who Like This App", 'Client application label')%>
+                      <%=tr("Monthly New Users", 'Client application label')%>
                     </td>               
                     <td style="color:#666;width:200px;">
                       <%=tr("Total Users", 'Client application label')%>
                     </td>               
+                    <td style="color:#666;width:200px;">
+                      <%=tr("Total Reviews", 'Client application label')%>
+                    </td>               
                   </tr>
                   <tr>
                     <td style="font-size:20px;">
-                      0
+                      <%=(@app.last_monthly_metric ? @app.last_monthly_metric.active_user_count : 0) %>
                     </td>
                     <td style="font-size:20px;">
-                      0
+                      <%=(@app.last_monthly_metric ? @app.last_monthly_metric.new_user_count : 0) %>
                     </td>
                     <td style="font-size:20px;">
-                      0
+                      <%=(@app.last_total_metric ? @app.last_total_metric.user_count : 0) %>
+                    </td>
+                    <td style="font-size:20px;">
+                      <%= @app.rating_count %>
                     </td>
                   </tr>
                </table>
              </div>
           </div>
-          <% end %>
 					
           <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
             <div class="app_menu">

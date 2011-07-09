@@ -1,0 +1,53 @@
+<style>
+	.reviews_table {
+		width:100%; background-color:white; border: 1px dotted #ccc;
+	}
+	.reviews_table td {
+    padding:3px;
+  } 
+</style>
+
+<% unless app.recently_updated_reviews.empty? %>
+	<div style="padding-top:10px; font-size:14px; border-bottom:1px solid #ccc; margin-bottom:5px;">
+    <div style="float:right; font-size:12px;">
+       <%=link_to(tr("view all", "Link to view all translation votes"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Reviews')%>
+    </div>
+
+    <%=platform_toggler_tag("reviews_content_#{app.id}", "", false)%>
+	  <%=tr("Recent Application Reviews", "Dashboard section header")%>
+		<span style="color:#ccc; font-size:12px;">(<%=tr("last 5", "Last 5 application reviews")%>)</span>
+	</div>
+	
+	<div id="reviews_content_<%=app.id%>" style="display:none">
+		<table class="reviews_table">
+		  <tr style="border-bottom:1px solid #ccc;">
+		    <td class="topic_header" style="width:200px;"><%=tr("User", "Dashboard section header")%></td>
+        <td class="topic_header" style=""><%=tr("Review", "Dashboard section header")%></td>
+		  </tr>  
+		
+		  <% app.recently_updated_reviews.each do |review| %>
+		    <% style = "border-bottom:1px dotted #ccc;" unless app.recently_updated_reviews.last == review %>
+		    <tr style="<%=style%>">
+						<td style="text-align:left; vertical-align:top; padding-top:3px;">
+						  <table>
+						    <tr>
+						      <td style="vertical-align:top;padding-right:2px;">
+						        <%=platform_user_mugshot_tag(review.user, :linked => true)%>
+						      </td>
+						      <td style="vertical-align:top">
+						        <%=platform_user_tag(review.user, :linked => true)%>
+						        <div style="color:grey;">
+						            <%=review.created_at.trl(:date_time) %>
+						        </div>
+						      </td>
+						    </tr>
+						  </table>
+						</td>
+            <td style="text-align:left; vertical-align:top; padding-top:3px;">
+						    <%=platform_rating_tag(review, :width => "12px;") %> - <%=review.comment ? review.toHTML : "<span style='color:#ccc'>#{tr('no comment')}</span>" %>
+						</td>
+		    </tr>
+		  <% end %>
+		</table>
+	</div>	
+<% end %>	

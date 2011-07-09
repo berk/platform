@@ -42,7 +42,8 @@ private
         {"title" => "Applications", "description" => "Admin tab", "controller" => "apps"},
         {"title" => "Developers", "description" => "Admin tab", "controller" => "developers"},
         {"title" => "Categories", "description" => "Admin tab", "controller" => "categories"},
-        {"title" => "Forum", "description" => "Admin tab", "controller" => "forum"}
+        {"title" => "Forum", "description" => "Admin tab", "controller" => "forum"},
+        {"title" => "Metrics", "description" => "Admin tab", "controller" => "metrics"},
     ]
   end
   helper_method :platform_admin_tabs
