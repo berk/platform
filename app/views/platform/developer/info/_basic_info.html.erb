@@ -1,21 +1,70 @@
+<style>
+	input {
+		width:90%;
+	}
+  textarea {
+    width:90%;
+		height:200px;
+  }
+</style>
 <div id="basic_info_container">
-  <%=render(:partial => "header", :locals => {:section => "basic_info", :label => "Translator Details", :description => "Translator details section title", :mode => mode})%>
+  <%=render(:partial => "header", :locals => {:section => "basic_info", :label => "Developer Details", :description => "Developer details section title", :mode => mode})%>
   
   <% form_for(:developer, platform_current_developer, :url => {:action => :index}, :html => {:id => 'basic_info_form', :method => :post}) do |f| %>
     <div class="section_box colored">
       <div style="float:right; padding-right:5px;">
-          <%=tr8n_help_icon_tag %>
+          <%=platform_help_icon_tag %>
       </div>
       <div ondblclick="switchSectionMode('basic_info', 'edit')">
         <table>
           <tr>
-            <th style="text-align:left;width:120px;padding:3px;vertical-align:middle;font-weight:bold;"><%=trl("Name:", "Translator name")%></th>
+            <th style="text-align:left;width:120px;padding:3px;vertical-align:top;font-weight:bold;"><%=trl("Name:")%></th>
             <td style="padding:3px;">
 						  <% if mode == :edit %>
                 <%=f.text_field(:name)%>
 							<% else %>
 							   <%= platform_current_developer.name%>
 							<% end %>	 	
+            </td>
+          </tr>
+          <tr>
+            <th style="text-align:left;width:120px;padding:3px;vertical-align:top;font-weight:bold;"><%=trl("Email:")%></th>
+            <td style="padding:3px;">
+              <% if mode == :edit %>
+                <%=f.text_field(:email)%>
+              <% else %>
+                 <%= platform_current_developer.email%>
+              <% end %>   
+            </td>
+          </tr>
+          <tr>
+            <th style="text-align:left;width:120px;padding:3px;vertical-align:top;font-weight:bold;"><%=trl("Url:")%></th>
+            <td style="padding:3px;">
+              <% if mode == :edit %>
+                <%=f.text_field(:url)%>
+              <% else %>
+                 <%= platform_current_developer.url%>
+              <% end %>   
+            </td>
+          </tr>
+          <tr>
+            <th style="text-align:left;width:120px;padding:3px;vertical-align:top;font-weight:bold;"><%=trl("Phone:")%></th>
+            <td style="padding:3px;">
+              <% if mode == :edit %>
+                <%=f.text_field(:phone)%>
+              <% else %>
+                 <%= platform_current_developer.phone%>
+              <% end %>   
+            </td>
+          </tr>
+          <tr>
+            <th style="text-align:left;width:120px;padding:3px;vertical-align:top;font-weight:bold;"><%=trl("About:")%></th>
+            <td style="padding:3px;">
+              <% if mode == :edit %>
+                <%=f.text_area(:about)%>
+              <% else %>
+                 <%= platform_current_developer.about%>
+              <% end %>   
             </td>
           </tr>
         </table>

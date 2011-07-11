@@ -96,4 +96,8 @@ module PlatformHelper
     img_tag.html_safe
   end  
 
+  def platform_help_icon_tag(filename = "index")
+    link_to(image_tag("/platform/images/help.png", :style => "border:0px; vertical-align:middle;", :title => trl("Help")), {:controller => "/platform/help", :action => filename}, :target => "_new")
+  end
+
 end
