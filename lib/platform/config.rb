@@ -280,6 +280,14 @@ class Platform::Config
     site_user_info[:current_user_method]
   end
 
+  def self.logout_method
+    site_user_info[:logout_method]
+  end
+
+  def self.login_url
+    site_info[:login_url]
+  end
+
   def self.site_user_info_enabled?
     site_user_info[:enabled].nil? ? true : site_user_info[:enabled]
   end

@@ -53,11 +53,13 @@ defaults: &defaults
     title:                    "Geni"
     contact_email:            "platform@geni.com"
     default_url:              "/platform/home"
+    login_url:                "/login"
     platform_layout:          "platform"
     admin_layout:             "platform_admin"
     user_info:
       enabled:                true
       current_user_method:    "current_user"
+      logout_method:          "logout!"
       class_name:             "Platform::PlatformUser"
       methods:
         id:                   "id"

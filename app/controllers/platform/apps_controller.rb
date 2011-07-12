@@ -55,7 +55,7 @@ class Platform::AppsController < Platform::BaseController
           redirect_url = "/platform/apps/#{@app.canvas_name}"
           return redirect_to( :controller => '/platform/oauth', :action => :authorize, 
                               :response_type => :token, :client_id => @app.key, 
-                              :client_secret => @app.secret, :type => :web, :redirect_url => redirect_url)
+                              :display => :web, :redirect_url => redirect_url)
         end
         @access_token = tokens.first
       end

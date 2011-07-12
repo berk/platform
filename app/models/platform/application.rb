@@ -243,9 +243,13 @@ class Platform::Application < ActiveRecord::Base
   def reset_secret!
     update_attributes(:secret => Platform::Helper.generate_key(40)[0,40])
   end
+
+  def authorize_user(user = Platform::Config.current_user)
+    Platform::ApplicationUser.touch(self, user)
+  end
   
   def authorized_user?(user = Platform::Config.current_user)
-    Platform::ApplicationUser.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id])
+    not Platform::ApplicationUser.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id]).nil?
   end
   
   def deauthorize_user(user = Platform::Config.current_user)

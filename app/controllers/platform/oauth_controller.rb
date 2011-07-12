@@ -9,8 +9,8 @@ class Platform::OauthController < Platform::BaseController
   # supports response_type = code, token 
   def authorize
     if Platform::Config.current_user_is_guest?
-      save_login_redirect_params
-      return redirect_to(:controller => "/login", :display => params[:display])
+      save_oauth_login_redirect_params
+      return redirect_to(:controller => Platform::Config.login_url, :display => params[:display])
     end
   
     if request_param(:client_id).blank?
@@ -84,13 +84,24 @@ class Platform::OauthController < Platform::BaseController
     render_response(:result => "OK")
   end
   
-  # should be implemented in the extending class
   def deauthorize
+    unless Platform::Config.current_user_is_guest?
+      client_application.deauthorize_user if client_application
+    end
     render_response(:result => "OK")
   end
 
-  # should be implemented in the extending class
   def logout
+    if Platform::Config.site_user_info_enabled?
+      begin
+        eval(Platform::Config.logout_method)
+      rescue Exception => ex
+        raise Platform::Exception.new("Failed to execute #{Platform::Config.logout_method} with exception: #{ex.message}")
+      end
+    else
+      # handle default logout strategy
+    end
+    
     render_response(:result => "OK")
   end
   
@@ -98,8 +109,32 @@ class Platform::OauthController < Platform::BaseController
   	render :layout => false
   end
 
+  def status
+    if Platform::Config.current_user_is_guest?
+      return redirect_with_response(:status => "unknown")
+    end
+    
+    unless client_application
+      return redirect_with_response(:status => "unknown")
+    end
+
+    # implement authorized user
+    if client_application.authorized_user?
+      # add access token to the redirect
+      access_token = client_application.create_access_token(:user=>Geni.current_user, :scope=>scope)
+      refresh_token = client_application.create_refresh_token(:user=>Geni.current_user, :scope=>scope)
+      return redirect_with_response(:status => "authorized", :access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
+    end
+    
+    redirect_with_response(:status => "unauthorized")
+  end 
+
 private
 
+  def save_oauth_login_redirect_params
+    session[:oauth_login_redirect_params] = params
+  end
+  
   def valid_signature?
     # enable signature verification, always
     return true if request_param(:sig).blank?
