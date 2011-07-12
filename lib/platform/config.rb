@@ -13,6 +13,14 @@ class Platform::Config
     Thread.current[:platform_current_developer] 
   end
 
+  def self.current_application
+    Thread.current[:platform_current_application]
+  end
+
+  def self.current_application=(app)
+    Thread.current[:platform_current_application] = app
+  end
+
   def self.current_user_is_developer?
     Thread.current[:platform_current_developer] != nil
   end
@@ -20,6 +28,7 @@ class Platform::Config
   def self.reset!
     Thread.current[:platform_current_user] = nil
     Thread.current[:platform_current_developer] = nil
+    Thread.current[:platform_current_application] = nil
   end
 
   def self.models

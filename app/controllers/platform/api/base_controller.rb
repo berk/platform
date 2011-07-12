@@ -2,8 +2,7 @@ class Platform::Api::BaseController < ActionController::Base
   before_filter :ensure_api_enabled 
   before_filter :set_default_format
   before_filter :authenticate
-  before_filter :before_api_call
-  after_filter  :after_api_call
+  after_filter  :log_api_call
   
   class ApiError < StandardError
     def status
@@ -75,6 +74,7 @@ private
   ############################################################################
   def authenticate
     authenticate_via_oauth 
+    authenticate_via_cookie if cookies_enabled? and (not jsonp?)
 
     if oauth_attempted? and not logged_in?
       raise Exception.new('Invalid access token')
@@ -85,12 +85,21 @@ private
     verify_signature
   end
 
-  # should be overloaded by the extending base class
   def authenticate_via_oauth
     user = access_token.try(:user)
     Platform::Config.init(user) if user
   end
 
+  # should be overloaded by the extending class
+  def authenticate_via_cookie
+    if Platform::Config.site_user_info_enabled?
+      user = Platform::Config.user_class.find_by_user_id(session[:user_id])
+    else
+      user = Platform::PlatformUser.find_by_user_id(session[:user_id])
+    end
+    Platform::Config.init(user) if user
+  end
+  
   def access_token
     unless defined?(@access_token)
       @access_token = Platform::Application.find_token(params[:access_token])
@@ -335,11 +344,11 @@ private
   #### Navigation Params
   ############################################################################
   def prev_page
-    url_for params.merge(navigation_params(page - 1))
+    url_for(params.merge(navigation_params(page - 1)))
   end
 
   def next_page
-    url_for params.merge(navigation_params(page + 1))
+    url_for(params.merge(navigation_params(page + 1)))
   end
 
   def navigation_params(page)
@@ -368,19 +377,23 @@ private
     params[name].to_s.split(/\s*,\s*/)
   end
   
-private
-
   def redirect_to_login
-    redirect_to("/login")
+    redirect_to(:controller => Platform::Config.login_url)
   end
 
-  def before_api_call
+  def log_api_call
     return unless Platform::Config.enable_api_log?
-    @api_log = Platform::ApplicationLog.create(:application => client_app, :user_id => Platform::Config.current_user.try(:id), :event => "#{params[:controller]}-#{params[:action]}", :data => params)
-  end
-  
-  def after_api_call
-    return unless Platform::Config.enable_api_log?
-    @api_log.update_attributes(:user_id => Platform::Config.current_user.try(:id)) if @api_log    
+    
+    duration = response.headers['X-Runtime']
+    Platform::ApplicationLog.create(
+          :application => client_app,
+          :user_id => Platform::Config.current_user.try(:id), 
+          :event => "#{params[:controller]}-#{params[:action]}", 
+          :data => params,
+          :request_method => request.request_method,
+          :user_agent => request.user_agent,
+          :ip => request.remote_ip,
+          :duration => (duration =~ /[.0-9]/) ? duration.to_f / 1000 : nil
+    )
   end
 end
