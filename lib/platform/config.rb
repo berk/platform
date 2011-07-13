@@ -1,8 +1,9 @@
 class Platform::Config
 
-  def self.init(site_current_user)
+  def self.init(site_current_user, current_application = nil)
     Thread.current[:platform_current_user] = site_current_user
     Thread.current[:platform_current_developer] = Platform::Developer.for(site_current_user)
+    Thread.current[:platform_current_application] = current_application
   end
 
   def self.current_user

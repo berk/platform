@@ -97,7 +97,7 @@ private
 
   def recursive_category_delete(cat_id)
     cat = Platform::Category.find(cat_id)
-    Platform::CategoryItem.delete_all(["category_id=?", cat_id])
+    Platform::ApplicationCategory.delete_all(["category_id=?", cat_id])
     
     cat.children.each do |sub_cat|
       recursive_category_delete(sub_cat.id)
