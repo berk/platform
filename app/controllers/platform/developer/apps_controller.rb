@@ -1,9 +1,33 @@
+#--
+# Copyright (c) 2011 Michael Berkovich, Geni Inc
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject to
+# the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+
 class Platform::Developer::AppsController < Platform::Developer::BaseController
 
-  before_filter :validate_application_developer, :except => [:new, :create]
+  before_filter :validate_application_developer, :except => [:index, :new, :create]
 
   def index
-    @app = Platform::Application.find(params[:id]) if params[:id]
+    @app = Platform::Application.find_by_id(params[:id]) if params[:id]
+    @app = nil unless @app and @app.developed_by?(Platform::Config.current_developer)
     
     @apps = Platform::Application.find(:all, :conditions => ["developer_id=?", Platform::Config.current_developer.id], :order => "name asc")
     unless @app
@@ -15,6 +39,7 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
 
   def new
     @page_title = tr('Register New Application', 'Client application controller title')
+    
     application
     prepare_form
   end
@@ -73,6 +98,8 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
 private
 
   def validate_application_developer
+    return unless application.id
+    
     unless application.developed_by?(Platform::Config.current_developer)
       trfe("You are not authorized to access this application")
       redirect_to(:action => :index)
