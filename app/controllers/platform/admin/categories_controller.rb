@@ -15,8 +15,9 @@ class Platform::Admin::CategoriesController < Platform::Admin::BaseController
 
   def items
     @parent = Platform::Category.find(params[:parent_id])
-    @children = @parent.children if params[:sub_categories] == "true"
-    @items = @parent.category_items if params[:objects] == "true"
+    @children = @parent.children
+    @featured_apps = @parent.featured_application_categories
+    @apps = @parent.regular_application_categories
     
     render  :layout => false
   end
@@ -39,57 +40,54 @@ class Platform::Admin::CategoriesController < Platform::Admin::BaseController
     redirect_to :action => :index, :category_id => @category.id
   end
 
-  def lb_update_category_item
-    @cat_item = Platform::CategoryItem.find(params[:cat_item_id])
+  def lb_update_application_category
+    @app_cat = Platform::ApplicationCategory.find_by_category_id_and_application_id(params[:category_id], params[:app_id])
     render  :layout => false
   end
 
-  def update_category_item
-    @cat_item = Platform::CategoryItem.find(params[:category_item][:id])
-    @cat_item.update_attributes(params[:category_item])
-    flash[:notice] = 'Category Item was successfully updated.'
-    redirect_to :action => :index, :category_id => @cat_item.category.id
+  def update_application_category
+    app_cat = Platform::ApplicationCategory.find(params[:application_category][:id])
+    app_cat.update_attributes(params[:application_category])
+    redirect_to :action => :index, :category_id => app_cat.category.id
   end
 
   def delete_category
     recursive_category_delete(params[:category_id])
-    flash[:notice] = 'Category was successfully deleted.'
     redirect_to :action => :index
   end
 
   def assign_category
-    cls = params[:item_type].constantize
-    item = cls.find(params[:item_id])
+    @app = Platform::Application.find_by_id(params[:app_id])
     category = Platform::Category.find(params[:category_id])
     
-    if params[:job] == "destroy"
-      item.remove_category(category)
-    else
-      item.add_category(category)
+    if params[:checked] == "true"
+      @app.add_category(category)
+    else  
+      @app.remove_category(category)
     end
-
-    item.reload
-    categories_text = item.category_names 
+    @app.reload
     
-    render :text=>categories_text
+    render(:partial=>"/platform/admin/apps/categories")
+  end
+
+  def category_assigner
+    @app = Platform::Application.find_by_id(params[:app_id])
+    render :layout=>false
   end
   
-  def category_assigner
-    @item_id = params[:item_id]
-    @item_type = params[:item_type]
-
+  def category_assigner_tree
+    @app = Platform::Application.find_by_id(params[:app_id])
     @root_keyword = params[:root_keyword] || "root"
-
-    cls = @item_type.constantize
-    @item = cls.find(@item_id.to_i)    
-
     @root = Platform::Category.find_by_keyword(@root_keyword)
     
     render :layout=>false
   end
   
-  def loading_assigner
-    render :layout=>false
+  def update_featured_flag
+    app_cat = Platform::ApplicationCategory.find(params[:app_category_id])
+    app_cat.update_attributes(:featured => params[:checked])
+    @app = app_cat.application
+    render(:partial=>"/platform/admin/apps/categories")
   end
   
 private

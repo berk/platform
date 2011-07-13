@@ -138,9 +138,18 @@
         <td><%=@app.updated_at %></td>
     </tr>
     <tr>
+        <th>Categories</th>
+        <td>
+					<div id="app_categories">  
+            <%=render(:partial => "categories")%>
+					</div> 
+				</td>
+    </tr>
+    <tr>
         <th></th>
         <td>
         	 <% html = [] 
+              html << link_to_function("Manage Categories", "assignCategories()")
               html << link_to("View Access Tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>@app.id})
 
               Platform::Application.permissions.each do |perm|
@@ -155,5 +164,24 @@
         </td>
     </tr>
 </table>
+
+<script>
+function assignCategories() {
+  platformLightbox.show('/platform/admin/categories/category_assigner?app_id=<%=@app.id%>', {"width":"800", "height":"500"});
+}
+
+function assignCategory(category_id, checked) {
+  Platform.Utils.update("app_categories", "/platform/admin/categories/assign_category", {
+      parameters: {app_id:'<%=@app.id%>', category_id: category_id, checked: checked}
+  });
+}
+
+function makeFeatured(app_category_id, checked) {
+  Platform.Utils.update("app_categories", "/platform/admin/categories/update_featured_flag", {
+      parameters: {app_id:'<%=@app.id%>', app_category_id: app_category_id, checked: checked}
+  });
+}
+
+</script>
 
 <%= render :partial => "/platform/admin/common/footer" %>

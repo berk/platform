@@ -14,6 +14,9 @@ class Platform::Application < ActiveRecord::Base
   has_many :access_tokens,    :class_name => "Platform::Oauth::AccessToken", :dependent => :destroy
   has_many :verifier_tokens,  :class_name => "Platform::Oauth::VerifierToken", :dependent => :destroy
 
+  has_many :application_categories,  :class_name => "Platform::ApplicationCategory", :dependent => :destroy
+  has_many :categories,  :class_name => "Platform::Category", :through => :application_categories
+
   belongs_to :icon, :class_name => "Platform::Media::Image", :foreign_key => "icon_id"
   belongs_to :logo, :class_name => "Platform::Media::Image", :foreign_key => "logo_id"
 
@@ -72,17 +75,6 @@ class Platform::Application < ActiveRecord::Base
       nil
     end
   end
-
-#  def self.verify_request(request, options = {}, &block)
-#    begin
-#      signature = ::OAuth::Signature.build(request, options, &block)
-#      return false unless Platform::Oauth::OauthNonce.remember(signature.request.nonce, signature.request.timestamp)
-#      value = signature.verify
-#      value
-#    rescue ::OAuth::Signature::UnknownSignatureMethod => e
-#      false
-#    end
-#  end
 
   def last_token_for_user(user)
     Platform::Oauth::OauthToken.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id], :order => "updated_at desc")
@@ -205,26 +197,6 @@ class Platform::Application < ActiveRecord::Base
     return name if name.length < 15
     "#{name[0..15]}..."
   end
-
-  def self.featured_for_category(category, page = 1, per_page = 20)
-    conditions = [" (state='approved') "]
-    if category and category.keyword != 'all'
-      conditions[0] << " and " unless conditions[0].blank?
-      conditions = ["(id in (select item_id from category_items where category_id = ?))", category.id]
-    end
-    
-    paginate(:conditions => conditions, :page => page, :per_page => per_page)
-  end
-  
-  def self.for_category(category, page = 1, per_page = 20)
-    conditions = [" (state='approved') "]
-    if category and category.keyword != 'all'
-      conditions[0] << " and " unless conditions[0].blank?
-      conditions = ["(id in (select item_id from category_items where category_id = ?))", category.id]
-    end
-    
-    paginate(:conditions => conditions, :page => page, :per_page => per_page)
-  end
   
   def update_rank!
     total_rank = (rating_count == 0) ? 0 : (rating_sum/rating_count)
@@ -281,6 +253,64 @@ class Platform::Application < ActiveRecord::Base
 
   def recently_updated_discussions
     @recently_updated_discussions ||= Platform::ForumTopic.find(:all, :conditions => ["subject_type = ? and subject_id = ?", 'Platform::Application', self.id], :order => "updated_at desc", :limit => 5)    
+  end
+  
+  
+  ############################################################################
+  #### Category Management Methods
+  ############################################################################
+  
+  def category_names
+    categories.collect{|cat| cat.name}.join(", ")
+  end
+
+  def add_category(cat)
+    cat = Platform::Category.find_by_keyword(cat) if cat.is_a?(String)
+    return nil if not cat
+    
+    Platform::ApplicationCategory.find_or_create(self, cat)
+  end
+
+  def add_categories(catigories)
+    catigories.each do |cat|
+      add_category(cat)
+    end
+  end
+  
+  def remove_category(cat)
+    cat = Platform::Category.find_by_keyword(cat) if cat.is_a?(String)
+    return nil if not cat
+    
+    app_cat = Platform::ApplicationCategory.find_by_application_id_and_category_id(self.id, cat.id)
+    app_cat.destroy if app_cat                                                
+  end
+
+  def remove_categories(categories)
+    categories.each do |cat|
+      remove_category(cat)
+    end
+  end  
+  
+  def self.featured_for_category(category, page = 1, per_page = 20)
+    cat_ids = [category.id]
+    cat_ids = category.children.collect{|cat| cat.id} if category.children.any?
+    
+    conditions = [" (state='approved') and (id in (select application_id from platform_application_categories where category_id in (?) and featured = ?)) "]
+    conditions << cat_ids
+    conditions << true
+    
+    paginate(:conditions => conditions, :order => "rank desc", :page => page, :per_page => per_page)
+  end
+  
+  def self.regular_for_category(category, page = 1, per_page = 20)
+    cat_ids = [category.id]
+    cat_ids = category.children.collect{|cat| cat.id} if category.children.any?
+
+    conditions = [" (state='approved') and (id in (select application_id from platform_application_categories where category_id in (?) and (featured is NULL or featured = ?)))"]
+    conditions << cat_ids
+    conditions << false
+    
+    paginate(:conditions => conditions, :order => "rank desc", :page => page, :per_page => per_page)
   end
   
 protected

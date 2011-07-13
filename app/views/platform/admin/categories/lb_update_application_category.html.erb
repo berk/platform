@@ -1,0 +1,54 @@
+<div style="font-weight:bold; border-bottom:1px solid #ccc;">
+  Application Category Details
+</div>
+
+<div style="margin-top:10px;">
+	<% form_for(:application_category, @app_cat, :url =>  {:action => :update_application_category}, :html => {:method => 'post', :id => 'platform_form'}) do |form| %>
+	<div class="content">
+	    <%= form.hidden_field :id %>
+	    <table class="admin_table">
+	        <tr>
+	            <th width="150px">
+	                Category Keyword:
+	            </th>
+	            <td>
+	                <%=@app_cat.category.keyword %>
+	            </td>
+	        </tr>
+	        <tr>
+	            <th width="150px">
+	                Category Name:
+	            </th>
+	            <td>
+	                <%=@app_cat.category.full_name %>
+	            </td>
+	        </tr>
+	        <tr>
+	            <th>
+	                Application:
+	            </th>
+	            <td>
+	                <%=@app_cat.application.name %>
+	            </td>
+	        </tr>
+	        <tr>
+	            <th>
+	                Position:
+	            </th>
+	            <td>
+	                <%= form.text_field :position, :size=>"50" %>
+	            </td>
+	        </tr>
+	        <tr>
+	            <th>
+	                Featured:
+	            </th>
+	            <td>
+	                <%= form.check_box :featured %>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+	<%= render('/platform/admin/common/lightbox_buttons') %>
+	<% end %>
+</div>

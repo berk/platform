@@ -145,15 +145,15 @@ class CreatePlatformTables < ActiveRecord::Migration
     end
     add_index :platform_categories, :parent_id    
     
-    create_table :platform_category_items do |t|
+    create_table :platform_application_categories do |t|
       t.integer   :category_id,     :null => false
-      t.string    :item_type
-      t.integer   :item_id
+      t.integer   :application_id,  :null => false
       t.integer   :position
+      t.boolean   :featured
       t.timestamps
     end
-    add_index :platform_category_items, :category_id
-    add_index :platform_category_items, [:item_type, :item_id]
+    add_index :platform_application_categories, :category_id
+    add_index :platform_application_categories, [:category_id, :application_id]
     
     create_table :platform_forum_topics do |t|
       t.string  :subject_type

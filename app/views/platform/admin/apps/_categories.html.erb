@@ -1,0 +1,35 @@
+<% if @app.application_categories.any? %>
+<table>
+	<tr>
+    <th style="width:5%">Id</th>
+		<th style="width:50%">Category Name</th>
+    <th style="width:30%">Featured</th>
+		<th></th>
+	</tr>
+<% @app.application_categories.each do |ac| %>
+   <tr>
+      <td>
+        <%=ac.category.id%>
+      </td>
+   	  <td>
+   	  	<%=ac.category.full_name%>
+   	  </td>
+			<td>
+				<%=ac.featured?%>
+			</td>
+			<td style="text-align:right">
+				<%
+				  html = []
+          if ac.featured? 
+            html << link_to_function("Remove From Featured", "makeFeatured(#{ac.id}, false)")
+          else
+            html << link_to_function("Make Featured", "makeFeatured(#{ac.id}, true)")
+          end 
+          html << link_to_function("Unassign", "assignCategory(#{ac.category.id}, false)")
+        %>
+				<%=html.join(" | ")%>
+			</td>
+   </tr>  
+<% end %>
+</table>
+<% end %>

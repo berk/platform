@@ -92,28 +92,33 @@
 					  </div> 
             <table>
               <tr>
-                <td style="align-vertical:top; width:90px;">
+                <td style="align-vertical:top; width:90px;" rowspan="2">
                    <%=image_tag(@app.logo_url)%> 
                 </td>
                 <td style="align-vertical:top;">
                   <div style="font-size:18px;padding-bottom:15px;"><%=@app.name%></div>
-		
-		              <% if Platform::Config.enable_app_directory? %>
-	                  <div style="font-size:12px;color:#666;">Directory Status:
-	                    <% if @app.approved? %>  
-	                       <span style='color:green'>approved</span>
-	                    <% elsif @app.submitted? %>
-	                       <span style='color:#ADAD00'>submitted</span>
-	                    <% else %>
-	                       <span style='color:red'>not submitted</span>
-	                    <% end %>  
-	                  </div>
-										<% unless @app.approved? %>  
-	                     <div style="font-size:10px;color:#999;">Once you have completed your app, you may submit it to the App Directory.</div>
-										<% end %>	 
-									<% end %>	
                 </td>
               </tr>
+							<tr>
+								<td style="align-vertical:bottom;">
+                  <% if Platform::Config.enable_app_directory? %>
+                    <div style="font-size:12px;color:#666;">Directory Status:
+                      <% if @app.approved? %>  
+                         <span style='color:green'>approved</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Your application is now listed in the [link: App Directory].", "", :link => ["/platform/apps"])%></div>
+                      <% elsif @app.submitted? %>
+                         <span style='color:#ADAD00'>submitted</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Your application is being reviewed.")%>
+												    <%=tr("Once it is approved, it will appear in the [link: App Directory].", "", :link => ["/platform/apps"])%>
+												 </div>
+                      <% else %>
+                         <span style='color:red'>not submitted</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Once you have completed your application, you may submit it to the [link: App Directory].", "", :link => ["/platform/apps"])%></div>
+                      <% end %>  
+                    </div>
+                  <% end %> 
+								</td>
+							</tr>
             </table> 
           </div> 
 

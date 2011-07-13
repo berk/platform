@@ -64,7 +64,6 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
   def submit
     application.state ||= "new"
     application.submit!
-    trfn('{app_name} has been submitted for review.', 'Client application controller notice', :app_name => application.name)
     redirect_to :action => :index, :id => application.id 
   end
 

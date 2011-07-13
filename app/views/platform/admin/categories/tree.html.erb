@@ -1,8 +1,8 @@
 <html>
 	<head>
 		
-		<SCRIPT src="/javascripts/ua.js"></SCRIPT>
-		<SCRIPT src="/javascripts/ftiens4.js"></SCRIPT>
+    <%=javascript_include_tag("/platform/javascripts/ua.js")%>
+    <%=javascript_include_tag("/platform/javascripts/ftiens4.js")%>
 		
 		<STYLE>
 			BODY {
@@ -17,12 +17,13 @@
 		      color: black;}
 	  			
 			.tree_root {
-				 font-size: 10pt; 
+				 font-size: 12pt; 
 				 font-family: verdana,helvetica; 
 				 text-decoration: bold;
 				 color: black;}
+				 
 			.tree_item {
-				 font-size: 9pt; 
+				 font-size: 10pt; 
 				 font-family: verdana,helvetica; 
 				 text-decoration: none;
 				 color: black;}
@@ -51,7 +52,7 @@
 
 	</head>
 	<body topmargin=0>
-		<DIV><TABLE border=0><TR><TD><FONT size=-2><A style="font-size:7pt;text-decoration:none;color:silver" href="http://www.treemenu.net/" target=_blank>Javascript Tree Menu</A></FONT></TD></TR></TABLE></DIV>
+		<A style="font-size:7pt;text-decoration:none;color:silver;visibility:hidden;" href="http://www.treemenu.net/" target=_blank>Javascript Tree Menu</A>
 		
 		<SCRIPT>initializeDocument()</SCRIPT>
 		

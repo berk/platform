@@ -8,9 +8,23 @@ class Platform::AppsController < Platform::BaseController
     @categories = Platform::Category.root.children
     @category = Platform::Category.find(params[:cat_id]) if params[:cat_id]
     @category = @categories.first unless @category
+  
+    @featured_apps = []
+    @apps = []
+    @search_apps = []
     
-    @featured_apps = Platform::Application.featured_for_category(@category, page, 2)
-    @apps = Platform::Application.for_category(@category, page, 20)
+    if params[:search].blank?
+      @featured_apps = Platform::Application.featured_for_category(@category, page, 2)
+      @apps = Platform::Application.regular_for_category(@category, page, 20)
+    else
+      @category = nil
+      conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
+      @search_apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => 20, :order => "rank desc")
+    end
+  end
+  
+  def apps_page
+    params[:section]
   end
   
   def view

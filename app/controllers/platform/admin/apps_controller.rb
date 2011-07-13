@@ -5,7 +5,7 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
   end
 
   def view
-    @app = Platform::Application.find(params[:app_id])  
+    @app = Platform::Application.find(params[:app_id])
   end
   
   def tokens

@@ -2,7 +2,7 @@
 	Category Details
 </div>
 <div style="margin-top:10px;">
-    <% form_for(:category, @category, :url =>  {:action => :update_category}, :html => {:method => 'post', :method => :post, :id => 'platform_form'}) do |form| %>
+    <% form_for(:category, @category, :url =>  {:action => :update_category}, :html => {:method => 'post', :id => 'platform_form'}) do |form| %>
     <div class="content">
         <%= form.hidden_field :parent_id %>
         <%= form.hidden_field :id %>

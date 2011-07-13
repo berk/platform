@@ -80,8 +80,8 @@
 		<table style="width:100%">
 			<tr>
 				<td style="width:220px;">
-					<% form_tag() do %>
-					 <%=text_field_tag(:apps_search, "", :style => "width:195px", :label => "Search Apps")%>
+					<% form_tag({:action => :index}, :method => :get) do %>
+					 <%=text_field_tag(:search, params[:search], :style => "width:195px", :label => "Search Apps")%>
 					<% end %>
 					<div style="border: 1px dotted #ccc; padding-top:10px; margin-top:10px; margin-bottom:15px; background: #f9f8f7; vertical-align:top; width:200px;">
 	          <% @categories.each do |cat| %>
@@ -92,7 +92,7 @@
 	            <% end %>
 	              <%=link_to(cat.name, {:cat_id=>cat.id}) %>
 	            </div>
-							<% if cat == @category || cat.children.include?(@category) %>
+							<% if @category and (cat == @category or cat.children.include?(@category)) %>
 								<% cat.children.each do |sub_cat| %>
 		              <% if sub_cat == @category %>
 		                  <div class="sub_cat_item sub_cat_item_selected">
@@ -107,7 +107,7 @@
 					</div>
 				</td>
 				<td>
-					  <% if @apps.empty? %>
+					  <% if @apps.empty? and @featured_apps.empty? and @search_apps.empty? %>
 						  <div style="padding:10px;text-align:center;font-size:14px;">
 						  	There are no applications in this category.
 						  </div>
@@ -116,6 +116,9 @@
             <%= render(:partial => 'featured_apps_module', :locals => {:apps => @featured_apps, :per_row => 2, :per_block => 20, :title => "Featured Applications"})%>
 						
 						<%= render(:partial => 'apps_module', :locals => {:apps => @apps, :per_row => 5, :per_block => 20, :title => "Applications You May Like"})%>
+						
+            <%= render(:partial => 'search_apps_module', :locals => {:apps => @search_apps, :title => "Search Results"})%>
+						
 				</td>
 			</tr>
 		</table>
