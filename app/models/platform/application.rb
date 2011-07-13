@@ -209,6 +209,10 @@ class Platform::Application < ActiveRecord::Base
     total_rank
   end
   
+  def developed_by?(dev = Platform::Config.current_developer)
+    self.developer == dev
+  end
+  
   def rating_count
     @rating_count ||= Platform::Rating.count(:id, :conditions => ["object_type = ? and object_id = ?", self.class.name, self.id])
   end

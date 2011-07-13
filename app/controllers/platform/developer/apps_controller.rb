@@ -1,7 +1,10 @@
 class Platform::Developer::AppsController < Platform::Developer::BaseController
 
+  before_filter :validate_application_developer, :except => [:new, :create]
+
   def index
     @app = Platform::Application.find(params[:id]) if params[:id]
+    
     @apps = Platform::Application.find(:all, :conditions => ["developer_id=?", Platform::Config.current_developer.id], :order => "name asc")
     unless @app
       @app = @apps.first if @apps.any?
@@ -68,6 +71,13 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
   end
 
 private
+
+  def validate_application_developer
+    unless application.developed_by?(Platform::Config.current_developer)
+      trfe("You are not authorized to access this application")
+      redirect_to(:action => :index)
+    end
+  end
 
   def application
     @app ||= begin
