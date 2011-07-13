@@ -15,6 +15,10 @@ class Platform::Category < ActiveRecord::Base
     cat.id
   end
 
+  def root?
+    keyword == 'root'  
+  end
+  
   def featured_application_categories
     Platform::ApplicationCategory.find(:all, :conditions => ["category_id = ? and featured = ?", self.id, true], :order => "position")
   end

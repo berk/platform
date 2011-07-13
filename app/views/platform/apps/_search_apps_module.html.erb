@@ -1,12 +1,10 @@
 <% if apps.any? %>
   <div style="padding-bottom:20px;">
     <div class="apps_header">
-      <span style="float:right; font-size:12px; font-weight:normal">
-        Page 1 of 1 &nbsp;
-        <%=link_to_function('<<', "", :class=>'button super blue small') %>
-        <%=link_to_function('>>', "", :class=>'button super blue small') %>
+      <span style="float:right; font-size:12px; font-weight:normal;">
+        <%=render(:partial => "paginator", :locals => {:apps => apps, :element_id => "searched_apps"})%> 
       </span>
-      <%=title%>
+      <%=tr(Platform::Config.searched_apps_title)%>
     </div>
     <div class="apps_body">
       <table style="width:100%;">
@@ -16,8 +14,17 @@
           	<%= link_to(image_tag(app.logo_url), {:action => :view, :id => app.id}) %>
           </td>        	
           <td style="padding-bottom:5px;padding-top:5px;">
-            <%= link_to(app.name, {:action => :view, :id => app.id}) %><br><br>
-            <%= platform_app_rank_tag(app) %>
+					  <div style="float:right">
+					     <%= platform_app_rank_tag(app) %>	
+					  </div> 
+						
+						<div style="margin-bottom:10px;">  
+              <%= link_to(app.name, {:action => :view, :id => app.id}) %>
+						</div>
+            
+            <div style="margin-bottom:5px;">  
+              <%= app.description %>
+            </div>
           </td>         
         </tr>
         <% end %>

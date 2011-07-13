@@ -6,11 +6,9 @@
   <div style="padding-bottom:20px;">
     <div class="apps_header">
       <span style="float:right; font-size:12px; font-weight:normal">
-        Page 1 of 1 &nbsp;
-        <%=link_to_function('<<', "", :class=>'button super blue small') %>
-        <%=link_to_function('>>', "", :class=>'button super blue small') %>
+        <%=render(:partial => "paginator", :locals => {:apps => apps, :element_id => "suggested_apps"})%> 
       </span>
-      <%=title%>
+      <%=tr(Platform::Config.suggested_apps_title)%>
     </div>
     <div class="apps_body">
       <table style="width:100%;">

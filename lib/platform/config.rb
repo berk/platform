@@ -35,7 +35,7 @@ class Platform::Config
     @models ||= begin 
       mdls = [
           Platform::ApplicationDeveloper, Platform::ApplicationPermission, Platform::ApplicationUser,
-          Platform::CategoryItem, Platform::Category, 
+          Platform::ApplicationCategory, Platform::Category, 
           Platform::ForumMessage, Platform::ForumTopic,
           Platform::Permission, Platform::Rating,
           Platform::Developer, Platform::Application, 
@@ -406,6 +406,44 @@ class Platform::Config
   end
   #########################################################
 
+  #########################################################
+  # Application Directory
+  #########################################################
+  def self.featured_apps_enabled?
+    true
+  end
+
+  def self.featured_apps_title
+    "Featured Applications"
+  end
+
+  def self.featured_apps_per_row
+    2
+  end
+
+  def self.featured_apps_per_page
+    2
+  end
+
+  def self.suggested_apps_title
+    "Applications You May Like"
+  end
+
+  def self.suggested_apps_per_row
+    5
+  end
+
+  def self.suggested_apps_per_page
+    20
+  end
+
+  def self.searched_apps_title
+    "Search Results"
+  end
+
+  def self.searched_apps_per_page
+    15
+  end
   #########################################################
   # API
   #########################################################

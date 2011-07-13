@@ -36,7 +36,7 @@
 					
 	        function assignCategory(chk) {
 	          category_id = chk.id.split("_")[1];
-						top.assignCategory(category_id, chk.checked);
+						top.assignCategory('<%=@app.id%>', category_id, chk.checked);
 	        }
 	            	
 	        function checkCategory(id, flag) {

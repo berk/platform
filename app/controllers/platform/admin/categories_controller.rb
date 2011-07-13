@@ -57,17 +57,21 @@ class Platform::Admin::CategoriesController < Platform::Admin::BaseController
   end
 
   def assign_category
-    @app = Platform::Application.find_by_id(params[:app_id])
+    app = Platform::Application.find_by_id(params[:app_id])
     category = Platform::Category.find(params[:category_id])
     
     if params[:checked] == "true"
-      @app.add_category(category)
+      cat = category
+      while cat do
+        app.add_category(cat) unless cat.root?
+        cat = cat.parent
+      end  
     else  
-      @app.remove_category(category)
+      app.remove_category(category)
     end
-    @app.reload
+    app.reload
     
-    render(:partial=>"/platform/admin/apps/categories")
+    render(:partial=>"/platform/admin/apps/categories", :locals => {:app => app})
   end
 
   def category_assigner
@@ -86,8 +90,7 @@ class Platform::Admin::CategoriesController < Platform::Admin::BaseController
   def update_featured_flag
     app_cat = Platform::ApplicationCategory.find(params[:app_category_id])
     app_cat.update_attributes(:featured => params[:checked])
-    @app = app_cat.application
-    render(:partial=>"/platform/admin/apps/categories")
+    render(:partial=>"/platform/admin/apps/categories", :locals => {:app => app_cat.application})
   end
   
 private

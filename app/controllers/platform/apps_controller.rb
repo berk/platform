@@ -14,12 +14,12 @@ class Platform::AppsController < Platform::BaseController
     @search_apps = []
     
     if params[:search].blank?
-      @featured_apps = Platform::Application.featured_for_category(@category, page, 2)
-      @apps = Platform::Application.regular_for_category(@category, page, 20)
+      @featured_apps = Platform::Application.featured_for_category(@category, page, Platform::Config.featured_apps_per_page)
+      @apps = Platform::Application.regular_for_category(@category, page, Platform::Config.suggested_apps_per_page)
     else
       @category = nil
       conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
-      @search_apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => 20, :order => "rank desc")
+      @search_apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => Platform::Config.searched_apps_per_page, :order => "name asc")
     end
   end
   
@@ -47,6 +47,22 @@ class Platform::AppsController < Platform::BaseController
       else  
         @topics = Platform::ForumTopic.paginate(:all, :conditions => ["subject_type = ? and subject_id = ?", @app.class.name, @app.id], :page => page, :per_page => per_page, :order => "created_at desc")
       end
+    end
+  end
+  
+  def paginate_module
+    if params[:module] == 'featured_apps'  
+      category = Platform::Category.find(params[:cat_id])
+      apps = Platform::Application.featured_for_category(category, page, Platform::Config.featured_apps_per_page)
+      render(:partial => 'featured_apps_module', :locals => {:apps => apps, :per_row => Platform::Config.featured_apps_per_row})
+    elsif params[:module] == 'suggested_apps'   
+      category = Platform::Category.find(params[:cat_id])
+      apps = Platform::Application.regular_for_category(category, page, Platform::Config.suggested_apps_per_page)
+      render(:partial => 'apps_module', :locals => {:apps => apps, :per_row => Platform::Config.suggested_apps_per_row})
+    else
+      conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
+      apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => Platform::Config.searched_apps_per_page, :order => "name asc")
+      render(:partial => 'search_apps_module', :locals => {:apps => apps})      
     end
   end
   

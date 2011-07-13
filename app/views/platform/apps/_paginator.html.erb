@@ -1,0 +1,4 @@
+<%=tr("Page {num} of {count}", "", {:num => apps.current_page, :count => apps.total_pages})%> 
+&nbsp;
+<%=link_to_function('<<', "goPage('#{element_id}', '#{apps.previous_page}')", :class=>"button super #{apps.previous_page.blank? ? 'gray' : 'blue'} small") %>
+<%=link_to_function('>>', "goPage('#{element_id}', '#{apps.next_page}')", :class=>"button super #{apps.next_page.blank? ? 'gray' : 'blue'} small") %>
