@@ -104,7 +104,7 @@ class Platform::Application < ActiveRecord::Base
   end
 
   def valid_tokens_for_user(user)
-    Platform::Oauth::OauthToken.find(:all, :conditions => ["application_id = ? and user_id = ? and invalidated_at is null", self.id, user.id])
+    Platform::Oauth::OauthToken.find(:all, :conditions => ["application_id = ? and user_id = ? and invalidated_at is null", self.id, user.id], :order => "created_at desc")
   end
 
   def rate_limited(value=true)

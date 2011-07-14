@@ -100,25 +100,28 @@ class Platform::AppsController < Platform::BaseController
   
   def method_missing(method, *args)
     @app = Platform::Application.find_by_canvas_name(method)
-    if @app
-      if @app.auto_signin?
-        tokens = @app.valid_tokens_for_user(current_user)
-        
-        if tokens.empty?
-          redirect_url = "/platform/apps/#{@app.canvas_name}"
-          return redirect_to( :controller => '/platform/oauth', :action => :authorize, 
-                              :response_type => :token, :client_id => @app.key, 
-                              :display => :web, :redirect_url => redirect_url)
-        end
-        @access_token = tokens.first
+    return render(:action => :canvas_app) unless @app
+    
+    if @app.auto_signin?
+      app_user = Platform::ApplicationUser.for(@app)
+      
+      unless app_user
+        redirect_url = "/platform/apps/#{@app.canvas_name}"
+        return redirect_to( :controller => '/platform/oauth', :action => :authorize, 
+                            :response_type => :token, :client_id => @app.key, 
+                            :display => :web, :redirect_url => redirect_url)
       end
-      
-      Platform::ApplicationUser.touch(@app)
-      
-      @page_title = @app.name
-    else
-      @page_title = "Invalid Application"
+
+      tokens = @app.valid_tokens_for_user(Platform::Config.current_user)
+      if tokens
+        access_token = tokens.first
+      else  
+        access_token = client_application.create_access_token(:user=>Platform::Config.current_user)
+      end
+      @access_token = access_token
     end
+    
+    @page_title = @app.name
 
     @canvas_url = @app.canvas_url
     @canvas_uri = URI.parse(@app.canvas_url)
