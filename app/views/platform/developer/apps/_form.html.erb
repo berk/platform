@@ -92,17 +92,6 @@
     </td> 
   </tr>
 
-	<tr>
-		<th>
-			<%=tr('Site URL:', 'Client application field label')%>
-		</th>
-		<td>
-			<%=form.text_field :url, :class=>'xxlong_input'%>
-		</td>	
-    <td class="comments">
-      <%=tr("Your site or application's URL", 'Client application field comment')%>
-    </td> 
-	</tr>
   <tr>
     <th>
       <%=tr('Support URL:', 'Client application field label')%>
@@ -139,9 +128,55 @@
   <tr>
     <td colspan="3">
       <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;margin-top:10px;">
-         <%=tr('Geni Integration', 'Client application section') %>
+         <%=tr('Website Settings', 'Client application section') %>
       </div>
     </td>
+  </tr>
+  
+  <tr>
+    <th>
+      <%=tr('Site URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required: URL of your site.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Site Domain:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :site_domain, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required: Domain to enable authentication (subdomains included).", 'Client application field comment')%>
+    </td> 
+  </tr>	
+	
+  <tr>
+    <td colspan="3">
+      <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;margin-top:10px;">
+         <%=tr('Authentication', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Application Type:','Client application field label')%>
+    </th>
+    <td>
+        <label for="option1" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'html5', :id => "option1", :style=>"vertical-align: top;" %> Web</label>
+				&nbsp; 
+        <label for="option2" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'native', :id => "option2", :style=>"vertical-align: top;" %> Native/Desktop</label>
+    </td> 
+    <td class="comments">
+      <%=tr("Choose your application type.", 'Client application field comment')%>
+    </td> 
   </tr>
 	
   <tr>
@@ -169,6 +204,14 @@
   </tr>
 	 
 <% if Platform::Config.enable_embedded_applications? %>
+  <tr>
+    <td colspan="3">
+      <div style="background-color:#ddd;padding:5px;width:100%;margin-bottom:10px;margin-top:10px;">
+         <%=tr('On Geni', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+
   <tr>
     <th>
       <%=tr('Canvas Page:','Client application field label')%>
@@ -227,25 +270,13 @@
   </tr>
   <tr>
     <th>
-      <%=tr('Application Type:','Client application field label')%>
-    </th>
-    <td>
-        <label for="option1" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'html5', :id => "option1", :style=>"vertical-align: top;" %> HTML5 application</label> 
-        <label for="option2" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'native', :id => "option2", :style=>"vertical-align: top;" %> Native application</label>
-    </td> 
-    <td class="comments">
-      <%=tr("Choose your application type.", 'Client application field comment')%>
-    </td> 
-  </tr>
-  <tr>
-    <th>
       <%=tr('iOS Bundle ID:','Client application field label')%>
     </th>
     <td>
       <%=form.text_field :ios_bundle_id, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
-      <%=tr("We will use it for extra security during authentication.", 'Client application field comment')%>
+      <%=tr("Required: iOS Bundle ID for iOS native app.", 'Client application field comment')%>
     </td> 
   </tr>
   <tr>

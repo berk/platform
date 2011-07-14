@@ -29,11 +29,11 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
     @app = Platform::Application.find_by_id(params[:id]) if params[:id]
     @app = nil unless @app and @app.developed_by?(Platform::Config.current_developer)
     
-    @apps = Platform::Application.find(:all, :conditions => ["developer_id=?", Platform::Config.current_developer.id], :order => "name asc")
+    @apps = Platform::Application.find(:all, :conditions => ["developer_id=?", Platform::Config.current_developer.id], :order => "updated_at desc")
     unless @app
       @app = @apps.first if @apps.any?
     end  
-    
+
     @page_title = tr('Application Details for {app_name}', 'Client application controller title', :app_name => @app.name) if @app
   end
 
@@ -60,6 +60,7 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
 
   def edit
     @page_title = tr('Edit {app_name}', 'Client application controller title', :app_name => application.name)
+    application.touch
     @languages = Tr8n::Language.locale_options
   end
 

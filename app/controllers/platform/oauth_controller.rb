@@ -132,12 +132,22 @@ class Platform::OauthController < Platform::BaseController
   	render :layout => false
   end
 
+  # XD only method - for now
   def status
-    if Platform::Config.current_user_is_guest?
-      return redirect_with_response(:status => "unknown")
+    if params[:origin].blank?
+      return redirect_with_response(:status => "unknown", :error => :invalid_request, :error_description => "origin must be specified")
     end
     
     unless client_application
+      return redirect_with_response(:status => "unknown", :error => :invalid_request, :error_description => "client_id must be specified")
+    end
+    
+    uri = URI.parse(params[:origin])
+    unless uri.host == client_application.site_domain
+      return redirect_with_response(:status => "unknown", :error => :invalid_request, :error_description => "Anauthorized access - invalid origin.")
+    end
+    
+    if Platform::Config.current_user_is_guest?
       return redirect_with_response(:status => "unknown")
     end
 
@@ -307,7 +317,7 @@ private
         return redirect_to(Platform::Config.default_url)
       end
 
-      return redirect_with_response(:error => :access_denied)
+      return redirect_with_response(:status => :unauthorized, :message => "user canceled")
     end   
 
     render_action("authorize")

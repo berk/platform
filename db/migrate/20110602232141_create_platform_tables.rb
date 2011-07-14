@@ -18,6 +18,7 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.string  :state,             :default => "new"
       t.string  :locale
       t.string  :url
+      t.string  :site_domain
       t.string  :support_url
       t.string  :callback_url
       t.string  :contact_email
