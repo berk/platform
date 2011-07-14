@@ -113,11 +113,13 @@ class Platform::AppsController < Platform::BaseController
         @access_token = tokens.first
       end
       
+      Platform::ApplicationUser.touch(@app)
+      
       @page_title = @app.name
     else
       @page_title = "Invalid Application"
     end
-    
+
     @canvas_url = @app.canvas_url
     @canvas_uri = URI.parse(@app.canvas_url)
     [:controller, :action].each do |key| 
