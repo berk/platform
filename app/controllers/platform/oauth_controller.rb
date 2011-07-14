@@ -298,7 +298,7 @@ private
         return redirect_to(Platform::Config.default_url)
       end
       
-      return redirect_with_response(:error => :access_denied)
+      return redirect_with_response(:status => :unauthorized, :message => "user canceled")
     end   
 
     render_action("authorize")
