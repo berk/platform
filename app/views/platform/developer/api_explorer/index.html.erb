@@ -1,0 +1,375 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+<style>
+
+.field {
+	margin-bottom:1px;
+}
+
+.field_name_container {
+  padding-right:2px;	
+}
+
+.field_name {
+	width:150px;
+	font-size:12px;
+}
+
+.field_action {
+  padding-left:5px;
+  padding-top:5px;
+}
+	
+.field_value {
+	width:400px;
+	font-size:12px;
+}	
+
+.obj_key {
+  padding-right: 10px;
+	color: #444;
+}
+
+.obj_value_string {
+	color: green;
+}
+
+.obj_value_string {
+  color: green;
+}
+
+.obj_value_boolean {
+  color: blue;
+}
+
+.obj_value_number {
+  color: red;
+}
+
+.response_data {
+	font-size:12px;
+	overflow:auto;
+	font-family:Arial;
+	padding:10px;
+	height:500px;
+	background-color:#F2F2F2;
+}
+
+.status {
+	height:10px;
+	background-color:#EFF8FF;
+	color: #444;
+}
+
+.error {
+	color:red;
+}
+
+.api_url {
+
+}
+</style>
+
+<div class="section_title">
+  <div style="float:right; padding-top:6px; font-size:12px; color: #ccc;">
+  </div>
+  
+  <%=tr("#{Platform::Config.site_info[:title]} API Explorer", nil) %>  
+</div>
+
+<% form_tag() do %>
+<div class="section_box">
+	<table style="width:100%">
+		<tr>
+			<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
+			<td><%=text_field_tag(:access_token, "", :label=>"Paste an existing Access Token, or click to generate one", :style=>"width:660px;")%> &nbsp;
+			   <%=link_to_function("X", "")%> 
+			</td>
+			<td style="width:150px; text-align:right;">
+				<%= link_to_function(trl('Get Access Token', 'Client application action label'), "", :class=>'button super blue medium') %>
+			</td>
+		</tr>
+	</table>
+
+  <div class="section_box" style="background-color:#EFF8FF">
+  	<table>
+  		<tr>
+  			<td style="width:70px;">
+			    <select id="request_method" onChange="switchRequestMethod()">
+			      <option>GET</option>
+			      <option>POST</option>
+			    </select>
+  			</td>
+				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
+				  <span style="padding-left:5px;vertical-align:middle;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, "", :style=>"width:600px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) submitRequest();")%>			
+				</td>
+				<td style="padding-left:5px;text-align:right;">
+          <%= link_to_function(trl('Submit', 'Client application action label'), "submitRequest()", :class=>'button super blue medium') %>
+				</td>
+  		</tr>
+			<tr>
+				<td></td>
+				<td colspan="2">
+					<div style="padding-top:5px;display:none;" id="post_params">
+					  <div id="post_fields">
+					  </div>
+						<div style="padding-top:5px;">
+				      <%=link_to_function("+ add a field", "addPostField()")%>
+						</div>
+					</div>
+				</td>
+			</tr>
+  	</table>
+  </div>	
+
+  <div class="section_box response_data" id="response_data">
+    
+  </div>
+	
+  <div class="section_box status" id="status">
+    
+  </div>
+	
+</div>
+<% end %>
+
+<script>
+var field_count = 0;
+var base_api_url = "<%=Platform::Config.api_base_url%>";
+	
+function updateStatus(msg) {
+	Platform.element("status").innerHTML = msg;
+}	
+
+function logInfo(msg) {
+  updateStatus("<span class='info'>" + msg + "</span>");
+} 
+	
+function logError(msg) {
+	updateStatus("<span class='error'>" + msg + "</span>");
+}	
+
+function switchRequestMethod() {
+	if (Platform.value("request_method") == "GET") {
+		Platform.Effects.hide("post_params");
+	} else {
+		Platform.Effects.show("post_params");
+	}
+}	
+
+function addPostField() {
+	var fields = Platform.element("post_fields");
+	var field = document.createElement("div");
+  field.id="field" + field_count;
+  field.className="field";
+	
+  var field_name_container = document.createElement("span");
+  field_name_container.className="field_name_container";
+
+  var field_name = document.createElement("input");
+	field_name.type="text";
+	field_name.className="field_name";
+	field_name.id="field_name" + field_count;
+	field_name.label="name";
+  field_name_container.appendChild(field_name);
+  field.appendChild(field_name_container);
+
+  var field_value = document.createElement("input");
+  field_value.type="text";
+  field_value.className="field_value";
+  field_value.id="field_value" + field_count;
+  field_value.label="value";
+  field.appendChild(field_value);
+
+  var field_action = document.createElement("a");
+	field_action.setAttribute("onclick", "removePostField(" + field_count + "); return false;");
+	field_action.innerHTML="<span>X</span>";
+  field_action.className="field_action";
+  field_action.id="field_action" + field_count;
+	field_action.href="#";
+  field.appendChild(field_action);
+	
+	fields.appendChild(field);
+	field_count++;
+}
+
+function removePostField(field_index) {
+  var fields = Platform.element("post_fields");
+	var field = Platform.element("field" + field_index);
+	fields.removeChild(field);
+	
+	field_index ++;
+	var next_field = Platform.element("field" + field_index);
+	while (next_field) {
+		next_field.id="field" + (field_index-1);
+		var field_name = Platform.element("field_name" + field_index);
+    field_name.id="field_name" + (field_index-1);
+    var field_value = Platform.element("field_value" + field_index);
+    field_value.id="field_value" + (field_index-1);
+    var field_action = Platform.element("field_action" + field_index);
+    field_action.id="field_action" + (field_index-1);
+    field_action.setAttribute("onclick", "removePostField(" + (field_index-1) + "); return false;");
+	  field_index ++;	
+		next_field = Platform.element("field" + field_index);
+	} 
+	
+	field_count--;
+}
+
+function generateRequestParams() {
+	var params = {};
+	var field_index = 0;
+	
+  var field = Platform.element("field" + field_index);
+  while (field) {
+    var field_name = Platform.value("field_name" + field_index);
+    var field_value = Platform.value("field_value" + field_index);
+		params[field_name] = field_value;
+		
+		field_index ++;
+    field = Platform.element("field" + field_index);
+  } 
+	
+	return params;
+}
+
+function submitRequest() {
+	logInfo("Executing request...");
+	Platform.element("response_data").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+	
+	var params = generateRequestParams();
+	// add access token
+	
+	var t0 = new Date();
+	Platform.Utils.ajax("http://localhost:3000/api/" + Platform.value("api_path"), {
+	   method: Platform.value("request_method"),
+		 parameters: params,
+		 onSuccess: function(response) {
+		 	  var t1 = new Date();
+        logInfo("Request took " + (t1.getTime() - t0.getTime()) + " milliseconds");
+		 	  formatResponse(response.responseText);
+		 }, 	
+     onFailure: function(response) {
+        logError("API call failed with status: " +  response.status);
+        formatResponse(response.responseText);
+     }  
+	});
+}
+
+function isArray(obj) {
+	return !(obj.constructor.toString().indexOf("Array") == -1);
+}
+
+function formatResponse(response_text){
+	var response = response_text;
+	
+	if (typeof response_text == 'string') {
+		try {
+			response = eval("[" + response_text + "]")[0];
+		} 
+		catch (err) {
+			Platform.element("response_data").innerText = response_text;
+			return;
+		}
+  }
+	
+	if (typeof response == 'object') {
+		Platform.element("response_data").innerHTML = formatObject(response, 1);
+	} else {
+		Platform.element("response_data").innerHTML = "Invalid response: " + response_text;
+	}
+}
+
+function formatObject(obj, level) {
+  var html = [];
+  html.push("{");
+	var keys = Object.keys(obj).sort();
+	
+  for (var i=0; i<keys.length; i++) {
+ 	  key = keys[i];
+		if (isObject(obj[key])) {
+			if (isArray(obj[key])) {
+        html.push(createSpacer(level) + "<span class='obj_key'>" + key + ":</span>" + formatArray(obj[key], level + 1) + ",");
+			} else {
+        html.push(createSpacer(level) + "<span class='obj_key'>" + key + ":</span>" + formatObject(obj[key], level + 1) + ",");
+			}
+		} else {
+      html.push(createSpacer(level) + formatProperty(key, obj[key]) + ",");
+		}
+	}
+	html.push(createSpacer(level-1) + "}");
+	return html.join("<br>");
+}
+
+function formatArray(arr, level) {
+  var html = [];
+  html.push("[");
+  for (var i=0; i<arr.length; i++) {
+    if (isObject(arr[i])) {
+      if (isArray(arr[i])) {
+			   html.push(createSpacer(level) + formatArray(arr[i], level + 1) + ",");	
+	    } else {
+			   html.push(createSpacer(level) + formatObject(arr[i], level + 1) + ","); 	
+			}			
+		} else {
+      html.push(createSpacer(level) + formatProperty(null, arr[i]) + ",");
+    }
+  }  
+  html.push(createSpacer(level-1) + "]");
+  return html.join("<br>");
+}
+
+function createSpacer(level) {
+  return "<img src='/platform/images/pixel.gif' style='height:1px;width:" + (level * 20) + "px;'>";
+}
+
+function isObject(obj) {
+	return (typeof obj == 'object');
+}
+
+function isString(obj) {
+  return (typeof obj == 'string');
+}
+
+function isURL(str) {
+	str = "" + str;
+  return (str.indexOf("http://") != -1) || (str.indexOf("https://") != -1);
+}
+
+function isApiCall(str) {
+  str = "" + str;
+	return (str.indexOf(base_api_url) != -1);
+}
+
+function callApi(str) {
+	var parts = str.split(base_api_url);
+	Platform.element("api_path").value = parts[parts.length-1];
+	submitRequest();
+}
+
+function formatProperty(key, value) {
+	var cls = "obj_value_" + (typeof value);
+	var value_span = "";
+	
+	if (isURL(value)) {
+		if (isApiCall(value)) {
+      value = "<a target='_new' class='api_url' href='#' onclick=\"callApi('" + value + "'); return false;\">" + value + "</a>";
+	  } else {
+		  value = "<a target='_new' href='" + value + "'>" + value + "</a>";
+	  }
+	}
+	
+	if (isString(value)) 
+	  value_span = "<span class='" + cls + "'>\"" + value + "\"</span>";
+	else
+		value_span = "<span class='" + cls + "'>" + value + "</span>";
+		 
+	if (key == null)
+  	return value_span;
+		
+  return "<span class='obj_key'>" + key + ":</span>" + value_span;
+}
+
+</script>	
+
+<%= render :partial => "/platform/developer/common/footer" %>

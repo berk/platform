@@ -499,6 +499,10 @@ class Platform::Config
     api[:max_models]
   end
   
+  def self.api_base_url
+    api[:base_url]
+  end  
+  
   #########################################################
 
   def self.silhouette_image(user = current_user)

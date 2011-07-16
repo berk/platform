@@ -8,7 +8,7 @@
 #############################################################################
 
 defaults: &defaults
-  enabled_features: [dashboard, apps, forum, help]
+  enabled_features: [dashboard, apps, forum, api_explorer, help]
   
   dashboard:
     title:            Dashboard
@@ -38,10 +38,10 @@ defaults: &defaults
     actions:          []
     manager_only:     false
 
-  test:
-    title:            Test
-    link:             http://www.google.com
-    controller:       test
+  api_explorer:
+    title:            API Explorer
+    link:             /platform/developer/api_explorer
+    controller:       api_explorer
     actions:          [index]
     manager_only:     false
     
