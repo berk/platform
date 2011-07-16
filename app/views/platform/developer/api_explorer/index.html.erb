@@ -241,7 +241,7 @@ function submitRequest() {
 	// add access token
 	
 	var t0 = new Date();
-	Platform.Utils.ajax("http://localhost:3000/api/" + Platform.value("api_path"), {
+	Platform.Utils.ajax("http://" + base_api_url + Platform.value("api_path"), {
 	   method: Platform.value("request_method"),
 		 parameters: params,
 		 onSuccess: function(response) {
