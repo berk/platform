@@ -68,6 +68,45 @@
 .api_url {
 
 }
+
+.api_options {
+  position: absolute;
+	top: 0;
+	left: 0;
+	font-family: verdana; 
+	font-size:11px; 
+	width: 765px;
+	background: #f4f4f4;
+	border:solid 1px #e8e8e8;
+	border-color:#e8e8e8 #bababa #bababa #e8e8e8;
+	padding: 0;
+	margin: 0;
+	z-index: 10000;
+	-webkit-box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+	-moz-box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+	box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+	display:none;
+}
+
+.api_options .inner  {
+	background:#fff;
+	border:solid 1px #bababa;
+	border-color:#bababa #e8e8e8 #e8e8e8 #bababa;
+	padding:5px;
+	-moz-border-radius:2px;
+	-webkit-border-radius:2px;
+	border-radius:2px;
+	font-size:11px;
+}
+
+.api_list {
+	padding-left:10px;
+}
+
+.api_method_list {
+  padding-left:30px;
+	padding-bottom:10px;
+}
 </style>
 
 <div class="section_title">
@@ -101,7 +140,8 @@
 			    </select>
   			</td>
 				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
-				  <span style="padding-left:5px;vertical-align:middle;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, "", :style=>"width:600px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) submitRequest();")%>			
+				  <span style="float:right;padding-right:5px;"><%=link_to_function(image_tag("/platform/images/arrow_down.gif"), "toggleApiOptions(this)")%></span>
+				  <span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, "", :style=>"width:600px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) submitRequest();")%>			
 				</td>
 				<td style="padding-left:5px;text-align:right;">
           <%= link_to_function(trl('Submit', 'Client application action label'), "submitRequest()", :class=>'button super blue medium') %>
@@ -114,7 +154,7 @@
 					  <div id="post_fields">
 					  </div>
 						<div style="padding-top:5px;">
-				      <%=link_to_function("+ add a field", "addPostField()")%>
+				      <%=link_to_function("+ add a field", "addPostField('', '')")%>
 						</div>
 					</div>
 				</td>
@@ -132,6 +172,12 @@
 	
 </div>
 <% end %>
+
+<div id="api_options" class="api_options" style="display:none;">
+	<div id="api" class="inner">
+    <%=render :partial => "api_methods" %>
+	</div>
+</div>
 
 <script>
 var field_count = 0;
@@ -157,7 +203,7 @@ function switchRequestMethod() {
 	}
 }	
 
-function addPostField() {
+function addPostField(name, value) {
 	var fields = Platform.element("post_fields");
 	var field = document.createElement("div");
   field.id="field" + field_count;
@@ -171,6 +217,7 @@ function addPostField() {
 	field_name.className="field_name";
 	field_name.id="field_name" + field_count;
 	field_name.label="name";
+	field_name.value = name;
   field_name_container.appendChild(field_name);
   field.appendChild(field_name_container);
 
@@ -178,6 +225,7 @@ function addPostField() {
   field_value.type="text";
   field_value.className="field_value";
   field_value.id="field_value" + field_count;
+  field_value.value = value;
   field_value.label="value";
   field.appendChild(field_value);
 
@@ -193,6 +241,12 @@ function addPostField() {
 	field_count++;
 }
 
+function removeAllPostFields() {
+	var fields = Platform.element("post_fields");
+	fields.innerHTML = "";
+	field_count = 0;
+}
+	
 function removePostField(field_index) {
   var fields = Platform.element("post_fields");
 	var field = Platform.element("field" + field_index);
@@ -256,6 +310,30 @@ function submitRequest() {
 	});
 }
 
+function updateApi(path, method, params) {
+	hideApiOptions();
+	
+  if (path.indexOf(base_api_url) != -1) {
+    var parts = path.split(base_api_url);
+    path = parts[parts.length-1];
+  }
+
+  logInfo("");
+  Platform.element("response_data").innerHTML = "";
+  Platform.element("api_path").value = path;
+	Platform.element("request_method").value = method;
+	switchRequestMethod();
+	removeAllPostFields();
+	for (key in params) {
+		addPostField(key, params[key]);
+	}
+}
+
+function callApi(path) {
+  updateApi(path, "GET", {});
+  submitRequest();
+}
+
 function isArray(obj) {
 	return !(obj.constructor.toString().indexOf("Array") == -1);
 }
@@ -281,8 +359,11 @@ function formatResponse(response_text){
 }
 
 function formatObject(obj, level) {
+  if (obj == null) return "{<br>}";
+
   var html = [];
   html.push("{");
+
 	var keys = Object.keys(obj).sort();
 	
   for (var i=0; i<keys.length; i++) {
@@ -341,12 +422,6 @@ function isApiCall(str) {
 	return (str.indexOf(base_api_url) != -1);
 }
 
-function callApi(str) {
-	var parts = str.split(base_api_url);
-	Platform.element("api_path").value = parts[parts.length-1];
-	submitRequest();
-}
-
 function formatProperty(key, value) {
 	var cls = "obj_value_" + (typeof value);
 	var value_span = "";
@@ -370,6 +445,26 @@ function formatProperty(key, value) {
   return "<span class='obj_key'>" + key + ":</span>" + value_span;
 }
 
+function hideApiOptions() {
+	Platform.Effects.hide("api_options");
+}
+
+function toggleApiOptions(trigger) {
+	var options = Platform.element("api_options");
+	
+	if (options.style.display == "none") {
+  	var trigger_position = Platform.Utils.cumulativeOffset(trigger);
+  	var container_position = {
+  		left: trigger_position[0] + trigger.offsetWidth - 765 + 'px',
+  		top: trigger_position[1] + trigger.offsetHeight + 10 + 'px'
+  	}
+  	options.style.left = container_position.left;
+  	options.style.top = container_position.top;
+  	Platform.Effects.show("api_options");
+  } else {
+		Platform.Effects.hide("api_options");
+	}
+}
 </script>	
 
 <%= render :partial => "/platform/developer/common/footer" %>

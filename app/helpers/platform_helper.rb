@@ -41,6 +41,10 @@ module PlatformHelper
     html << "</span>" 
   end  
   
+  def platform_documentation_tag(url)
+    link_to(image_tag("/platform/images/bullet_go.png", :style=>"vertical-align:middle;"), url, :target=>"_new")
+  end
+  
   def platform_scripts_tag(opts = {})
     render(:partial => '/platform/common/scripts', :locals => {:opts => opts})    
   end
