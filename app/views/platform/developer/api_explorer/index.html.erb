@@ -168,7 +168,7 @@
   <div class="section_box" style="background-color:#EFF8FF">
   	<table>
   		<tr>
-  			<td style="width:70px;">
+  			<td style="width:80px;">
 				  <%=select_tag("request_method", options_for_select(['GET', 'POST', 'PUT', 'DELETE'], params[:method] || 'GET'), :onChange=>"switchRequestMethod()")%>
   			</td>
 				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
@@ -182,7 +182,7 @@
 			<tr>
 				<td></td>
 				<td colspan="2">
-					<div style="padding-top:5px;" id="post_params">
+					<div style="padding-top:5px;display:none" id="post_params">
 					  <div id="post_fields">
 					  </div>
 						<div style="padding-top:5px;">
@@ -317,7 +317,7 @@ function copyUrlToClipboard(trigger) {
 	
 	for (key in params) {
 		if (key == "") continue;
-		link_location = link_location + "&" + key + "=" + params[key];
+		link_location = link_location + "&" + encodeURI(key) + "=" + encodeURI(params[key]);
 	}
 	
   Platform.element("api_clipboard_text").value = link_location;
@@ -472,13 +472,11 @@ function logError(msg) {
 }	
 
 function switchRequestMethod() {
-/*
 	if (Platform.value("request_method") == "GET") {
 		Platform.Effects.hide("post_params");
 	} else {
 		Platform.Effects.show("post_params");
 	}
-*/	
 }	
 
 function addPostField(name, value) {
@@ -518,6 +516,7 @@ function addPostField(name, value) {
 	fields.appendChild(field);
 	field_count++;
 	
+  Platform.Effects.show("post_params");
 	Platform.Effects.show('remove_all_params_link');
 }
 
