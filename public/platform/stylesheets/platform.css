@@ -119,3 +119,59 @@ body.platform_grey_disabled_button                  {background-position: left -
 body.platform_grey_disabled_button span             {background-position: right -626px; }
 
 .platform_cancel_link                               {font-size:12px;font-family:arial;}
+
+
+.app_fields {
+  font-size:12px;
+  border: 1px dotted #ccc; 
+  padding:10px; 
+  background: #fafafa;
+  margin-bottom:20px; 
+}
+
+.app_fields th {
+  padding-top:5px;
+  padding-right:15px;
+  white-space: nowrap;
+}
+
+.app_fields td {
+  padding-top:5px;
+  padding-right:15px;
+}
+
+.comments {
+  color: #666;
+  font-size: 10px;
+}
+
+.platform td {
+  vertical-align:top;
+}
+
+.platform th {
+  vertical-align:top;
+  text-align:right;
+}
+
+.apps_header {
+  padding-bottom:5px;
+  margin-bottom:5px;
+  font-size:14px;
+  border-bottom: 1px solid #ccc;
+  font-weight:bold;
+}
+
+.app_fields_section_header {
+  background-color:#F0F2F7;
+  padding:5px;
+  margin-bottom:10px;
+  margin-top:10px;
+  border-top:1px dotted #ccc;
+} 
+
+.edit_section_header {
+  background-color:#eee;
+  padding:5px;width:100%;margin-bottom:10px;
+  border-top: 1px solid #ccc;
+} 

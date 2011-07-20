@@ -1,0 +1,140 @@
+.field {
+  margin-bottom:1px;
+}
+
+.field_name_container {
+  padding-right:2px;  
+}
+
+.field_name {
+  width:150px;
+  font-size:12px;
+}
+
+.field_action {
+  padding-left:5px;
+  padding-top:5px;
+}
+  
+.field_value {
+  width:400px;
+  font-size:12px;
+} 
+
+.obj_key {
+  padding-right: 10px;
+  color: #444;
+}
+
+.obj_value_string {
+  color: green;
+}
+
+.obj_value_string {
+  color: green;
+}
+
+.obj_value_boolean {
+  color: blue;
+}
+
+.obj_value_number {
+  color: red;
+}
+
+.response_data {
+  font-size:12px;
+  overflow:auto;
+  font-family:Arial;
+  padding:10px;
+  height:450px;
+  background-color:#F2F2F2;
+}
+
+.status {
+  height:10px;
+  background-color:#EFF8FF;
+  color: #444;
+}
+
+.error {
+  color:red;
+}
+
+.api_url {
+
+}
+
+.api_options {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-family: verdana; 
+  font-size:11px; 
+  width: 765px;
+  background: #f4f4f4;
+  border:solid 1px #e8e8e8;
+  border-color:#e8e8e8 #bababa #bababa #e8e8e8;
+  padding: 0;
+  margin: 0;
+  z-index: 10000;
+  -webkit-box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+  -moz-box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+  box-shadow:2px 2px 3px rgba(0,0,0,0.6);
+  display:none;
+}
+
+.api_options .inner  {
+  background:#fff;
+  border:solid 1px #bababa;
+  border-color:#bababa #e8e8e8 #e8e8e8 #bababa;
+  padding:5px;
+  -moz-border-radius:2px;
+  -webkit-border-radius:2px;
+  border-radius:2px;
+  font-size:11px;
+}
+
+.api_list {
+  padding-left:10px;
+}
+
+.api_method_list {
+  padding-left:30px;
+  padding-bottom:10px;
+}
+
+.api_history {
+  
+}
+
+.api_history th {
+  text-align:left;
+  font-weight:bold;
+  padding:3px;
+  border-bottom: 1px solid #ccc;
+  font-size:10px;
+}
+
+.api_history td {
+  padding:3px;
+  border-bottom: 1px dotted #ccc;
+  cursor:pointer;
+  font-size:10px;
+}
+
+.api_history .api_row {
+}
+
+.api_history .api_row:hover {
+  background-color: #eee;
+}
+
+.api_history .selected_row {
+  background-color: #EFF8FF;
+}
+
+.expander {
+  cursor:pointer;
+  padding-right:3px;
+}
