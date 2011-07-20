@@ -1,16 +1,16 @@
 <% doc_server = "http://api-preview.geni.com" %>
 
 <div style="border-bottom: 1px solid #ccc; margin:10px; font-weight:bold;">
-	Geni API List
+  Geni API List
 </div>
 
 <table style="width:100%">
-	<tr>
-		<td style="width:33%">
+  <tr>
+    <td style="width:33%">
       <div class="api_list">
         <%=platform_toggler_tag("user_api")%>
         <%=link_to_function("User", "updateApi('user', 'GET', {})")%> 
-				<%=platform_documentation_tag("#{doc_server}/api-reference/user.html")%>
+        <%=platform_documentation_tag("#{doc_server}/api-reference/user.html")%>
       </div>
       <div id="user_api" class="api_method_list"> 
           <ul>
@@ -55,8 +55,8 @@
                 <%=platform_documentation_tag("#{doc_server}/api-reference/user/uploaded-videos.html")%>
             </li> 
           </ul>
-      </div>			
-			
+      </div>      
+      
       <div class="api_list">
         <%=platform_toggler_tag("project_api")%>
         <%=link_to_function("Project", "updateApi('project-1', 'GET', {})")%> 
@@ -78,7 +78,7 @@
             </li> 
           </ul>
       </div>    
-			
+      
       <div class="api_list">
         <%=platform_toggler_tag("photo_album_api")%>
         <%=link_to_function("Photo Album", "updateApi('photo_album-1', 'GET', {})")%> 
@@ -100,7 +100,7 @@
             </li> 
           </ul>
       </div>
-			
+      
       <div class="api_list">
         <%=platform_toggler_tag("union_api")%>
         <%=link_to_function("Union", "updateApi('union-1', 'GET', {})")%> 
@@ -118,76 +118,76 @@
             </li> 
           </ul>
       </div>
-			
-			
-		</td>	
-		<td style="width:33%">
-	    <div class="api_list">
-	      <%=platform_toggler_tag("document_api")%>
-	      <%=link_to_function("Document", "updateApi('document-1', 'GET', {})")%> <%=platform_documentation_tag("#{doc_server}/api-reference/document.html")%>
-	    </div>
-	    <div id="document_api" class="api_method_list"> 
-	        <ul>
-	          <li>
-	              <%=link_to_function("add", "updateApi('document/add', 'POST', {title:'Document title', text:'Document text'})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/add.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("tag", "updateApi('document-1/tag/profile-1', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/tag.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("tags", "updateApi('document-1/tags', 'GET', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/tags.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("untag", "updateApi('document-1/untag/profile-1', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/untag.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("update", "updateApi('document-1/update', 'POST', {title:'New document title', text:'New document text'})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/update.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("delete", "updateApi('document-1/delete', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/document/delete.html")%>
-	          </li> 
-	        </ul>
-	    </div>
-			
-	    <div class="api_list">
-	      <%=platform_toggler_tag("photo_api")%>
-	      <%=link_to_function("Photo", "updateApi('photo-1', 'GET', {})")%> 
-				<%=platform_documentation_tag("#{doc_server}/api-reference/photo.html")%>
-	    </div>
-	    <div id="photo_api" class="api_method_list"> 
-	        <ul>
-	          <li>
-	              <%=link_to_function("add", "updateApi('photo/add', 'POST', {title:'Photo title'})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/add.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("tag", "updateApi('photo-1/tag/profile-1', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/tag.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("tags", "updateApi('photo-1/tags', 'GET', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/tags.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("untag", "updateApi('photo-1/untag/profile-1', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/untag.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("update", "updateApi('photo-1/update', 'POST', {title:'New photo title'})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/update.html")%>
-	          </li> 
-	          <li>
-	              <%=link_to_function("delete", "updateApi('photo-1/delete', 'POST', {})")%>
-	              <%=platform_documentation_tag("#{doc_server}/api-reference/photo/delete.html")%>
-	          </li> 
-	        </ul>
-	    </div>
+      
+      
+    </td> 
+    <td style="width:33%">
+      <div class="api_list">
+        <%=platform_toggler_tag("document_api")%>
+        <%=link_to_function("Document", "updateApi('document-1', 'GET', {})")%> <%=platform_documentation_tag("#{doc_server}/api-reference/document.html")%>
+      </div>
+      <div id="document_api" class="api_method_list"> 
+          <ul>
+            <li>
+                <%=link_to_function("add", "updateApi('document/add', 'POST', {title:'Document title', text:'Document text'})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/add.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("tag", "updateApi('document-1/tag/profile-1', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/tag.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("tags", "updateApi('document-1/tags', 'GET', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/tags.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("untag", "updateApi('document-1/untag/profile-1', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/untag.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("update", "updateApi('document-1/update', 'POST', {title:'New document title', text:'New document text'})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/update.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("delete", "updateApi('document-1/delete', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/document/delete.html")%>
+            </li> 
+          </ul>
+      </div>
+      
+      <div class="api_list">
+        <%=platform_toggler_tag("photo_api")%>
+        <%=link_to_function("Photo", "updateApi('photo-1', 'GET', {})")%> 
+        <%=platform_documentation_tag("#{doc_server}/api-reference/photo.html")%>
+      </div>
+      <div id="photo_api" class="api_method_list"> 
+          <ul>
+            <li>
+                <%=link_to_function("add", "updateApi('photo/add', 'POST', {title:'Photo title'})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/add.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("tag", "updateApi('photo-1/tag/profile-1', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/tag.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("tags", "updateApi('photo-1/tags', 'GET', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/tags.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("untag", "updateApi('photo-1/untag/profile-1', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/untag.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("update", "updateApi('photo-1/update', 'POST', {title:'New photo title'})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/update.html")%>
+            </li> 
+            <li>
+                <%=link_to_function("delete", "updateApi('photo-1/delete', 'POST', {})")%>
+                <%=platform_documentation_tag("#{doc_server}/api-reference/photo/delete.html")%>
+            </li> 
+          </ul>
+      </div>
 
       <div class="api_list">
         <%=platform_toggler_tag("video_api")%>
@@ -222,7 +222,7 @@
             </li> 
           </ul>
       </div>
-					
+          
       <div class="api_list">
         <%=platform_toggler_tag("revision_api")%>
         <%=link_to_function("Revision", "updateApi('revision-1', 'GET', {})")%> 
@@ -230,13 +230,13 @@
       </div>
       <div id="revision_api" class="api_method_list"> 
       </div>
-					
+          
     </td>
     <td style="width:33%">
       <div class="api_list">
         <%=platform_toggler_tag("profile_api")%>
         <%=link_to_function("Profile", "updateApi('profile-1', 'GET', {})")%> 
-				<%=platform_documentation_tag("#{doc_server}/api-reference/profile.html")%>
+        <%=platform_documentation_tag("#{doc_server}/api-reference/profile.html")%>
       </div>
       <div id="profile_api" class="api_method_list"> 
           <ul>
@@ -330,7 +330,7 @@
             </li> 
           </ul>
       </div>    
-    </td>		
+    </td>   
   </tr>
 </table>
-		
+    

@@ -24,7 +24,22 @@
 class Platform::Developer::ApiExplorerController < Platform::Developer::BaseController
   
   def index
-    
+    @api_history = "[]"
+    @api_history = request.cookies["api_history"] unless request.cookies["api_history"].blank?
+    @api_history_index = request.cookies["api_history_index"] || 0
   end
 
+  def history
+    @api_history = []
+    @api_history = JSON.parse(request.cookies["api_history"]) unless request.cookies["api_history"].blank?
+    @api_history_index = (params["api_history_index"] || -1).to_i
+    
+    render(:layout => false)
+  end
+  
+  def api_methods
+    
+    render(:layout => false)
+  end
+  
 end
