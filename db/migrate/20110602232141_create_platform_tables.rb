@@ -40,10 +40,14 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.integer :rank
       t.boolean :auto_signin
       t.string  :deauthorize_callback_url
+      t.string  :version
+      t.string  :api_version
+      t.integer :parent_id
       t.timestamps
     end
     add_index :platform_applications, :developer_id
     add_index :platform_applications, :key, :unique    
+    add_index :platform_applications, :parent_id  
     
     create_table :platform_application_logs do |t|
       t.integer     :application_id

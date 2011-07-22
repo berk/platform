@@ -468,6 +468,7 @@ class Platform::Config
   def self.searched_apps_per_page
     15
   end
+  
   #########################################################
   # API
   #########################################################
@@ -502,6 +503,34 @@ class Platform::Config
   def self.api_base_url
     api[:base_url]
   end  
+
+  def self.api_supported_versions
+    api[:supported_versions]
+  end  
+  
+  def self.api_default_version
+    api[:default_version]
+  end
+  
+  #########################################################
+  # API References
+  #########################################################
+  
+  def self.api_reference(api_version = api_default_version)
+    @api_reference ||= begin
+      ref = HashWithIndifferentAccess.new
+      api_supported_versions.each do |version|
+        ref[version] = {}
+        path = "#{root}/config/platform/api/#{version}"
+        files = Dir.glob("#{path}/*.yml")
+        files.each do |file|
+          ref[version].merge!(YAML.load_file(file))
+        end
+      end  
+      ref.freeze
+    end
+    @api_reference[api_version]
+  end
   
   #########################################################
 

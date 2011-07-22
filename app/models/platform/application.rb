@@ -26,6 +26,7 @@ class Platform::Application < ActiveRecord::Base
   
   # useful methods - should be public
   include Platform::SimpleStringPermissions
+  acts_as_tree :order => "version"
 
   belongs_to :developer, :class_name => "Platform::Developer"
   has_many :application_developers, :class_name => "Platform::ApplicationDeveloper", :dependent => :destroy
@@ -35,7 +36,7 @@ class Platform::Application < ActiveRecord::Base
   
   has_many :tokens,           :class_name => "Platform::Oauth::OauthToken", :dependent => :destroy
   has_many :access_tokens,    :class_name => "Platform::Oauth::AccessToken", :dependent => :destroy
-  has_many :verifier_tokens,  :class_name => "Platform::Oauth::VerifierToken", :dependent => :destroy
+  has_many :refresh_tokens,   :class_name => "Platform::Oauth::RefreshToken", :dependent => :destroy
 
   has_many :application_categories,  :class_name => "Platform::ApplicationCategory", :dependent => :destroy
   has_many :categories,  :class_name => "Platform::Category", :through => :application_categories
@@ -64,10 +65,15 @@ class Platform::Application < ActiveRecord::Base
   state :approved
   state :rejected 
   state :blocked 
+  state :deprecated
   
   event :submit do
     transitions :from => :new,        :to => :submitted
     transitions :from => :rejected,   :to => :submitted
+  end
+
+  event :deprecate do
+    transitions :from => :approved,   :to => :deprecated
   end
   
   event :block do
@@ -333,6 +339,12 @@ class Platform::Application < ActiveRecord::Base
     paginate(:conditions => ["platform_applications.state='approved' and platform_application_categories.category_id = ? and (platform_application_categories.featured is null or platform_application_categories.featured = ?)", category.id, false], 
              :joins => "inner join platform_application_categories on platform_application_categories.application_id = platform_applications.id", 
              :order => "platform_application_categories.position asc", :page => page, :per_page => per_page)
+  end
+  
+  def versioned_name
+    @versioned_name ||= begin
+      "#{name} #{version}"
+    end
   end
   
 protected

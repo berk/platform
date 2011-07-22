@@ -24,7 +24,15 @@
 class Platform::Developer::DashboardController < Platform::Developer::BaseController
 
   def index
-    
+    app_ids = session[:platform_dashboard_apps] || []
+    if app_ids.empty?
+      @apps = Platform::Application.find(:all, :conditions => ["developer_id = ?", platform_current_developer.id], :order => "created_at desc", :limit => 5)
+    else
+      @apps = Platform::Application.find(:all, :conditions => ["id in (?) and developer_id = ?", app_ids, platform_current_developer.id], :order => "created_at desc")
+    end
   end
   
+  def settings
+    
+  end
 end

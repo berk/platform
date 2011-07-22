@@ -50,6 +50,11 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
   def block
     app = Platform::Application.find(params[:app_id])  
     app.block!
+    
+    app.children.each do |child|
+      child.block!
+    end
+    
     redirect_to(:action => :view, :app_id => app.id)
   end
 
@@ -60,8 +65,14 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
   end
 
   def approve
-    app = Platform::Application.find(params[:app_id])  
+    app = Platform::Application.find(params[:app_id])
+    
+    app.children.each do |child|
+      child.deprecate!
+    end
+    
     app.approve!
+    
     redirect_to(:action => :view, :app_id => app.id)
   end
 

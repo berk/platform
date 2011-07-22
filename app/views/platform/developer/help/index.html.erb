@@ -1,25 +1,19 @@
-<%= render :partial => "/platform/developer/common/header" %>
+<%= render :partial => "header" %>
 
-<%= render :partial => "/platform/developer/help/navigation" %>
+<div class="documentation_section_title">
+  <%= tr("Welcome to #{Tr8n::Config.site_title} API Documentation") %>
+</div>
 
-<% @page_title = "Introduction" %>
-
-<div id="tr8n_help_content">
-  
-  <h1><%= @page_title %></h1>
-
-  <p>
-    Thank you for becoming a <%= Tr8n::Config.site_title %> developer. We're happy to provide you with a set of developer tools that will enable you to register and developer your applications as well as monitor your application popularity and usability.
-  </p>
-  
+<div class="documentation_section">
 	<p>
-		To view the API document, please visit this site:<br><br> <%=link_to("http://api-preview.geni.com", "http://api-preview.geni.com")%>
-	</p>
+    Thank you for becoming a <%= Tr8n::Config.site_title %> developer. 
+		We're happy to provide you with a set of developer tools that will enable you to register, develop and monitor your application on <%= Tr8n::Config.site_title %>.
+  </p>
 	
   <p>
-    To learn more, use the menu to the left of each page.
+    To learn more, use the menu on the left to expore the API.
   </p>
   
 </div>
 
-<%= render :partial => "/platform/developer/common/footer" %>
+<%= render :partial => "footer" %>

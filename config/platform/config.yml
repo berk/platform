@@ -84,6 +84,7 @@ defaults: &defaults
     request_limit:            3
     request_window:           1
     token_lifetime:           86400
+    versions:                 ['1.0.0', '2.0.0']
     user:
       create_enabled:         true
       

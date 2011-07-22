@@ -1,0 +1,70 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= @api[:title] || @api[:path] %>
+</div>
+
+<div class="documentation_section">
+  <p>
+	 <%= @api[:description] %>
+	</p>
+	
+	<% if @api[:sample] %>
+		<h2><%=tr("Usage")%></h2>
+		<p>
+			<% if @api[:method] == 'POST' %>
+			 <p><%=tr("Requires POST.")%></p>
+			<% end %>
+			
+			<%= link_to(@api[:sample], @api[:sample]) %>
+		</p>
+  <% end %>
+	
+	<% if @api[:params] %>
+	  <h2><%=tr("Parameters") %></h2>
+		<p>
+		<table class="documentation_table">
+			 <tr>
+			 	<th><%=tr("Name") %></th>
+				<th><%=tr("Description") %></th>
+				<th><%=tr("Type") %></th>
+				<th><%=tr("Required") %></th>
+			 </tr>
+		<% @api[:params].keys.sort.each do |key| %>
+		   <tr>
+		   	 <td><%=key%></td>
+	       <td><%=@api[:params][key][:description]%></td>
+	       <td><%=@api[:params][key][:type]%></td>
+	       <td><%=@api[:params][key][:required]%></td>
+		   </tr>
+	  <% end %>
+		</table>
+		</p>
+	<% end %>
+	
+  <% if @api[:fields] %>
+	  <% @api[:fields] = @api[:parent][:fields] if @api[:fields]=="*" %>
+    <h2><%=tr("Returned Fields") %></h2>
+    <p>
+    <table class="documentation_table">
+       <tr>
+        <th><%=tr("Name") %></th>
+        <th><%=tr("Description") %></th>
+        <th><%=tr("Type") %></th>
+        <th><%=tr("Public") %></th>
+       </tr>
+    <% @api[:fields].keys.sort.each do |key| %>
+       <tr>
+         <td><%=key%> <%=documentation_field_decorators_tag(@api[:fields][key]) %></td>
+         <td><%=@api[:fields][key][:description]%></td>
+         <td><%=documentation_field_type_tag(@api[:fields][key])%></td>
+         <td><%=@api[:fields][key][:public]%></td>
+       </tr>
+    <% end %>
+    </table>
+    <div class="documentaiton_note" style="padding-top:10px;">Note: Blank fields will not be returned to save bandwidth.</div>
+    </p>
+	<% end %>
+</div>
+
+<%= render :partial => "footer" %>

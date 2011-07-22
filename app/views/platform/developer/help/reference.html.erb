@@ -1,0 +1,33 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("Using the API Reference") %>
+</div>
+
+<div class="documentation_section">
+  <p>
+  	
+  </p>
+	
+	<h2><%=tr("API Legend")%></h2>
+	<table class="documentation_table">
+		<tr>
+			<th style="width:20px;"><%=tr("Icon")%></th>
+			<th><%=tr("Description")%></th>
+		</tr>
+		<tr>
+			<td><%=image_tag("/platform/images/exclamation.png")%></td>
+			<td><%=tr("Indicates that the API has been changed or a field has been deprecated")%></td>
+		</tr>
+    <tr>
+      <td><%=image_tag("/platform/images/add.png")%></td>
+      <td><%=tr("Indicates that the API has been added or a field has been added")%></td>
+    </tr>
+    <tr>
+      <td><%=image_tag("/platform/images/accept.png")%></td>
+      <td><%=tr("Indicates that the API has been changed or a field has been changed")%></td>
+    </tr>
+	</table>
+</div>
+
+<%= render :partial => "footer" %>

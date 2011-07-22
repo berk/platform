@@ -6,6 +6,20 @@
 			</div>
 		</td>
 	</tr>	
+	<% if @current_app || @app.version %>
+  <tr>
+    <th>
+      <%=tr('Version:', 'Client application field label')%>
+    </td>
+    <td>
+      <%=form.text_field :version, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required.")%>
+      <%=tr("New version of your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	<% end %>
 	<tr>
 		<th>
 			<%=tr('Application Name:', 'Client application field label')%>
@@ -14,6 +28,7 @@
 			<%=form.text_field :name, :class=>'xxlong_input'%>
 		</td>	
 		<td class="comments">
+			<%=tr("Required.")%>
 			<%=tr("Name of your application.", 'Client application field comment')%>
 		</td>	
 	</tr>
@@ -73,7 +88,7 @@
       <%=tr('Language:', 'Client application field label')%>
     </th>
     <td>
-      <%=select_tag("client_application[locale]", options_for_select(@languages, @app.locale || Tr8n::Config.default_locale)) %>
+      <%=select_tag("application[locale]", options_for_select(@languages, @app.locale || Tr8n::Config.default_locale)) %>
     </td> 
     <td class="comments">
       <%=tr("The native language of your app.", 'Client application field comment')%>
@@ -169,13 +184,26 @@
     <th>
       <%=tr('Application Type:','Client application field label')%>
     </th>
-    <td>
+    <td style="height:30px;">
         <label for="option1" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'web', :id => "option1", :style=>"vertical-align: top;" %> Web</label>
 				&nbsp; 
         <label for="option2" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'native', :id => "option2", :style=>"vertical-align: top;" %> Native/Desktop</label>
     </td> 
     <td class="comments">
       <%=tr("Choose your application type.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr("#{Platform::Config.site_title} API Version:", 'Client application field label')%>
+    </td>
+    <td>
+      <%=select_tag("application[api_version]", options_for_select(Platform::Config.api_supported_versions, @app.api_version)) %>
+    </td> 
+    <td class="comments">
+      <%=tr("Required.")%>
+      <%=tr("API version your application is using.", 'Client application field comment')%>
     </td> 
   </tr>
 	
@@ -227,7 +255,7 @@
     <th>
       <%=tr('Canvas URL:','Client application field label')%>
     </th>
-    <td>
+    <td style="height:30px;">
       <%=form.text_field :canvas_url, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
@@ -238,7 +266,7 @@
     <th>
       <%=tr('IFrame Size:','Client application field label')%>
     </th>
-    <td>
+    <td style="height:30px;">
         <label for="resize_option1" style="vertical-align: middle"><%=form.radio_button :auto_resize, false, :id => "resize_option1", :style=>"vertical-align: top;" %> Show scrollbars</label>
         <label for="resize_option2" style="vertical-align: middle"><%=form.radio_button :auto_resize, true, :id => "resize_option2", :style=>"vertical-align: top;" %> Auto-resize</label>
     </td> 
@@ -250,7 +278,7 @@
     <th>
       <%=tr('Authentication:','Client application field label')%>
     </th>
-    <td>
+    <td style="height:30px;">
         <label for="signin_option1" style="vertical-align: middle"><%=form.radio_button :auto_signin, true, :id => "signin_option1", :style=>"vertical-align: top;" %> Auto sign-in</label>
         <label for="signin_option2" style="vertical-align: middle"><%=form.radio_button :auto_signin, false, :id => "signin_option2", :style=>"vertical-align: top;" %> Handle authentication</label>
     </td> 
@@ -276,7 +304,8 @@
       <%=form.text_field :ios_bundle_id, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
-      <%=tr("Required: iOS Bundle ID for iOS native app.", 'Client application field comment')%>
+      <%=tr("Required.")%>    	
+      <%=tr("iOS Bundle ID for iOS native app.", 'Client application field comment')%>
     </td> 
   </tr>
   <tr>
