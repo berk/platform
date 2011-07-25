@@ -23,6 +23,8 @@
 
 class Platform::Developer::ApiExplorerController < Platform::Developer::BaseController
   
+  before_filter :prepare_api_version
+  
   def index
     @api_history = "[]"
     @api_history = request.cookies["api_history"] unless request.cookies["api_history"].blank?
@@ -37,9 +39,15 @@ class Platform::Developer::ApiExplorerController < Platform::Developer::BaseCont
     render(:layout => false)
   end
   
-  def api_methods
+  def options
     
     render(:layout => false)
   end
   
+private
+ 
+  def prepare_api_version
+    @version = params[:version] || Platform::Config.api_default_version
+  end
+    
 end

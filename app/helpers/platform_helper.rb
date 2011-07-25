@@ -43,8 +43,24 @@ module PlatformHelper
     html << "</span>" 
   end  
   
-  def platform_documentation_tag(url)
-    link_to(image_tag("/platform/images/bullet_go.png", :style=>"vertical-align:middle;"), url, :target=>"_new")
+  def platform_documentation_tag(url_options = {})
+    link_to(image_tag("/platform/images/bullet_go.png", :style=>"vertical-align:middle;"), url_options.merge({:controller => "/platform/developer/help", :action => "api"}))
+  end
+  
+  def platform_documentation_field_decorators_tag(field)
+    return unless field[:status]
+    return image_tag("/platform/images/cancel.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been deprecated and will no longer be supported in the future versions")) if ['deprecated', 'removed'].include?(field[:status]) 
+    return image_tag("/platform/images/exclamation.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field will be changed in the future versions")) if field[:status] == 'changed'
+    return image_tag("/platform/images/add.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been added")) if field[:status] == 'added'
+    return image_tag("/platform/images/accept.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been changed")) if field[:status] == 'updated'
+  end
+
+  def platform_documentation_api_decorators_tag(api)
+    return unless api[:status]
+    return image_tag("/platform/images/exclamation.png", :style=>"vertical-align:top;height:10px;", :title => trl("The API structure has changed")) if ['changed'].include?(api[:status]) 
+    return image_tag("/platform/images/cancel.png", :style=>"vertical-align:top;height:10px;", :title => trl("The API has been removed")) if ['removed', 'deprecated'].include?(api[:status]) 
+    return image_tag("/platform/images/add.png", :style=>"vertical-align:top;height:10px;", :title => trl("This API has been added")) if api[:status] == 'added'
+    return image_tag("/platform/images/accept.png", :style=>"vertical-align:top;height:10px;", :title => trl("This API has been updated")) if api[:status] == 'updated'
   end
   
   def platform_scripts_tag(opts = {})

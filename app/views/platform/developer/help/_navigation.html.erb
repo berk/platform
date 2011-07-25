@@ -49,7 +49,7 @@
   <div class="section_link <%="selected" if @controller.action_name == 'reference' %>"><%=link_to(tr("Using the API Reference"), :action => :reference, :version => @version)%></div>
 
   <div class="navigation_header" style="white-space:nowrap;"><%=tr("API Reference")%> &nbsp; 
-	 <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
+	 <span style="font-size:8px;">v</span> <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
 	</div>
 	
 	<% ref = Platform::Config.api_reference(@version) %>
@@ -61,7 +61,7 @@
     <div class="section_link <%="selected" if @api[:path]==api[:path] %>" style="vertical-align:middle;">
     	<%=platform_toggler_tag("#{api_key}_api_actions", "", true, {:style => "text-align:center; vertical-align:top; width:10px;"})%>
 			<%=link_to(api_key.titleize, {:action => :api, :path => api[:path], :version => @version})%>
-			<%=documentation_api_decorators_tag(api) %>
+			<%=platform_documentation_api_decorators_tag(api) %>
 		</div>
 		<% if api[:actions] %>
 		 <div id="<%=api_key%>_api_actions" style="margin-bottom:5px;"> 
@@ -69,7 +69,7 @@
 		    <% api_action = api[:actions][api_action_key] %>
 		    <div style="padding-left:25px;" class="section_link <%="selected" if @api[:path]==api_action[:path] %>">
 				    <%=link_to(api_action_key, {:action => :api, :path => api_action[:path], :version => @version})%>
-						<%=documentation_api_decorators_tag(api_action) %>
+						<%=platform_documentation_api_decorators_tag(api_action) %>
 				</div>
 		 <% end %>
 		 </div>

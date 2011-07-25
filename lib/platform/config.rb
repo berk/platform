@@ -203,6 +203,7 @@ class Platform::Config
   
   #########################################################
   # Config Sections
+  #########################################################
   def self.caching
     config[:caching]
   end
@@ -222,6 +223,7 @@ class Platform::Config
 
   #########################################################
   # Caching
+  #########################################################
   def self.enable_caching?
     caching[:enabled]
   end
@@ -241,6 +243,7 @@ class Platform::Config
 
   #########################################################
   # Logger
+  #########################################################
   def self.enable_logger?
     logger[:enabled]
   end
@@ -507,6 +510,10 @@ class Platform::Config
   def self.api_supported_versions
     api[:supported_versions]
   end  
+
+  def self.api_supported_version_options
+    @api_supported_version_options ||= api[:supported_versions].collect{|v| ["v #{v}", v]}
+  end  
   
   def self.api_default_version
     api[:default_version]
@@ -517,11 +524,11 @@ class Platform::Config
   #########################################################
   
   def self.api_reference(api_version = api_default_version)
-    @api_reference ||= begin
+    @api_reference = begin
       ref = HashWithIndifferentAccess.new
       api_supported_versions.each do |version|
         ref[version] = {}
-        path = "#{root}/config/platform/api/#{version}"
+        path = "#{root}/#{api[:config_path]}/#{version}"
         files = Dir.glob("#{path}/*.yml")
         files.each do |file|
           ref[version].merge!(YAML.load_file(file))
@@ -530,6 +537,10 @@ class Platform::Config
       ref.freeze
     end
     @api_reference[api_version]
+  end
+
+  def self.api_explorer_groups(api_version = api_default_version)
+    api[:explorer_groups][api_version]
   end
   
   #########################################################

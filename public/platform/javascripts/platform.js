@@ -401,14 +401,14 @@ Platform.Utils = {
 	
 	  for(p in obj1) {
 	      if (obj1[p]) {
-	          switch(typeof(obj1[p])) {
-	                  case 'object':
-	                          if (!equal(obj1[p], x[p])) { return false }; break;
-	                  case 'function':
-	                          if (typeof(obj2[p])=='undefined' || (obj1[p].toString() != obj2[p].toString())) { return false; }; break;
-	                  default:
-	                          if (obj1[p] != obj2[p]) { return false; }
-	          }
+	       switch(typeof(obj1[p])) {
+	           case 'object':
+	             if (!Platform.Utils.equal(obj1[p], obj2[p])) { return false }; break;
+	           case 'function':
+	             if (typeof(obj2[p])=='undefined' || (obj1[p].toString() != obj2[p].toString())) { return false; }; break;
+	           default:
+	             if (obj1[p] != obj2[p]) { return false; }
+	       }
 	      } else {
 	          if (obj2[p]) {
 	              return false;

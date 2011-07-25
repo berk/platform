@@ -199,7 +199,7 @@
       <%=tr("#{Platform::Config.site_title} API Version:", 'Client application field label')%>
     </td>
     <td>
-      <%=select_tag("application[api_version]", options_for_select(Platform::Config.api_supported_versions, @app.api_version)) %>
+      <%=select_tag("application[api_version]", options_for_select(Platform::Config.api_supported_version_options, @app.api_version)) %>
     </td> 
     <td class="comments">
       <%=tr("Required.")%>

@@ -26,15 +26,15 @@
 		<table class="documentation_table">
 			 <tr>
 			 	<th><%=tr("Name") %></th>
+        <th><%=tr("Type") %></th>
 				<th><%=tr("Description") %></th>
-				<th><%=tr("Type") %></th>
 				<th><%=tr("Required") %></th>
 			 </tr>
 		<% @api[:params].keys.sort.each do |key| %>
 		   <tr>
 		   	 <td><%=key%></td>
+         <td><%=@api[:params][key][:type]%></td>
 	       <td><%=@api[:params][key][:description]%></td>
-	       <td><%=@api[:params][key][:type]%></td>
 	       <td><%=@api[:params][key][:required]%></td>
 		   </tr>
 	  <% end %>
@@ -49,16 +49,14 @@
     <table class="documentation_table">
        <tr>
         <th><%=tr("Name") %></th>
-        <th><%=tr("Description") %></th>
         <th><%=tr("Type") %></th>
-        <th><%=tr("Public") %></th>
+        <th><%=tr("Description") %></th>
        </tr>
     <% @api[:fields].keys.sort.each do |key| %>
        <tr>
-         <td><%=key%> <%=documentation_field_decorators_tag(@api[:fields][key]) %></td>
-         <td><%=@api[:fields][key][:description]%></td>
+         <td><%=key%> <%=platform_documentation_field_decorators_tag(@api[:fields][key]) %></td>
          <td><%=documentation_field_type_tag(@api[:fields][key])%></td>
-         <td><%=@api[:fields][key][:public]%></td>
+         <td><%=@api[:fields][key][:description]%></td>
        </tr>
     <% end %>
     </table>

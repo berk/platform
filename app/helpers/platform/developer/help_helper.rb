@@ -36,23 +36,6 @@ module Platform::Developer::HelpHelper
     link_to(name, :controller => "/platform/developer/help", :action => :api, :path => type.underscore)
   end
   
-  def documentation_field_decorators_tag(field)
-    html = []
-    html << image_tag("/platform/images/exclamation.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been deprecated")) if field[:deprecated]
-    html << image_tag("/platform/images/add.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been added")) if field[:added]
-    html << image_tag("/platform/images/accept.png", :style=>"vertical-align:top;height:10px;", :title => trl("This field has been changed")) if field[:updated]
-    html.join("")
-  end
-
-  def documentation_api_decorators_tag(api)
-    html = []
-    html << image_tag("/platform/images/exclamation.png", :style=>"vertical-align:top;height:10px;", :title => trl("The API structure has changed")) if api[:changed]
-    html << image_tag("/platform/images/add.png", :style=>"vertical-align:top;height:10px;", :title => trl("This API has been added")) if api[:added]
-    html << image_tag("/platform/images/accept.png", :style=>"vertical-align:top;height:10px;", :title => trl("This API has been updated")) if api[:updated]
-    html << image_tag("/platform/images/exclamation.png", :style=>"vertical-align:top;height:10px;", :title => trl("This API has been deprecated")) if api[:removed]
-    html.join("")
-  end
-  
 private
 
   def simple_field?(type)

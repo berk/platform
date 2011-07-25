@@ -66,7 +66,7 @@ function copyUrlToClipboard(trigger) {
   var params = generateRequestParams();
   var link_location = "" + window.location;
   link_location = link_location.split("?")[0];
-  link_location = link_location + "?path=" + Platform.value("api_path") + "&method=" + Platform.value("request_method");
+  link_location = link_location + "?path=" + Platform.value("api_path") + "&method=" + Platform.value("request_method") + "&version=" + Platform.value("api_version");
   
   for (key in params) {
     if (key == "") continue;
@@ -77,6 +77,48 @@ function copyUrlToClipboard(trigger) {
   Platform.element("api_clipboard_text").focus();
   Platform.element("api_clipboard_text").select();
 } 
+
+
+function toggleApiOptions(trigger) {
+  Platform.Effects.hide("api_clipboard");
+  Platform.Effects.hide("api_history"); 
+
+  var options = Platform.element("api_options");
+  
+  if (options.style.display == "none") {
+    Platform.element("api_options_container").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+		
+    var trigger_position = Platform.Utils.cumulativeOffset(trigger);
+    var container_position = {
+      left: trigger_position[0] + trigger.offsetWidth - 765 + 'px',
+      top: trigger_position[1] + trigger.offsetHeight + 10 + 'px'
+    }
+    options.style.left = container_position.left;
+    options.style.top = container_position.top;
+    Platform.Effects.show("api_options");
+		
+    Platform.Utils.update("api_options_container", "/platform/developer/api_explorer/options", {
+      parameters: {version:Platform.value("api_version")}
+    });
+		
+  } else {
+    Platform.Effects.hide("api_options");
+  }
+}
+
+function switchApiVersion() {
+  var options = Platform.element("api_options");
+	
+  if (options.style.display != "none") {
+    Platform.element("api_options_container").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+		
+  	Platform.Utils.update("api_options_container", "/platform/developer/api_explorer/options", {
+  		parameters: {
+  			version: Platform.value("api_version")
+  		}
+  	});
+  }
+}
 
 /************************************************************************************
 ** API History Functions
@@ -226,11 +268,11 @@ function logError(msg) {
 } 
 
 function switchRequestMethod() {
-  if (Platform.value("request_method") == "GET") {
-    Platform.Effects.hide("post_params");
-  } else {
-    Platform.Effects.show("post_params");
-  }
+//  if (Platform.value("request_method") == "GET") {
+//    Platform.Effects.hide("post_params");
+//  } else {
+//    Platform.Effects.show("post_params");
+//  }
 } 
 
 function addPostField(name, value) {
@@ -331,18 +373,33 @@ function generateRequestParams() {
 
 function submitRequest() {
   hidePopups();
-  
+
   logInfo("Executing request...");
   Platform.element("response_data").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
   
   var params = generateRequestParams();
   // add access token
   
+	// add version
+	params['version'] = Platform.value('api_version');
+	
   saveCallToHistory(Platform.value("api_path"), Platform.value("request_method"), params);
-  
+
+	var path =  Platform.value("api_path");
+	var method = Platform.value("request_method");
+	if (method == 'GET') {
+		var path_params = [];
+		for (key in params) {
+      if (key == "") continue;
+      path_params.push(encodeURI(key) + "=" + encodeURI(params[key]));
+    }
+		path += (path.indexOf("?") == -1) ? "?" : "&";
+		path += path_params.join("&");
+	}
+	
   var t0 = new Date();
-  Platform.Utils.ajax("http://" + base_api_url + Platform.value("api_path"), {
-     method: Platform.value("request_method"),
+  Platform.Utils.ajax("http://" + base_api_url + path, {
+     method: method,
      parameters: params,
      onSuccess: function(response) {
         var t1 = new Date();
@@ -371,8 +428,13 @@ function updateApi(path, method, params) {
   switchRequestMethod();
   removeAllPostFields();
   for (key in params) {
+		if (key == 'version') continue;
     addPostField(key, params[key]);
   }
+	
+	if (params['version']) {
+    Platform.element('api_version').value = params['version']; 		
+	}
 }
 
 function callApi(path, method, params) {
@@ -532,28 +594,4 @@ function formatProperty(key, value) {
     return value_span;
     
   return "<span class='obj_key'>" + key + ":</span>" + value_span;
-}
-
-function hideApiOptions() {
-  Platform.Effects.hide("api_options");
-}
-
-function toggleApiOptions(trigger) {
-  Platform.Effects.hide("api_clipboard");
-  Platform.Effects.hide("api_history"); 
-
-  var options = Platform.element("api_options");
-  
-  if (options.style.display == "none") {
-    var trigger_position = Platform.Utils.cumulativeOffset(trigger);
-    var container_position = {
-      left: trigger_position[0] + trigger.offsetWidth - 765 + 'px',
-      top: trigger_position[1] + trigger.offsetHeight + 10 + 'px'
-    }
-    options.style.left = container_position.left;
-    options.style.top = container_position.top;
-    Platform.Effects.show("api_options");
-  } else {
-    Platform.Effects.hide("api_options");
-  }
 }
