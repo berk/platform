@@ -8,6 +8,11 @@
   <p>
   	
   </p>
+  <h2><%=tr("API Versions")%></h2>
+  <p>
+    API Version changes only when the API is no longer backwards compatible with the previous version. Such API changes include changes to the results structure or modifications to the API path. 
+    Adding new API will not change the API version.
+  </p>
 	
 	<h2><%=tr("API Legend")%></h2>
 	<table class="documentation_table">
@@ -28,6 +33,10 @@
       <td><%=tr("Indicates that the API has been changed or a field has been changed")%></td>
     </tr>
 	</table>
+	<p>
+		
+	</p>
+	
 </div>
 
 <%= render :partial => "footer" %>

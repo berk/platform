@@ -524,7 +524,7 @@ class Platform::Config
   #########################################################
   
   def self.api_reference(api_version = api_default_version)
-    @api_reference = begin
+    @api_reference ||= begin
       ref = HashWithIndifferentAccess.new
       api_supported_versions.each do |version|
         ref[version] = {}
