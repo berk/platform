@@ -38,7 +38,7 @@
                     <td style="vertical-align:top;">
                       <% apps = [] %>
                       <% @apps.each do |app|
-                          apps << link_to(app.name, :anchor => "app_#{app.id}")  
+                          apps << link_to(app.versioned_name, :anchor => "app_#{app.id}")  
                          end %>       
                       <%= apps.join(" | ") %> (<%=link_to(tr("change", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>)
                     </td>
@@ -68,7 +68,7 @@
     <%=platform_toggler_tag("app_content_#{app.id}")%>
     
     <%=image_tag(app.icon_url, :title=>app.name) %>&nbsp;
-    <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.name%></a>
+    <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.versioned_name%></a>
   </div>
   
   <div id="app_content_<%=app.id%>" class="section_box colored">
