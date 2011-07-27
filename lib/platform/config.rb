@@ -69,7 +69,8 @@ class Platform::Config
           Platform::ApplicationLog, Platform::RollupLog, 
           Platform::ApplicationMetric, Platform::DailyApplicationMetric, 
           Platform::WeeklyApplicationMetric, Platform::MonthlyApplicationMetric, 
-          Platform::TotalApplicationMetric, Platform::ApplicationUsageMetric
+          Platform::TotalApplicationMetric, Platform::ApplicationUsageMetric,
+          Platform::LoggedException
       ]
       
       if user_class_name == "Platform::PlatformUser" # used for stand-alone deployment only
@@ -191,6 +192,10 @@ class Platform::Config
 
   def self.enable_app_statistics?
     config[:enable_app_statistics]
+  end
+
+  def self.enable_api_verification?
+    config[:enable_api_verification]
   end
 
   def self.default_app_icon

@@ -47,10 +47,27 @@ class Platform::Api::BaseController < ActionController::Base
   class UnauthorizedError < ApiError ; end
   class JSONPError < ApiError ; end
   class SignatureError < ApiError ; end
+  class ResponseStructureError < ApiError ; end
 
   class LoginError < StandardError ; end
+
   
   include SslRequirement
+
+  PLATFORM_NON_LOGGED_EXCEPTIONS = [
+    ActionController::MethodNotAllowed,
+    ActionController::UnknownAction,
+    ActiveRecord::RecordNotFound,
+    ForbiddenError,
+    MethodNotAllowedError, 
+    ServiceUnavailableError,
+    UnauthorizedError
+  ]
+
+  rescue_from StandardError do |e|
+    log_exception(e) if should_log_error?(e)
+    render_exception(e)
+  end
 
 protected
 
@@ -59,6 +76,10 @@ protected
     ! (Rails.env.development? || Rails.env.test?)
   end
 
+  def log_exception(e)
+    Platform::LoggedException.create_from_exception(self, e, nil)
+  end
+  
 private
 
   ############################################################################
@@ -183,11 +204,14 @@ private
     to_opts = params.merge(:max_models => limit, :viewer => Platform::Config.current_user)
     respond_to do |format|
       format.json   do
+        json = obj.to_json(to_opts)
+        validate_response_structure(json)
+        
         if jsonp?
-          script = "#{params[:callback].strip}(#{obj.to_json(to_opts)})"
+          script = "#{params[:callback].strip}(#{json})"
           render(:text => script)
         else  
-          render(opts.merge(:json => obj.to_json(to_opts)))
+          render(opts.merge(:json => json))
         end
       end
   
@@ -199,7 +223,7 @@ private
         render opts.merge(:text => obj.to_xml(to_opts.merge(:root => opts[:xml_root] || xml_root)))
       end
     end
-
+    
     add_response_headers
 
     true
@@ -419,4 +443,77 @@ private
           :duration => (duration =~ /[.0-9]/) ? duration.to_f / 1000 : nil
     )
   end
+  
+  ############################################################################
+  #### Exceptions
+  ############################################################################
+
+  def should_log_error?(ex)
+    return true if Rails.env.development?
+    not PLATFORM_NON_LOGGED_EXCEPTIONS.include?(ex.class)
+  end
+  
+  def render_exception(ex)
+    error = {
+      'type'    => 'ApiException'
+    }
+    case ex
+      when ActiveRecord::RecordNotFound
+        status           = :not_found
+        error['message'] = 'Not Found'
+      when ActiveRecord::StatementInvalid
+        status           = :bad_request
+        error['message'] = 'Bad Request'
+      when ApiError
+        error['type']    = 'OAuthException' if ex.is_a?(UnauthorizedError)
+        error['message'] = ex.message
+        status           = ex.status
+      else
+        error['message'] = ex.message
+        status           = :internal_server_error
+    end
+    params[:only_list] = nil
+    render_response({'error' => error}, :status => status)
+  end  
+  
+  ############################################################################
+  #### Response Validation
+  ############################################################################
+  
+  def api_version
+    @api_version ||= params[:version] || request.headers[:version] || client_app.try(:api_version) || Platform::Config.api_default_version
+  end
+  
+  def api_reference_for_path(ref, path)
+    parts = path.split("/")
+    return ref[parts.first] if parts.length == 1
+    return nil if ref[parts.first].nil? or ref[parts.first][:actions].nil?
+    ref[parts.first][:actions][parts.last]    
+  end
+  
+  def handle_document_structure_error(msg)
+    log_exception(ResponseStructureError.new(msg))
+  end
+  
+  def validate_response_structure(json)
+    return unless Platform::Config.enable_api_verification?
+    
+#    path = request.url.split(Platform::Config.api_base_url).last.split('?').first
+#    pp request.url, path
+#
+#    hash = JSON.parse(json)
+#    pp hash
+#    
+#    ref = Platform::Config.api_reference(api_version)
+#    return log_exception(ResponseStructureError.new("Unsupported API version: #{api_version}")) if ref.nil?
+#
+#    ref = api_reference_for_path(ref, path)
+#    return log_exception(ResponseStructureError.new("Unsupported API path: #{path}")) if ref.nil?
+#
+#    obj.keys.each do |key|
+#            
+#    end
+    
+  end
+  
 end

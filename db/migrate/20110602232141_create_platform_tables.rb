@@ -221,6 +221,22 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.timestamps
     end
     add_index :platform_admins, [:user_id]    
+    
+    create_table :platform_logged_exceptions do |t|
+      t.column :exception_class, :string
+      t.column :controller_name, :string
+      t.column :action_name,     :string
+      t.column :server,          :string
+      t.column :message,         :text
+      t.column :backtrace,       :text
+      t.column :environment,     :text
+      t.column :request,         :text
+      t.column :session,         :text
+      t.column :cause,           :binary
+      t.column :user_id,         :integer  
+      t.column :application_id,  :integer  
+      t.timestamps
+    end
   end
 
   def self.down
@@ -241,5 +257,6 @@ class CreatePlatformTables < ActiveRecord::Migration
     drop_table :platform_application_users
     drop_table :platform_users
     drop_table :platform_admins
+    drop_table :platform_logged_exceptions
   end
 end

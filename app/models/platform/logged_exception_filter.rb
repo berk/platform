@@ -21,40 +21,38 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
+class Platform::LoggedExceptionFilter <  Platform::BaseFilter
 
-class Platform::Admin::BaseController < Platform::BaseController
-
-  if Platform::Config.admin_helpers.any?
-    helper *Platform::Config.admin_helpers
+  def default_order
+    'created_at'
   end
 
-  before_filter :validate_admin
-  
-  layout Platform::Config.admin_layout
-  
-private
-
-  def validate_platform_enabled
-    # don't do anything for admin pages
+  def default_criteria_key
+    :exception_class
   end
-  
-  def platform_admin_tabs
+
+  def date_condition
+    date_criteria = definition[:created_at]
+    return date_criteria.container.sql_condition if date_criteria and (date_criteria.validate == nil)
+    nil
+  end
+
+  def default_filters
     [
-        {"title" => "Applications", "description" => "Admin tab", "controller" => "apps"},
-        {"title" => "Developers", "description" => "Admin tab", "controller" => "developers"},
-        {"title" => "Categories", "description" => "Admin tab", "controller" => "categories"},
-        {"title" => "Forum", "description" => "Admin tab", "controller" => "forum"},
-        {"title" => "Metrics", "description" => "Admin tab", "controller" => "metrics"},
-        {"title" => "Exceptions", "description" => "Admin tab", "controller" => "exceptions"},
+      ["Exceptions Logged Today", "created_today"],
     ]
   end
-  helper_method :platform_admin_tabs
 
-  def validate_admin
-    unless platform_current_user_is_admin?
-      trfe("You must be an admin in order to view this section of the site")
-      redirect_to_site_default_url
+  def default_filter_conditions(key)
+    if (key=="created_today")
+      @order      ='created_at'
+      @order_type ='desc'
+      return [:created_at, :is_on, Date.today]
     end
   end
   
+  def default_filter_if_empty
+    "created_today"
+  end
+
 end
