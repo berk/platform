@@ -105,8 +105,12 @@
 Platform.Utils.addEvent(window, 'load', function() {
 	initApiExplorer('<%=Platform::Config.api_base_url%>', '<%=@api_history%>');
 	<% params.each do |key, value| %>
-	 <% next if ['controller', 'action', 'access_token', 'method', 'path'].include?(key) %>
+	 <% next if ['controller', 'action', 'access_token', 'method', 'path', 'version'].include?(key) %>
 	 addPostField('<%=key%>', '<%=value%>');
+	<% end %>
+	
+	<% if params['version'] %>
+	Platform.element("api_version").value = "<%=params['version']%>";
 	<% end %>
 });
 

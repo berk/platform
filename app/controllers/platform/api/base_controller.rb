@@ -481,7 +481,7 @@ private
   ############################################################################
   
   def api_version
-    @api_version ||= params[:version] || request.headers[:version] || client_app.try(:api_version) || Platform::Config.api_default_version
+    @api_version ||= params[:version] || client_app.try(:api_version) || Platform::Config.api_default_version
   end
   
   def api_reference_for_path(ref, path)
@@ -492,28 +492,38 @@ private
   end
   
   def handle_document_structure_error(msg)
+    pp msg
     log_exception(ResponseStructureError.new(msg))
   end
   
   def validate_response_structure(json)
     return unless Platform::Config.enable_api_verification?
     
-#    path = request.url.split(Platform::Config.api_base_url).last.split('?').first
+    path = request.url.split(Platform::Config.api_base_url).last.split('?').first
 #    pp request.url, path
-#
-#    hash = JSON.parse(json)
-#    pp hash
-#    
-#    ref = Platform::Config.api_reference(api_version)
-#    return log_exception(ResponseStructureError.new("Unsupported API version: #{api_version}")) if ref.nil?
-#
-#    ref = api_reference_for_path(ref, path)
-#    return log_exception(ResponseStructureError.new("Unsupported API path: #{path}")) if ref.nil?
-#
-#    obj.keys.each do |key|
-#            
-#    end
     
+    path = 'profile' if path.blank? # make this configurable option
+
+    hash = JSON.parse(json)
+#    pp hash
+    
+    ref = Platform::Config.api_reference(api_version)
+    return handle_document_structure_error("Unsupported API version: #{api_version}") if ref.nil?
+
+    ref = api_reference_for_path(ref, path)
+    return handle_document_structure_error("Unsupported API path: #{path}") if ref.nil?
+
+    fields = ref[:fields]
+#    pp fields
+
+    undocumented_fields = []
+    hash.keys.each do |key|
+      if fields[key].nil?
+        undocumented_fields << key
+      end
+    end
+    
+    handle_document_structure_error("Unsupported or undocumented fields: #{undocumented_fields.join(', ')}") if undocumented_fields.any?        
   end
   
 end

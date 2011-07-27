@@ -34,7 +34,8 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
       @app = @apps.first if @apps.any?
     end  
 
-    @menu_app = @app.parent || @app  
+    @menu_app = @app
+    @menu_app = @app.parent if @app && @app.parent
 
     @page_title = tr('Application Details for {app_name}', 'Client application controller title', :app_name => @app.name) if @app
   end
