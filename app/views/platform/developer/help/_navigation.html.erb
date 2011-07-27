@@ -54,17 +54,19 @@
 	
 	<% ref = Platform::Config.api_reference(@version) %>
 	<% @api ||= {} %>
+  <% path_parts = (@api[:path] || "").split("/") %> 
 	
 	<% ref.keys.sort.each do |api_key| %>
 	  <% api = ref[api_key] %>
 	  <% next if api[:type]=='struct' %>
     <div class="section_link <%="selected" if @api[:path]==api[:path] %>" style="vertical-align:middle;">
-    	<%=platform_toggler_tag("#{api_key}_api_actions", "", true, {:style => "text-align:center; vertical-align:top; width:10px;"})%>
+    	 <% expanded = (path_parts.first == api[:path]) %>	
+    	<%=platform_toggler_tag("#{api_key}_api_actions", "", expanded, {:style => "text-align:center; vertical-align:top; width:10px;"})%>
 			<%=link_to(api_key.titleize, {:action => :api, :path => api[:path], :version => @version})%>
 			<%=platform_documentation_api_decorators_tag(api) %>
 		</div>
 		<% if api[:actions] %>
-		 <div id="<%=api_key%>_api_actions" style="margin-bottom:5px;"> 
+		 <div id="<%=api_key%>_api_actions" style="margin-bottom:5px;<%='display:none' unless expanded%>"> 
 		 <% api[:actions].keys.sort.each do |api_action_key| %>
 		    <% api_action = api[:actions][api_action_key] %>
 		    <div style="padding-left:25px;" class="section_link <%="selected" if @api[:path]==api_action[:path] %>">
