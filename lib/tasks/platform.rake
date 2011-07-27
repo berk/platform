@@ -36,14 +36,14 @@ namespace :platform do
 #    Platform::ApplicationUsageMetric.delete_all
     
     # when we bootstrap the process, we should havesome set date/time from where to start
-    default_start_time = Time.parse("06/20/2011 12:00:00")
+    default_start_time = Time.parse("07/10/2011 12:00:00")
     
     if Platform::RollupLog.first == nil
       # running the rollup for the first time
       interval = interval_time_for(default_start_time)
     else
       last_rollup = Platform::RollupLog.last
-      interval = interval_time_for(last_rollup.interval - 15.min) # always do the last interval and the current interval
+      interval = interval_time_for(last_rollup.interval - 15.minutes) # always do the last interval and the current interval
     end
     
     rollup_interval(interval)
