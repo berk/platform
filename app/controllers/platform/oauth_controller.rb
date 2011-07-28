@@ -79,15 +79,11 @@ class Platform::OauthController < Platform::BaseController
       return render_response(:error_description => "invalid client application id", :error => :unauthorized_client)
     end
     
-    if request_param(:grant_type).blank?
-      return render_response(:error_description => "grant_type must be provided", :error => :invalid_request)
-    end
-    
-    unless ["authorization_code", "password", "refresh_token"].include?(request_param(:grant_type))
+    unless ["authorization_code", "password", "refresh_token"].include?(grant_type)
       return render_response(:error_description => "only authorization_code, password and refresh_token grant types are currently supported", :error => :unsupported_grant_type)
     end
 
-    send("oauth2_request_token_#{request_param(:grant_type)}")
+    send("oauth2_request_token_#{grant_type}")
   end 
   alias :token :request_token
   
@@ -205,6 +201,10 @@ private
 
   def scope
     request_param(:scope) || "basic"
+  end
+
+  def grant_type
+    request_param(:grant_type) || "authorization_code" 
   end
 
   # needs to be configured through Platform::Config
