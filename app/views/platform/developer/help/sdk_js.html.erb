@@ -1,0 +1,198 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("#{Tr8n::Config.site_title}'s JavaScript SDK") %>
+</div>
+
+<div class="documentation_section">
+  <p>
+    The <%=Tr8n::Config.site_title %> Javascript SDK is a full featured javascript library allowing developers to build dynamic web applications in the browser with <%=Tr8n::Config.site_title %>'s data. 
+		It enables full access to all of <%=Tr8n::Config.site_title %>'s API methods on the client-side and provides robust functionality for working with Oauth 2.0 authentication. 
+  </p>
+
+
+  <h2>Getting Started</h2>
+
+  <p>
+    To get started, you'll need to add the library to your page, and initialize your app by calling <strong><%=Tr8n::Config.site_title %>.init()</strong>, passing in your application key. 
+		The best place to put this is at the bottom of your page, before the closing <strong>&lt;/body&gt;</strong> tag to prohibit blocking parallel downloads as described in 
+		<a href="http://developer.yahoo.com/performance/rules.html#js_bottom">Yahoo's best practices</a>.
+	</p>	
+
+<pre class="code_snippet">
+&lt;script src="http://geni.com/jsdk.js">&lt;/script>
+&lt;script>
+    <%=Tr8n::Config.site_title %>.init({
+        app_id: 'YOUR_APP_KEY'
+    });
+&lt;/script>
+</pre>
+
+  <p>
+    In addition to app_id, <strong><%=Tr8n::Config.site_title %>.init()</strong> has a few optional parameters.
+	</p>	
+
+<pre class="code_snippet">
+&lt;script src="http://geni.com/jsdk.js">&lt;/script>
+&lt;script>
+    <%=Tr8n::Config.site_title %>.init({
+        app_id: 'YOUR_APP_KEY',
+        host: 'http://sandbox.geni.com',    // change host if needed
+        cookie: true,                       // enables saving the access token to a cookie on the users machine
+        logging:true                        // enable log messages to help in debugging
+    });
+&lt;/script>
+</pre>
+
+
+  <h2>Authentication</h2>
+
+  <p>
+  	Once your app has been initialized you can authenticate the user. 
+		<%=Tr8n::Config.site_title %> uses Oauth 2.0 for authentication, which entails getting an access token for a user via a redirect to the <%=Tr8n::Config.site_title %>.com website. 
+		Once a user approves your application you can then use the access token to make authorized requests to <%=Tr8n::Config.site_title %>'s API on behalf of that user.
+  </p>
+
+
+  <h2><%=Tr8n::Config.site_title %>.getStatus</h2>
+  <p>
+    To authenticate a user via the Javascript SDK you'll need to figure out whether the user is logged in and whether that user has already authorized your application. To do this we can use <strong><%=Tr8n::Config.site_title %>.getStatus()</strong>.
+	</p>	
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.getStatus(function(response) {
+        if(response.status == 'authorized') {
+            // User is logged in and has authorized your application.
+            // You can now make authorized calls to the API.
+        } else {
+            // User is either logged out, has not authorized the app or both.
+        }
+});
+</pre>
+
+  <p>
+    The <%=Tr8n::Config.site_title %>.getStatus() method will make a request to <%=Tr8n::Config.site_title %> to obtain the current status of the user. The request will respond with one of three status types:
+	</p>	
+  
+	<ul class="data_list">
+		<li>"authorized" - the user is logged in to <%=Tr8n::Config.site_title %> and has authorized your application</li>
+		<li>"unauthorized" - the user is logged in to <%=Tr8n::Config.site_title %> but has not authorized your application</li>
+		<li>"unknown" - the user is logged out of <%=Tr8n::Config.site_title %></li>
+	</ul>  
+
+
+  <h2><%=Tr8n::Config.site_title %>.connect</h2>
+  <p>
+    If the status is 'authorized', an access token will be returned which can then be used to start making API calls. If the status is either 'unauthorized' or 'unknown', your application will need to prompt the user to login and/or authorize by calling <%=Tr8n::Config.site_title %>.connect().
+  </p>
+
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.connect(function(response) {
+    if(response.status == 'authorized')) {
+        // User is logged in and has authorized your application.
+        // You can now make authorized calls to the API.
+    }  else {
+        // User canceled the popup
+    }
+});
+</pre>
+
+	<p>
+	 <%=Tr8n::Config.site_title %>.connect() will open a small popup window to the <%=Tr8n::Config.site_title %>.com site, prompting the user to login and authorize your application. The popup will close immediately after authorization is either allowed or disallowed.
+	</p>
+
+	<p>
+  	Just like the <%=Tr8n::Config.site_title %>.getStatus() method, <%=Tr8n::Config.site_title %>.connect() returns user status and an access token if the user authorizes the application. Note: Because calling this method opens a popup window to the <%=Tr8n::Config.site_title %>.com site, it should only be called on a user action like a click on a button or link, as most browsers will block the popup unless they are the result of a user initiated event.
+	</p>
+
+  <h2><%=Tr8n::Config.site_title %>.logout</h2>
+
+	<p>
+		At some point you may wish to offer your users a way to logout of <%=Tr8n::Config.site_title %>. To do this the Javascript SDK offers the logout() method.
+	</p>
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.logout(function() {
+    // The user is now logged out of <%=Tr8n::Config.site_title %>
+    // Your application will no longer be able to make api calls on the users behalf until they log back in
+});
+</pre>
+
+
+  <h2>Status Change Events</h2>
+  <p>
+    The Javascript SDK also provides an 'auth:statusChange' event that can be subscribed to. The event fires when the user's status changes as the result of calling one of these methods.
+	</p>	
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.Event.bind('auth:statusChange',function(status) {
+    // status will be either 'authorized', 'unauthorized' or 'unknown'
+});
+</pre>
+
+	<p>
+		Similar to jQuery, you can subscribe/unsubscribe from events using bind (<%=Tr8n::Config.site_title %>.Event.bind) and unbind (<%=Tr8n::Config.site_title %>.Event.unbind).
+	</p>
+
+
+  <h2>Making API Calls</h2>
+
+  <p>
+    Once you have an authenticated user, you are free to make calls to the <%=Tr8n::Config.site_title %> API. With the Javascript SDK, developers get full access to the API directly through the user's browser via the <%=Tr8n::Config.site_title %>.api() method.
+  </p>
+
+	<p>
+		The first argument is the path to the API method and it is the only required argument. IDs are embedded before the action so the urls read more like a sentence. For instance, to get all profile 101’s tree matches you would request:
+	</p>
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.api('/profile-101/tree_matches', function(response) {
+    // returns a list of tree matches for profile with id 101
+});
+</pre>
+
+<p>
+  Omitting the ids in urls implies the action should be applied to the current user’s data. 
+</p>
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.api('/profile', function(response) {
+    // returns current user's profile data
+    // alert(response.name)
+});
+</pre>
+
+
+<p>
+	Specific parameters can optionally be passed in as the second argument.
+</p>
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.api('/profile', { fields : 'first_name'}, function(data) 
+    // only returns first name of profile current users profile
+    alert("Welcome + " " + response.first_name);
+});
+</pre>
+
+<p>
+	For post requests, you'll need to pass a 'method' parameter in the second argument.
+</p>
+
+
+<pre class="code_snippet">
+<%=Tr8n::Config.site_title %>.api('/profile', {
+        method:'post',
+        first_name: 'John'
+    }, 
+    function(response) {
+        // the current users first name is now set to 'John'
+    }
+);
+</pre>
+
+  </p>
+      
+</div>
+
+<%= render :partial => "footer" %>

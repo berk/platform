@@ -1,0 +1,97 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("Authentication with #{Tr8n::Config.site_title}") %>
+</div>
+
+<div class="documentation_section">
+	<p>
+    <%= Tr8n::Config.site_title %> Platform uses the <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20">Oauth 2.0 protocol</a> for authentication and authorization.
+		We support a number of different flows that you can use within your website, desktop and mobile applications.  
+  </p>
+	<p>
+		This document outlines the various mechanisms <%= Tr8n::Config.site_title %> Platform uses to support each of those flows. 
+		
+  </p>  	
+
+  <h2>Authenticaton Flows</h2>
+  <p>
+  	<table class="documentation_table">
+  		<tr>
+  			<th style="width:100px;">Flow Name</th>
+				<th style="width:150px;">Oauth 2.0 Specification</th>
+				<th>Description</th>
+  		</tr>
+			<tr>
+				<td>
+					Server Side Flow
+				</td>
+				<td>
+					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1">Authentication Code</a>
+				</td>
+				<td>
+					Use this flow if your application needs to call Geni's API from the server side
+				</td>
+			</tr>
+      <tr>
+        <td>
+          Client Side Flow
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
+        </td>
+        <td>
+          Use this flow if your application needs to call Geni's API from a client, such as JavaScript in a Web browser or from a native mobile or desktop application. 
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Desktop App Flow
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
+        </td>
+        <td>
+          Customized version of the Client Side Flow targeted for Desktop applications.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Mobile App Flow
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
+        </td>
+        <td>
+          Customized version of the Client Side Flow targeted for Mobile applications.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Trusted App Flow
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.3">Resource Owner Password Credentials</a>
+        </td>
+        <td>
+          Use this flow only if your application has a trust relationship with the user and no other flow can work for your application. For example, if you have a highly privileged desktop application and user wants to give your application explicit access to the user data.
+					This flow is not enabled by default. If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.
+        </td>
+      </tr>
+      <tr>
+        <td>
+          App Login Flow
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.4">Client Credentials</a>
+        </td>
+        <td>
+          Use this flow if your application needs to take various administrative actions, such as retrieving statistics data. The calls will not be made on behalf of the user, but on behalf of the app itself. 
+        </td>
+      </tr>
+  	</table>
+  </p>
+      
+</div>
+
+<%= render :partial => "footer" %>

@@ -31,11 +31,6 @@ class Platform::OauthController < Platform::BaseController
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.1
   # supports response_type = code, token 
   def authorize
-    if Platform::Config.current_user_is_guest?
-      save_oauth_login_redirect_params
-      return redirect_to(:controller => Platform::Config.login_url, :display => params[:display])
-    end
-  
     if request_param(:client_id).blank?
       return redirect_with_response(:error_description => "client_id must be provided", :error => :invalid_request)
     end
@@ -44,15 +39,16 @@ class Platform::OauthController < Platform::BaseController
       return redirect_with_response(:error_description => "invalid client application id", :error => :unauthorized_client)
     end
 
+    if Platform::Config.current_user_is_guest?
+      save_oauth_login_redirect_params
+      return redirect_to(:controller => Platform::Config.login_url, :client_id => request_param(:client_id), :display => display)
+    end
+
     if redirect_url.blank? and not xd?
       return redirect_with_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url property", :error => :invalid_request)
     end
-
-    if request_param(:response_type).blank?
-      return redirect_with_response(:error_description => "response_type must be provided", :error => :invalid_request)
-    end
     
-    unless ["code","token"].include?(request_param(:response_type))
+    unless ["code","token"].include?(response_type)
       return redirect_with_response(:error_description => "only code and token response types are currently supported", :error => :unsupported_response_type)
     end
 
@@ -60,11 +56,11 @@ class Platform::OauthController < Platform::BaseController
       return redirect_with_response(:error_description => "redirect_uri cannot point to a different server than from the one it sent a request", :error => :invalid_request)
     end
     
-    send("oauth2_authorize_#{request_param(:response_type)}")
+    send("oauth2_authorize_#{response_type}")
   end
 
   def xd?
-    ['popup', 'hidden'].include?(params[:display])
+    ['popup', 'hidden'].include?(display)
   end
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.2
@@ -196,15 +192,31 @@ private
 
   # web_server, user_agent
   def type
-    request_param(:type) || "web_server"
+    @type ||= request_param(:type) || "web_server"
   end
 
   def scope
-    request_param(:scope) || "basic"
+    @scope ||= request_param(:scope) || "basic"
   end
 
   def grant_type
-    request_param(:grant_type) || "authorization_code" 
+    @grant_type ||= request_param(:grant_type) || "authorization_code" 
+  end
+
+  def response_type
+    @response_type ||= request_param(:response_type) || "code" 
+  end
+  
+  def display
+    @display ||= begin
+      if mobile_device?
+        "mobile"
+      elsif params[:display]
+        params[:display]
+      else  
+        "web"
+      end
+    end    
   end
 
   # needs to be configured through Platform::Config
@@ -398,18 +410,34 @@ private
     # more scope validation must be done
     response_params[:scope] = request_param(:scope) if request_param(:scope)
 
+#    # if user passed redirect parameter, we must respond with a redirect
+#    redirect_url_param = params[:redirect_uri] || params[:redirect_url] 
+#    if redirect_url_param
+#      response_query = begin
+#        prms = []
+#        response_params.keys.apply(:to_s).sort.each do |key| 
+#          prms << "#{key}=#{CGI.escape(response_params[key.to_sym].to_s)}"
+#        end
+#        prms.join("&")
+#      end
+#      
+#      #support the client_id://authorize - schema for iOS SDK
+#      if redirect_url_param == "#{client_application.key}://authorize"
+#        return redirect_to("#{redirect_url_param}?#{response_query}")
+#      else
+#        redirect_uri = URI.parse(redirect_url_param)
+#        redirect_uri.path = (redirect_uri.path.blank? ? "/" : redirect_uri.path)
+#        redirect_uri.query = redirect_uri.query.blank? ? response_query : redirect_uri.query + "&#{response_query}"
+#        return redirect_to(redirect_uri.to_s)
+#      end    
+#    end
+
     # we need to support json and redirect based method as well
     if jsonp?
       render(:text => "#{params[:callback].strip}(#{response_params.to_json})")
     else  
       render(:json => response_params.to_json)
     end
-  end
-  
-  def display
-    return "mobile" if mobile_device?
-    return params[:display] if params[:display]
-    "web"   
   end
   
   def render_action(action)

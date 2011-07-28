@@ -48,6 +48,19 @@
   <div class="section_link <%="selected" if @controller.action_name == 'index' %>"><%=link_to(tr("Welcome"), :action => :index, :version => @version)%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'reference' %>"><%=link_to(tr("Using the API Reference"), :action => :reference, :version => @version)%></div>
 
+  <div class="navigation_header"><%=tr("Authentication")%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'oauth_intro' %>"><%=link_to(tr("Introduction"), :action => :oauth_intro, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'oauth_server_side' %>"><%=link_to(tr("Server Side Flow"), :action => :oauth_server_side, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'oauth_client_side' %>"><%=link_to(tr("Client Side Flow"), :action => :oauth_client_side, :version => @version)%></div>
+  <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_desktop' %>"><%=link_to(tr("Desktop Apps"), :action => :oauth_desktop, :version => @version)%></div>
+  <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_mobile' %>"><%=link_to(tr("Mobile Apps"), :action => :oauth_mobile, :version => @version)%></div>
+  <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_trusted_client' %>"><%=link_to(tr("Trusted Apps"), :action => :oauth_trusted_client, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'oauth_app_login' %>"><%=link_to(tr("App Login Flow"), :action => :oauth_app_login, :version => @version)%></div>
+
+  <div class="navigation_header"><%=tr("SDKs & Tools")%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'sdk_js' %>"><%=link_to(tr("JavaScript SDK"), :action => :sdk_js, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'sdk_ios' %>"><%=link_to(tr("iOS SDK"), :action => :sdk_ios, :version => @version)%></div>
+
   <div class="navigation_header" style="white-space:nowrap;"><%=tr("API Reference")%> &nbsp; 
 	 <span style="font-size:8px;">v</span> <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
 	</div>

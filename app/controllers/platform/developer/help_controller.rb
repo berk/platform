@@ -33,6 +33,42 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
     
   end
   
+  def oauth_intro
+    
+  end
+
+  def oauth_server_side
+    
+  end
+
+  def oauth_client_side
+    
+  end
+
+  def oauth_trusted_client
+    
+  end
+  
+  def oauth_app_login
+    
+  end
+    
+  def oauth_desktop
+    
+  end
+
+  def oauth_mobile
+    
+  end
+  
+  def sdk_js
+    
+  end
+  
+  def sdk_ios
+    
+  end
+  
   def api
     ref = Platform::Config.api_reference(@version) 
     unless ref
