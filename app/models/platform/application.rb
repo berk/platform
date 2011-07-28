@@ -41,8 +41,8 @@ class Platform::Application < ActiveRecord::Base
   has_many :application_categories,  :class_name => "Platform::ApplicationCategory", :dependent => :destroy
   has_many :categories,  :class_name => "Platform::Category", :through => :application_categories
 
-  belongs_to :icon, :class_name => "Platform::Media::Image", :foreign_key => "icon_id"
-  belongs_to :logo, :class_name => "Platform::Media::Image", :foreign_key => "logo_id"
+  belongs_to :icon, :class_name => Platform::Config.site_media_class, :foreign_key => "icon_id"
+  belongs_to :logo, :class_name => Platform::Config.site_media_class, :foreign_key => "logo_id"
 
   validates_presence_of :name, :key, :secret
   validates_uniqueness_of :key
@@ -196,25 +196,41 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def icon_url
-    return "/platform/images/default_app_icon.gif" unless icon
-    icon.url
+    return Platform::Config.default_app_icon unless icon
+    if Platform::Config.site_media_enabled?
+      Platform::Config.icon_url(icon)  
+    else
+      icon.url
+    end
   end
   
   def store_icon(file)
-    self.icon = Platform::Media::Image.create
-    self.icon.write(file, :size => 16)
-    self.save
+    if Platform::Config.site_media_enabled?
+      update_attributes(:icon => Platform::Config.create_media(file))
+    else
+      self.icon = Platform::Media::Image.create
+      self.icon.write(file, :size => 16)
+      self.save
+    end  
   end
 
   def logo_url
-    return "/platform/images/default_app_logo.gif" unless logo
-    logo.url
+    return Platform::Config.default_app_logo unless logo
+    if Platform::Config.site_media_enabled?
+      Platform::Config.logo_url(logo)  
+    else
+      logo.url
+    end
   end
 
   def store_logo(file)
-    self.logo = Platform::Media::Image.create
-    self.logo.write(file, :size => 75)
-    self.save
+    if Platform::Config.site_media_enabled?
+      update_attributes(:logo => Platform::Config.create_media(file))
+    else  
+      self.logo = Platform::Media::Image.create
+      self.logo.write(file, :size => 75)
+      self.save
+    end  
   end
   
   def short_description

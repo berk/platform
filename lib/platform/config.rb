@@ -439,6 +439,58 @@ class Platform::Config
   #########################################################
 
   #########################################################
+  # site media info
+  # The following methods could be overloaded in the initializer
+  #########################################################
+  def self.site_media_info
+    site_info[:media_info]
+  end
+
+  def self.site_media_enabled?
+    site_media_info[:enabled]
+  end
+
+  def self.site_media_class
+    return "Platform::Media::Image" unless site_media_enabled?
+    site_media_info[:class_name]
+  end
+
+  def self.site_media_write_method
+    site_media_info[:write_method]
+  end
+  
+  def self.create_media(file)
+    begin
+      media = site_media_class.constantize.create
+      media.send(site_media_write_method, file)
+      media
+    rescue Exception => ex
+      pp ex
+      Platform::Logger.error("Failed to create media: #{ex.to_s}")
+      nil
+    end  
+  end
+
+  def self.logo_url(media)
+    begin
+      eval("media.#{site_media_info[:logo_url_method]}")
+    rescue Exception => ex
+      Platform::Logger.error("Failed to fetch logo url: #{ex.to_s}")
+      default_app_logo
+    end  
+  end
+
+  def self.icon_url(media)
+    begin
+      eval("media.#{site_media_info[:icon_url_method]}")
+    rescue Exception => ex
+      Platform::Logger.error("Failed to fetch icon url: #{ex.to_s}")
+      default_app_icon
+    end  
+  end
+  #########################################################
+
+  #########################################################
   # Application Directory
   #########################################################
   def self.featured_apps_enabled?
