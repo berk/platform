@@ -1,7 +1,7 @@
 <%= render :partial => "header" %>
 
 <div class="documentation_section_title">
-  <%= tr("Server Side Authentication Flow") %>
+  <%= tr("Server Side Authorization Flow") %>
 </div>
 
 <div class="documentation_section">
@@ -33,15 +33,15 @@
       <td>true</td>
      </tr>
      <tr>
+      <td>response_type</td>
+      <td>For the server side flow the response type is defaulted to "code" and you don't need to set it.</td>
+      <td>false</td>
+     </tr>
+     <tr>
       <td>scope</td>
       <td>A comma delimited list of permissions that the application needs. By default the scope is to set to a full permission set. This is subject to change in the upcoming releases.</td>
       <td>false</td>
      </tr>
-		 <tr>
-		 	<td>response_type</td>
-			<td>For the server side flow the response type is defaulted to "code" and you don't need to set it.</td>
-			<td>false</td>
-		 </tr>
      <tr>
       <td>display</td>
       <td>For the server side flow the display parameter is defaulted to "web"</td>

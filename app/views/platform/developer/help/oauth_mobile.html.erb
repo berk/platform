@@ -1,11 +1,89 @@
 <%= render :partial => "header" %>
 
 <div class="documentation_section_title">
-  <%= tr("Server Side Authentication Flow") %>
+  <%= tr("Mobile Application Authorization Flow") %>
 </div>
 
 <div class="documentation_section">
+  <p>
+    User authentication and app authorization are handled at the same time as a two step flow by redirecting the user to the Login screen, followed by the Authorization screen.
+  </p>
   
+  <h2>Authentication & Authorization</h2>
+  <p> 
+    To enter the authentication/authorization client flow, you must pass the following parameters to the authorization url:
+  </p>
+
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Param Name") %></th>
+      <th><%=tr("Description") %></th>
+      <th style="width:150px;"><%=tr("Required") %></th>
+     </tr>
+     <tr>
+      <td>client_id</td>
+      <td>Application key generated during the app registration.</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>redirect_uri</td>
+      <td>Url that the user's browser will be redirected back to once app authorization is completed. You can specify this url in app settings as a Callback URL, or pass it as a paremeter. 
+      If you pass it as a parameter, parameter value will be used and the app setting will be ignored. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>response_type</td>
+      <td>For the client side flow the response type must be set to "token".</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>scope</td>
+      <td>A comma delimited list of permissions that the application needs. By default the scope is to set to a full permission set. This is subject to change in the upcoming releases.</td>
+      <td>false</td>
+     </tr>
+     <tr>
+      <td>display</td>
+      <td>For the server side flow the display parameter is defaulted to "web"</td>
+      <td>false</td>
+     </tr>
+  </table>
+  
+  <div class="code_snippet">
+    https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
+  </div>
+
+  <p>
+    If the user is already logged in, we validate the login cookie that we have stored on the user's browser, authenticating the user. If the user is not logged in, they are prompted to enter their credentials:
+  </p>  
+  
+  <center>
+  <%=image_tag("/platform/images/help/login.png", :style=>"width:600px;")%>
+  </center>
+  
+  <p>
+    Once we have successfully authenticated the user, we will prompt the user to authorize your application:
+  </p>
+  
+  <center>
+  <%=image_tag("/platform/images/help/authorize.png", :style=>"width:600px;")%>
+  </center>
+  
+  <p>
+    If the user presses Don't Allow, your app is not authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with the following error information as a URI fragment:
+  </p>
+
+  <div class="code_snippet">
+    http://YOUR_URL#status=unauthorized&message=user+canceled
+  </div>
+    
+  <p> 
+    If the user presses Allow, your app is authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with an access token as a URI fragment:
+  </p>
+
+  <div class="code_snippet">
+    http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+  </div>
+
 </div>
 
 <%= render :partial => "footer" %>
