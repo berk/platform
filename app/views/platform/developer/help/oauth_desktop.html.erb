@@ -37,12 +37,6 @@
       <td>true</td>
      </tr>
      <tr>
-      <td>redirect_uri</td>
-      <td>Url that the user's browser will be redirected back to once app authorization is completed. You can specify this url in app settings as a Callback URL, or pass it as a paremeter. 
-      If you pass it as a parameter, parameter value will be used and the app setting will be ignored. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
-      <td>true</td>
-     </tr>
-     <tr>
       <td>response_type</td>
       <td>For the client side flow the response type must be set to "token".</td>
       <td>true</td>
@@ -60,9 +54,9 @@
   </table>
   </p>
 	
-  <h3>Oauth URL</h3>
+  <h3>Example</h3>
   <div class="code_snippet">
-    https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
+    https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&response_type=token&display=desktop
   </div>
 
   <p>
@@ -85,18 +79,64 @@
     If the user presses Don't Allow, your app is not authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with the following error information as a URI fragment:
   </p>
 
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">status</td>
+      <td style="widtd:150px;">String</td>
+      <td>If user cancels tde autdorization flow, tde status will be set to "unauthorized"</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">message</td>
+      <td style="widtd:150px;">String</td>
+      <td>Error message</td>
+     </tr>
+  </table>
+  </p>
+
+  <h3>Example</h3>
   <div class="code_snippet">
-    http://YOUR_URL#status=unauthorized&message=user+canceled
+    http://www.geni.com/oauth/auth_failed#status=unauthorized&message=user+canceled
   </div>
     
   <p> 
     If the user presses Allow, your app is authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with an access token as a URI fragment:
   </p>
 
-  <div class="code_snippet">
-    http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
-  </div>
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">access_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Access token to be used with every request to Geni API. It must be passed as a parameter:
+         https://www.geni.com/api/profile?access_token=ACCESS_TOKEN
+      </td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">expires_in</td>
+      <td style="widtd:150px;">Number</td>
+      <td>Seconds until the token will expire</td>
+     </tr>
+  </table>     
+  </p>      
 
+  <h3>Example</h3>
+  <div class="code_snippet">
+    http://www.geni.com/oauth/auth_success#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+  </div>
+	
 </div>
 
 <%= render :partial => "footer" %>

@@ -93,7 +93,7 @@
      <tr>
       <td style="widtd:150px;">status</td>
       <td style="widtd:150px;">String</td>
-      <td>If user cancels tde autdorization flow, tde status will be set to "unautdorized"</td>
+      <td>If user cancels tde autdorization flow, tde status will be set to "unauthorized"</td>
      </tr>
      <tr>
       <td style="widtd:150px;">message</td>
@@ -142,26 +142,72 @@
 
   <h2>Cross Domain API Calls</h2>
   <p> 
-    Geni supports cross-domain API calls using <a href="">JSONP</a> script tag injection. 
+    Geni supports cross-domain API calls using <a href="">JSONP</a> script tag injection. Below is a simple example for Geni JSONP API call.
+		You must provide a valid access token in order to make an JSONP API call.  
   </p>
-	
 	
 <h3>Example</h3>
 <pre class="code_snippet">
-var the_object;
-var http_request = new XMLHttpRequest();
-http_request.open( "GET", url, true );
-http_request.send(null);
-http_request.onreadystatechange = function () {
-    if ( http_request.readyState == 4 ) {
-        if ( http_request.status == 200 ) {
-            the_object = eval( "(" + http_request.responseText + ")" );
-        } else {
-            alert( "There was a problem with the URL." );
-        }
-        http_request = null;
-    }
-};	
+var Geni = {callbacks:{}, client_id:"YOUR_APP_KEY", access_token:""};
+
+function jsonp(url, params, callback) {
+  var script  = document.createElement('script');
+  var g_uuid = 'g' + (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+  
+  params = params || {};  
+  params['callback'] = 'Geni.callbacks.' + g_uuid;
+	
+  var query = [];
+  for(var p in params) str.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
+  query = query.join("&");
+	
+  url = url + (url.indexOf('?')>-1 ? '&' : '?') + query;
+
+  Geni.callbacks[g_uuid] = function(data) {
+    if(callback) callback(data);
+    delete Geni.callbacks[g_uuid];
+  }
+  script.src = url;
+  document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+
+// Parse access token from the URL if it is available
+if (Geni.access_token == "") {
+  var params = {};
+
+  var anchor = window.location.href.split("#");
+	if (anchor.length &gt; 1) {
+	  var parts = anchor[1].split("&"); 
+	  for (var i=0; i &lt; parts.length; i++) {
+		  var values = parts[i].split("=");
+		  params[values[0]] = values[1]; 
+		} 
+	}
+
+  // Add code to store/retrieve access token from a cookie
+	
+	Geni.access_token = params["access_token"];
+}
+	
+if (Geni.access_token == "") {
+  window.location = "https://www.geni.com/oauth/authorize?client_id" + Geni.client_id + "&redirect_uri=" 
+	                  + window.location.href + "&response_type=token";
+} else {	
+  // Get profile data
+	jsonp("/profile", {access_token:Geni.access_token}, function(data) {
+	  alert("Hello " + data["name"]);
+	})
+}
+
 </pre>
+
+<h3>Geni JavaScript Client SDK</h3>
+<p>
+	Geni comes with a <%=link_to("full featured javascript library", :action => :sdk_js)%> that allows you to build dynamic web applications in the browser with Geni's data. 
+	It supports authentication, autherization and API calls to get Geni data. 
+</p>
+
+</div>
 
 <%= render :partial => "footer" %>

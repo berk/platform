@@ -46,7 +46,7 @@ class Platform::OauthController < Platform::BaseController
       return redirect_to(:controller => Platform::Config.login_url, :client_id => request_param(:client_id), :display => display)
     end
 
-    if redirect_url.blank? and not xd?
+    if redirect_url_required? and redirect_url.blank?
       return redirect_with_response(:error_description => "redirect_uri must be provided as a parameter or in the application callback_url property", :error => :invalid_request)
     end
     
@@ -188,6 +188,11 @@ private
     @redirect_url ||= request_param(:redirect_url) || request_param(:redirect_uri) || client_application.try(:callback_url)
   end
 
+  def redirect_url_required?
+    return false if xd? or desktop?
+    true
+  end
+  
   # web_server, user_agent
   def type
     @type ||= request_param(:type) || "web_server"
@@ -369,19 +374,27 @@ private
       params.merge!(response_params)
       return render(:action => :xd, :layout => false)
     end   
-    
-    # process normal redirect urls
-    if redirect_url.blank?
-      @error = response_params[:error_description]
-      return render_action("authorize_failure")
-    end
-    
+
     response_query = begin
       prms = []
       response_params.keys.apply(:to_s).sort.each do |key| 
         prms << "#{key}=#{CGI.escape(response_params[key.to_sym].to_s)}"
       end
       prms.join("&")
+    end
+
+    # for desktop apps - redirect to local urls
+    if desktop?
+      if response_params[:error_description] or response_params[:status] == 'unauthorized'
+        return redirect_to(:action => :oauth_failed, :anchor => response_query)
+      else  
+        return redirect_to(:action => :oauth_success, :anchor => response_query)
+      end
+    end
+
+    if redirect_url_required? and redirect_url.blank? 
+      @error = response_params[:error_description]
+      return render_action("authorize_failure")
     end
     
     #support the client_id://authorize - schema for iOS SDK
@@ -399,6 +412,10 @@ private
     not params[:callback].blank?
   end
 
+  def desktop?
+    display == "desktop"
+  end
+
   def render_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
     
@@ -407,28 +424,6 @@ private
     
     # more scope validation must be done
     response_params[:scope] = request_param(:scope) if request_param(:scope)
-
-#    # if user passed redirect parameter, we must respond with a redirect
-#    redirect_url_param = params[:redirect_uri] || params[:redirect_url] 
-#    if redirect_url_param
-#      response_query = begin
-#        prms = []
-#        response_params.keys.apply(:to_s).sort.each do |key| 
-#          prms << "#{key}=#{CGI.escape(response_params[key.to_sym].to_s)}"
-#        end
-#        prms.join("&")
-#      end
-#      
-#      #support the client_id://authorize - schema for iOS SDK
-#      if redirect_url_param == "#{client_application.key}://authorize"
-#        return redirect_to("#{redirect_url_param}?#{response_query}")
-#      else
-#        redirect_uri = URI.parse(redirect_url_param)
-#        redirect_uri.path = (redirect_uri.path.blank? ? "/" : redirect_uri.path)
-#        redirect_uri.query = redirect_uri.query.blank? ? response_query : redirect_uri.query + "&#{response_query}"
-#        return redirect_to(redirect_uri.to_s)
-#      end    
-#    end
 
     # we need to support json and redirect based method as well
     if jsonp?
