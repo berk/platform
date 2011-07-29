@@ -6,14 +6,25 @@
 
 <div class="documentation_section">
   <p>
-    User authentication and app authorization are handled at the same time as a two step flow by redirecting the user to the Login screen, followed by the Authorization screen.
+    Desktop application flow is a slightly modified version of the Client Side flow. 
+		Since desktop applications, normally, do not run their own web servers, we cannot redirect back to the desktop apps. 
+		Instead, we will redirect to an internal url with the returned fields. Desktop application will then listen to the browser url changes, 
+		and once the url is matched, it can get the access token and other parameters.   
   </p>
   
   <h2>Authentication & Authorization</h2>
   <p> 
-    To enter the authentication/authorization client flow, you must pass the following parameters to the authorization url:
+    To enter the authentication/authorization desktop client flow, you must poin an embedded browser to the authorization url and pass the following parameters:
+		(Notice that the display parameter is set to "desktop")
   </p>
 
+  <h3>Oauth URL</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/authorize
+  </div>
+
+  <h3>Parameters</h3>
+	<p>
   <table class="documentation_table">
      <tr>
       <th style="width:150px;"><%=tr("Param Name") %></th>
@@ -37,17 +48,19 @@
       <td>true</td>
      </tr>
      <tr>
+      <td>display</td>
+      <td>For a desktop application embedded browser, set the display value to "desktop"</td>
+      <td>true</td>
+     </tr>
+     <tr>
       <td>scope</td>
       <td>A comma delimited list of permissions that the application needs. By default the scope is to set to a full permission set. This is subject to change in the upcoming releases.</td>
       <td>false</td>
      </tr>
-     <tr>
-      <td>display</td>
-      <td>For the server side flow the display parameter is defaulted to "web"</td>
-      <td>false</td>
-     </tr>
   </table>
-  
+  </p>
+	
+  <h3>Oauth URL</h3>
   <div class="code_snippet">
     https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
   </div>

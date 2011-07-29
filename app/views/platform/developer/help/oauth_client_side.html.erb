@@ -6,14 +6,22 @@
 
 <div class="documentation_section">
   <p>
-    User authentication and app authorization are handled at the same time as a two step flow by redirecting the user to the Login screen, followed by the Authorization screen.
+    Client side authentication and authorization is very similar to the server side. The difference is in the parameters that are passed to the server and the response fields that you get back. 
   </p>
   
   <h2>Authentication & Authorization</h2>
   <p> 
     To enter the authentication/authorization client flow, you must pass the following parameters to the authorization url:
+		(Notice that response_type is now requred and must be set to "access_token")
   </p>
 
+  <h3>Oauth URL</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/authorize
+  </div>
+
+  <h3>Parameters</h3>
+  <p>
   <table class="documentation_table">
      <tr>
       <th style="width:150px;"><%=tr("Param Name") %></th>
@@ -47,7 +55,9 @@
       <td>false</td>
      </tr>
   </table>
-  
+  </p>
+	
+	<h3>Example</h3>
   <div class="code_snippet">
     https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
   </div>
@@ -56,22 +66,44 @@
     If the user is already logged in, we validate the login cookie that we have stored on the user's browser, authenticating the user. If the user is not logged in, they are prompted to enter their credentials:
   </p>  
   
-  <center>
+  <p style="text-align:center">
   <%=image_tag("/platform/images/help/login.png", :style=>"width:600px;")%>
-  </center>
+  </p>
   
   <p>
     Once we have successfully authenticated the user, we will prompt the user to authorize your application:
   </p>
   
-  <center>
+  <p style="text-align:center">
   <%=image_tag("/platform/images/help/authorize.png", :style=>"width:600px;")%>
-  </center>
+  </p>
   
   <p>
     If the user presses Don't Allow, your app is not authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with the following error information as a URI fragment:
   </p>
 
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">status</td>
+      <td style="widtd:150px;">String</td>
+      <td>If user cancels tde autdorization flow, tde status will be set to "unautdorized"</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">message</td>
+      <td style="widtd:150px;">String</td>
+      <td>Error message</td>
+     </tr>
+  </table>
+  </p>
+
+  <h3>Example</h3>
   <div class="code_snippet">
     http://YOUR_URL#status=unauthorized&message=user+canceled
   </div>
@@ -80,10 +112,56 @@
     If the user presses Allow, your app is authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with an access token as a URI fragment:
   </p>
 
-  <div class="code_snippet">
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">access_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Access token to be used with every request to Geni API. It must be passed as a parameter:
+         https://www.geni.com/api/profile?access_token=ACCESS_TOKEN
+      </td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">expires_in</td>
+      <td style="widtd:150px;">Number</td>
+      <td>Seconds until the token will expire</td>
+     </tr>
+  </table>     
+  </p>      
+
+  <h3>Example</h3>
+	<div class="code_snippet">
     http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
   </div>
 
-</div>
+  <h2>Cross Domain API Calls</h2>
+  <p> 
+    Geni supports cross-domain API calls using <a href="">JSONP</a> script tag injection. 
+  </p>
+	
+	
+<h3>Example</h3>
+<pre class="code_snippet">
+var the_object;
+var http_request = new XMLHttpRequest();
+http_request.open( "GET", url, true );
+http_request.send(null);
+http_request.onreadystatechange = function () {
+    if ( http_request.readyState == 4 ) {
+        if ( http_request.status == 200 ) {
+            the_object = eval( "(" + http_request.responseText + ")" );
+        } else {
+            alert( "There was a problem with the URL." );
+        }
+        http_request = null;
+    }
+};	
+</pre>
 
 <%= render :partial => "footer" %>

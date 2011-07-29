@@ -15,6 +15,13 @@
 		To enter the authentication/authorization flow, you must pass the following parameters to the authorization url:
   </p>
 
+  <h3>Oauth URL</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/authorize
+  </div>
+
+  <h3>Parameters</h3>
+	<p>
   <table class="documentation_table">
      <tr>
       <th style="width:150px;"><%=tr("Param Name") %></th>
@@ -29,7 +36,8 @@
      <tr>
       <td>redirect_uri</td>
       <td>Url that the user's browser will be redirected back to once app authorization is completed. You can specify this url in app settings as a Callback URL, or pass it as a paremeter. 
-			If you pass it as a parameter, parameter value will be used and the app setting will be ignored. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
+			If you pass it as a parameter, parameter value will be used and the app setting will be ignored. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.
+			</td>
       <td>true</td>
      </tr>
      <tr>
@@ -47,8 +55,15 @@
       <td>For the server side flow the display parameter is defaulted to "web"</td>
       <td>false</td>
      </tr>
+     <tr>
+      <td>state</td>
+      <td>Used for additional parameters and <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">CSRF protection</a></td>
+      <td>false</td>
+     </tr>
   </table>
-  
+  </p>
+	
+  <h3>Example</h3>
 	<div class="code_snippet">
     https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL
 	</div>
@@ -57,30 +72,90 @@
     If the user is already logged in, we validate the login cookie that we have stored on the user's browser, authenticating the user. If the user is not logged in, they are prompted to enter their credentials:
   </p>  
 	
-	<center>
+	<p style="text-align:center">
 	<%=image_tag("/platform/images/help/login.png", :style=>"width:600px;")%>
-	</center>
-	
+  </p>
+		
 	<p>
 		Once we have successfully authenticated the user, we will prompt the user to authorize your application:
 	</p>
 	
-  <center>
+  <p style="text-align:center">
   <%=image_tag("/platform/images/help/authorize.png", :style=>"width:600px;")%>
-  </center>
-  
+  </p>
+	
 	<p>
     If the user presses Don't Allow, your app is not authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:
   </p>
 
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">status</td>
+      <td style="widtd:150px;">String</td>
+      <td>If user cancels tde autdorization flow, tde status will be set to "unautdorized"</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">message</td>
+      <td style="widtd:150px;">String</td>
+      <td>Error message</td>
+     </tr>
+  </table>
+  </p>
+
+  <h3>Example</h3>
   <div class="code_snippet">
     http://YOUR_URL?status=unauthorized&message=user+canceled
-	</div>
-		
+  </div>
+
+				
 	<p>	
     If the user presses Allow, your app is authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with an authorization code:
   </p>
 
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">code</td>
+      <td style="widtd:150px;">String</td>
+      <td>Authorization code</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">expires_in</td>
+      <td style="widtd:150px;">Number</td>
+      <td>Seconds until the code is expired</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">scope</td>
+      <td style="widtd:150px;">String</td>
+      <td>List of permissions that the user has agreed to accept. Will be supported in future releases.</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">sig</td>
+      <td style="widtd:150px;">String</td>
+      <td>Signature is used to validate the authenticity of the response. Will be supported in future releases.</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">state</td>
+      <td style="widtd:150px;">String</td>
+      <td>Will return whatever was passed to the Oauth URL.</td>
+     </tr>
+  </table>
+  </p>      
+
+  <h3>Example</h3>
   <div class="code_snippet">
     http://YOUR_URL?code=A_CODE_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_THE_CODE_IS_EXPIRED
   </div>
@@ -95,6 +170,13 @@
     In order to authenticate your app, you must pass the following parameter to the request_token endpoint: 
   </p>
 	
+  <h3>Oauth Endpoint</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/request_token
+  </div>
+	
+  <h3>Parameters</h3>
+	<p>
   <table class="documentation_table">
      <tr>
       <th style="width:150px;"><%=tr("Param Name") %></th>
@@ -116,7 +198,7 @@
      </tr>
      <tr>
       <td>redirect_uri</td>
-      <td>Url that was used to get the authorization code.</td>
+      <td>Url that was used to get the authorization code. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
       <td>true</td>
      </tr>
      <tr>
@@ -130,28 +212,213 @@
       <td>false</td>
      </tr>
   </table>	
+	</p>
 	
+	<h3>Example</h3>
   <div class="code_snippet">
 		https://www.geni.com/oauth/request_token?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL&client_secret=YOUR_APP_SECRET&code=THE_CODE_FROM_ABOVE
   </div>		 
 
-  <div>
+  <p>
     If your app is successfully authenticated and the authorization code from the user is valid, the authorization server will return the access token in a JSON format:  	
-  </div>
+  </p>
 
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">access_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Access token to be used with every request to Geni API. It must be passed as a parameter:
+			   https://www.geni.com/api/profile?access_token=ACCESS_TOKEN
+			</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">expires_in</td>
+      <td style="widtd:150px;">Number</td>
+      <td>Seconds until the token will expire</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">refresh_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Token that can be used to get a new access token</td>
+     </tr>
+  </table>		 
+  </p>
+	
+  <h3><%=tr("Example") %></h3>
   <div class="code_snippet">
     {"expires_in":86400,"refresh_token":"wEq6FMb3CcfPN6CckQv7","access_token":"sye4NMd130L4wqq13zjqqLHwuHd5jnnKwdVi9S8X"}
   </div>     
 
-  <div>
+  <p>
     If your app failed to provide appropriate parameters, you will get one of the errors below in JSON format:    
-  </div>
+  </p>
 	
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+     <tr>
+      <td style="widtd:150px;">error</td>
+      <td style="widtd:150px;">String</td>
+      <td>Error code</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">error_description</td>
+      <td style="widtd:150px;">String</td>
+      <td>Error description</td>
+     </tr>
+	</table>	 
+  </p>
+		
+  <h3><%=tr("Examples") %></h3>
   <div class="code_snippet">
     {"error_description":"invalid client application id","error":"unauthorized_client"}<br><br>
     {"error_description":"redirection url must match the url used for the code request","error":"invalid_request"}
 	</div>	
 
+
+  <h3><%=tr("Full Example in PHP") %></h3>
+  <p>
+  	The following example demonstrates an authentication/autherization flow in a single PHP page. The example uses <a href="http://en.wikipedia.org/wiki/Cross-site_request_forgery">CSRF protection</a> for extra security.
+  </p>
+<pre class="code_snippet">
+&lt;?php 
+
+   $app_id = "YOUR_APP_KEY";
+   $app_secret = "YOUR_APP_SECRET";
+   $my_url = "YOUR_URL";
+
+   session_start();
+   $access_code = $_REQUEST["code"];
+
+   if (empty($access_code)) {
+     $_SESSION['state'] = md5(uniqid(rand(), TRUE)); // CSRF protection
+		 
+     $geni_oauth_url = "http://www.facebook.com/dialog/oauth?client_id=" . $app_id 
+		                   . "&redirect_uri=" . urlencode($my_url) . "&state=" . $_SESSION['state'];
+											 
+     echo("&lt;script> top.location.href='" . $geni_oauth_url . "'&lt;/script>");
+   }
+
+   if ($_REQUEST['state'] == $_SESSION['state']) {
+     $token_url = "https://www.geni.com/oauth/request_token?client_id=" . $app_id . "&client_secret=" . $app_secret
+           			 . "&redirect_uri=" . urlencode($my_url) . "&code=" . $access_code;
+
+     $params = json_decode(file_get_contents($token_url), true);
+
+     $geni_api_url = "https://www.geni.com/api/profile?access_token=" . $params['access_token'];
+
+     $profile = json_decode(file_get_contents($geni_api_url));
+		 
+     echo("Hello " . $profile->name);
+   } else {
+	 
+     echo("Error: CSRF validation failed. Someone is attacking your site!");
+   }
+?>
+</pre>
+
+
+  <h2>Refreshing Access Token</h2>
+  <p>  
+    If your access token has expired and you have a refresh token, you can get a new access token for the same scope by calling the oauth endpoint: 
+  </p>
+  
+  <h3>Oauth Endpoint</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/request_token
+  </div>
+  
+  <h3>Parameters</h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Param Name") %></th>
+      <th><%=tr("Description") %></th>
+      <th style="width:150px;"><%=tr("Required") %></th>
+     </tr>
+     <tr>
+      <td>client_id</td>
+      <td>Application key generated during the app registration.</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>client_secret</td>
+      <td>Application secret generated during the registration process and availble in the application settings.
+         The app secret is available from the Developer App and should not be shared with anyone or embedded in any code that you will distribute 
+         (you should use the client-side flow for these scenarios).
+      </td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>redirect_uri</td>
+      <td>Url that was used to get the refresh token. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>refresh_token</td>
+      <td>Refresh token value</td>
+      <td>true</td>
+     </tr>
+     <tr>
+      <td>grant_type</td>
+      <td>In order to refresh a token, set this param to "refresh_token"</td>
+      <td>true</td>
+     </tr>
+  </table>  
+  </p>
+  
+  <h3>Example</h3>
+  <div class="code_snippet">
+    https://www.geni.com/oauth/request_token?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL&client_secret=YOUR_APP_SECRET&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+  </div>
+	
+	
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+  <table class="documentation_table">
+     <tr>
+      <th style="width:150px;"><%=tr("Name") %></th>
+      <th style="width:150px;"><%=tr("Type") %></th>
+      <th><%=tr("Description") %></th>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">access_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Access token to be used with every request to Geni API. It must be passed as a parameter:
+         https://www.geni.com/api/profile?access_token=ACCESS_TOKEN
+      </td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">expires_in</td>
+      <td style="widtd:150px;">Number</td>
+      <td>Seconds until the token will expire</td>
+     </tr>
+     <tr>
+      <td style="widtd:150px;">refresh_token</td>
+      <td style="widtd:150px;">String</td>
+      <td>Token that can be used to get a new access token</td>
+     </tr>
+  </table>     
+  </p>
+  
+  <h3><%=tr("Example") %></h3>
+  <div class="code_snippet">
+    {"expires_in":86400,"refresh_token":"wEq6FMb3CcfPN6CckQv7","access_token":"sye4NMd130L4wqq13zjqqLHwuHd5jnnKwdVi9S8X"}
+  </div>     
+	     
 </div>
 
 <%= render :partial => "footer" %>
