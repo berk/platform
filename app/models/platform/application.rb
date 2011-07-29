@@ -96,6 +96,11 @@ class Platform::Application < ActiveRecord::Base
     transitions :from => :submitted,  :to => :rejected
   end
   
+  def self.for(client_id)
+    app = Platform::Application.find_by_id(client_id) if client_id.match(/^[\d]+$/)
+    app || Platform::Application.find_by_key(client_id)
+  end
+  
   def self.find_token(token_key)
     token = Platform::Oauth::OauthToken.find_by_token(token_key, :include => :application)
     if token && token.authorized?

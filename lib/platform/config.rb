@@ -276,6 +276,10 @@ class Platform::Config
     site_info[:admin_layout]
   end
 
+  def self.oauth_layout
+    site_info[:oauth_layout]
+  end
+
   def self.media_directory
     site_info[:media_directory]
   end

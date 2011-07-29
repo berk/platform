@@ -28,6 +28,8 @@ class Platform::OauthController < Platform::BaseController
 
   skip_before_filter :validate_guest_user  
 
+  layout Platform::Config.oauth_layout
+
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.1
   # supports response_type = code, token 
   def authorize
@@ -179,11 +181,7 @@ private
 
   def client_application
     return nil if request_param(:client_id).blank?  
-  
-    @client_application ||= begin
-      app = Platform::Application.find_by_id(request_param(:client_id)) if request_param(:client_id).match(/^[\d]+$/)
-      app || Platform::Application.find_by_key(request_param(:client_id))
-    end
+    @client_application ||= Platform::Application.for(request_param(:client_id))
   end
 
   def redirect_url
