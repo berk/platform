@@ -24,7 +24,7 @@
   		</tr>
 			<tr>
 				<td>
-					Server Side Flow
+					<%=link_to("Server Side Flow", :action => :oauth_server_side)%>
 				</td>
 				<td>
 					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1">Authentication Code</a>
@@ -35,7 +35,7 @@
 			</tr>
       <tr>
         <td>
-          Client Side Flow
+          <%=link_to("Client Side Flow", :action => :oauth_client_side)%>
         </td>
         <td>
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
@@ -46,7 +46,7 @@
       </tr>
       <tr>
         <td>
-          Desktop App Flow
+          <%=link_to("Client Side Flow", :action => :oauth_desktop)%>
         </td>
         <td>
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
@@ -57,7 +57,7 @@
       </tr>
       <tr>
         <td>
-          Mobile App Flow
+          <%=link_to("Mobile App Flow", :action => :oauth_mobile)%>
         </td>
         <td>
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
@@ -68,7 +68,7 @@
       </tr>
       <tr>
         <td>
-          Trusted App Flow
+          <%=link_to("Trusted App Flow", :action => :oauth_trusted_client)%>
         </td>
         <td>
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.3">Resource Owner Password Credentials</a>
@@ -78,9 +78,9 @@
 					This flow is not enabled by default. If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.
         </td>
       </tr>
-      <tr>
+      <!-- tr>
         <td>
-          App Login Flow
+        	<%=link_to("App Login Flow", :action => :oauth_app_login)%>
         </td>
         <td>
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.4">Client Credentials</a>
@@ -88,7 +88,7 @@
         <td>
           Use this flow if your application needs to take various administrative actions, such as retrieving statistics data. The calls will not be made on behalf of the user, but on behalf of the app itself. 
         </td>
-      </tr>
+      </tr -->
   	</table>
   </p>
       

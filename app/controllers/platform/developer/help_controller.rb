@@ -60,6 +60,10 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
   def oauth_mobile
     
   end
+
+  def oauth_extensions
+    
+  end
   
   def sdk_js
     

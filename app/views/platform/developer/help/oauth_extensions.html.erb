@@ -1,0 +1,38 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("#{Tr8n::Config.site_title} Extensions") %>
+</div>
+
+<div class="documentation_section">
+	<p>
+    <%= Tr8n::Config.site_title %> Platform prvides you with a mechanism for creating your own embedded applications (extensions) for the site.
+		<%= Tr8n::Config.site_title %> extensions are applications that are loaded inside of an iframe on the site. 
+  </p>
+
+  <h3>Embedded App Example</h3>
+	<p>
+		Below is an example of a Photo Gallery extension that loads
+    users photo albums and displayes them using an interactive layout. The embedded application is running inside of an iFrame and is served by a server outside of Geni.
+	</p>	
+  <p style="text-align:center">
+    <%=image_tag("/platform/images/help/ext.png", :style=>"width:600px;")%>
+  </p>  	
+
+  <h2>Embedded Application Registration</h2>
+	<p>
+		In order to create an embedded application, you have to provide the following information:
+	</p>
+  <p style="text-align:center">
+    <%=image_tag("/platform/images/help/app_reg_ext.png", :style=>"width:600px;")%>
+  </p>    
+
+  <h2>Authorization Flow</h2>
+  <p>
+    There are two ways you could authorize your application. If you chose to let Geni handle authorization then we will check if the user has authorized your application,
+	  and if not, we will present the authorization screen. Once user has authorized your app, we will pass you a valid access token as a parameter to your apps canvas URL.
+  </p>
+      
+</div>
+
+<%= render :partial => "footer" %>

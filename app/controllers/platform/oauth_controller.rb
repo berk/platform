@@ -24,7 +24,7 @@
 class Platform::OauthController < Platform::BaseController
   
   include SslRequirement
-  ssl_required :authorize, :request_token, :invalidate_token, :validate_token, :revoke, :invalidate
+  ssl_required :authorize, :request_token, :invalidate_token, :validate_token, :revoke, :invalidate, :auth_success
 
   skip_before_filter :validate_guest_user  
 
@@ -63,6 +63,14 @@ class Platform::OauthController < Platform::BaseController
 
   def xd?
     ['popup', 'hidden'].include?(display)
+  end
+
+  def auth_success
+    render :layout => false  
+  end
+
+  def auth_failed
+    render :layout => false  
   end
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.2
@@ -220,6 +228,14 @@ private
         "web"
       end
     end    
+  end
+
+  def jsonp?
+    not params[:callback].blank?
+  end
+
+  def desktop?
+    display == "desktop"
   end
 
   # needs to be configured through Platform::Config
@@ -386,9 +402,9 @@ private
     # for desktop apps - redirect to local urls
     if desktop?
       if response_params[:error_description] or response_params[:status] == 'unauthorized'
-        return redirect_to(:action => :oauth_failed, :anchor => response_query)
+        return redirect_to(:action => :auth_failed, :anchor => response_query)
       else  
-        return redirect_to(:action => :oauth_success, :anchor => response_query)
+        return redirect_to(:action => :auth_success, :anchor => response_query)
       end
     end
 
@@ -407,15 +423,7 @@ private
       redirect_to(redirect_uri.to_s)
     end    
   end
-
-  def jsonp?
-    not params[:callback].blank?
-  end
-
-  def desktop?
-    display == "desktop"
-  end
-
+  
   def render_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
     
