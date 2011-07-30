@@ -1,0 +1,31 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("#{Tr8n::Config.site_title}'s iOS SDK") %>
+</div>
+
+<div class="documentation_section">
+  <p>
+    The <%=Tr8n::Config.site_title %> iOS SDK is a full featured iOS library allowing developers to build iOS applications with <%=Tr8n::Config.site_title %>'s data. 
+    It enables full access to all of <%=Tr8n::Config.site_title %>'s API methods on the client-side and provides robust functionality for working with Oauth 2.0 authentication. 
+  </p>
+
+
+  <h2>Installing iOS SDK</h2>
+	<p>
+		You can install the SDK from the following URL:
+	</p>
+	
+	<div class="code_snippet">
+		<%=link_to("https://github.com/geni/geni-ios-sdk", "https://github.com/geni/geni-ios-sdk")%>
+	</div>	
+	
+	<p>
+		Follow the documentation on the SDK site to get the SDK integrated into your application.
+	</p>
+	
+	
+</div>
+
+<%= render :partial => "footer" %>
+	
