@@ -4,6 +4,16 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" name="viewport">
+    <link href="/stylesheets/fonts.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+
+  <link href="/stylesheets/reset.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/grids.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/general.css?1309203571" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/page_specific.css?1309203571" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/print.css?1309203571" media="print" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/header.css?1309203571" media="screen" rel="stylesheet" type="text/css" />  
+  <link href="/tr8n/stylesheets/tr8n.css?1303331524" media="screen" rel="stylesheet" type="text/css" /> 
+	
 </head>
 <body style="margin:0px;">
 	<center>
@@ -66,7 +76,6 @@
 			  <table style="width:100%">
 			  	<tr>
 			  		<td style='text-align:left; vertical-align:middle;'>
-	            <%= tr('Not {user}? [link: Login as you].', 'Client application action label', :user => [own_profile, :name], :link => lambda {|label| link_to(label, '/logout', :target => '_top')}) %>
 			  		</td>
 						<td style='text-align:right;'>
 			        <%= link_to_function(trl('Allow', 'Client application action label'), %Q{$('authorize').value = 1; $S('auth_form')}, :class=>'button super blue medium') %>

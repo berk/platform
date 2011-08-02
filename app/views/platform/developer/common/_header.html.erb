@@ -3,7 +3,7 @@
 <% if platform_developer_tabs.size > 1 %>
 	<div class="translations_navigation" dir="ltr">
 	  <div style="font-size:22px; font-weight: bold;padding-bottom:15px;">
-		  <%=trl("Platform Developer Tools", "Platform developer tools label")%>
+		  <%=tr("Platform Developer Tools", "Platform developer tools label")%>
 		</div>
 	
 	  <ul class="translations_tab_nav translations_tabs">
@@ -22,7 +22,7 @@
 	        %>
 	        
 	        <li class="<%=classes.join(' ') %>">
-	          <%=link_to(trl(tab["title"], tab["description"]), "/platform/developer/#{tab["controller"]}")%>
+	          <%=link_to(tr(tab["title"], tab["description"]), "/platform/developer/#{tab["controller"]}")%>
 	        </li>
 	
 	      <% end %>

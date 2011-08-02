@@ -59,7 +59,7 @@
 			</div>	
     </td> 
     <td class="comments">
-      <%=tr("Appears next to your app name throughout Geni (16x16)", 'Client application field comment')%>
+      <%=tr("Appears next to your app name throughout the site (16x16)", 'Client application field comment')%>
     </td> 
   </tr>
 	
@@ -103,7 +103,7 @@
       <%=form.text_field :contact_email, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
-      <%=tr("The email address where Geni can contact you or your company", 'Client application field comment')%>
+      <%=tr("The email address where we can contact you or your company", 'Client application field comment')%>
     </td> 
   </tr>
 
@@ -196,7 +196,7 @@
 	
   <tr>
     <th>
-      <%=tr("#{Platform::Config.site_title} API Version:", 'Client application field label')%>
+      <%=tr("{site_title} API Version:", 'Client application field label', :site_title => Platform::Config.site_title)%>
     </td>
     <td>
       <%=select_tag("application[api_version]", options_for_select(Platform::Config.api_supported_version_options, @app.api_version)) %>
@@ -227,7 +227,7 @@
       <%=form.text_field :deauthorize_callback_url, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
-      <%=tr("Geni will post to this URL when user removes the application.", 'Client application field comment')%>
+      <%=tr("We will post to this URL when user removes the application.", 'Client application field comment')%>
     </td> 
   </tr>
 	 
@@ -235,7 +235,7 @@
   <tr>
     <td colspan="3">
       <div class="edit_section_header" style="margin-top:10px;">
-         <%=tr('On Geni', 'Client application section') %>
+         <%=tr('On {site_title}', 'Client application section', :site_title => Platform::Config.site_title) %>
       </div>
     </td>
   </tr>
@@ -245,10 +245,10 @@
       <%=tr('Canvas Page:','Client application field label')%>
     </th>
     <td>
-      http://www.geni.com/platform/apps/<%=form.text_field :canvas_name, :class=>'long_input'%>/
+      http://<%=Platform::Config.site_base_url %>/platform/apps/<%=form.text_field :canvas_name, :class=>'long_input'%>/
     </td> 
     <td class="comments">
-      <%=tr("The base URL of your app on Geni", 'Client application field comment')%>
+      <%=tr("The base URL of your app on the site.", 'Client application field comment')%>
     </td> 
   </tr>
   <tr>
@@ -259,7 +259,7 @@
       <%=form.text_field :canvas_url, :class=>'xxlong_input'%>
     </td> 
     <td class="comments">
-      <%=tr("Geni pulls the content for your app's canvas pages from this base URL.", 'Client application field comment')%>
+      <%=tr("We will pull the content for your app's canvas pages from this base URL.", 'Client application field comment')%>
     </td> 
   </tr>
   <tr>
@@ -267,8 +267,8 @@
       <%=tr('IFrame Size:','Client application field label')%>
     </th>
     <td style="height:30px;">
-        <label for="resize_option1" style="vertical-align: middle"><%=form.radio_button :auto_resize, false, :id => "resize_option1", :style=>"vertical-align: top;" %> Show scrollbars</label>
-        <label for="resize_option2" style="vertical-align: middle"><%=form.radio_button :auto_resize, true, :id => "resize_option2", :style=>"vertical-align: top;" %> Auto-resize</label>
+        <label for="resize_option1" style="vertical-align: middle"><%=form.radio_button :auto_resize, false, :id => "resize_option1", :style=>"vertical-align: top;" %> <%=tr("Show scrollbars")%> </label>
+        <label for="resize_option2" style="vertical-align: middle"><%=form.radio_button :auto_resize, true, :id => "resize_option2", :style=>"vertical-align: top;" %> <%=tr("Auto-resize")%></label>
     </td> 
     <td class="comments">
       <%=tr("Choose \"Auto-resize\" if you are going to make the iFrame grow to the height of your app's content", 'Client application field comment')%>
@@ -279,11 +279,11 @@
       <%=tr('Authorization:','Client application field label')%>
     </th>
     <td style="height:30px;">
-        <label for="signin_option1" style="vertical-align: middle"><%=form.radio_button :auto_signin, true, :id => "signin_option1", :style=>"vertical-align: top;" %> Geni will handle authorization</label>
-        <label for="signin_option2" style="vertical-align: middle"><%=form.radio_button :auto_signin, false, :id => "signin_option2", :style=>"vertical-align: top;" %> App will handle authorization</label>
+        <label for="signin_option1" style="vertical-align: middle"><%=form.radio_button :auto_signin, true, :id => "signin_option1", :style=>"vertical-align: top;" %> <%=tr("Platform will handle authorization")%></label>
+        <label for="signin_option2" style="vertical-align: middle"><%=form.radio_button :auto_signin, false, :id => "signin_option2", :style=>"vertical-align: top;" %> <%=tr("App will handle authorization") %></label>
     </td> 
     <td class="comments">
-      <%=tr("Choose \"App will handle authorization\" if your application will handle the authorization. Otherwise Geni will make sure the user has authorized your application and will pass you an access token as a parameter.", 'Client application field comment')%>
+      <%=tr("Choose \"App will handle authorization\" if your application will handle the authorization. Otherwise we will make sure the user has authorized your application and will pass you an access token as a parameter.", 'Client application field comment')%>
     </td> 
   </tr>
 <% end %>

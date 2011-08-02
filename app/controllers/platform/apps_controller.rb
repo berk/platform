@@ -102,14 +102,14 @@ class Platform::AppsController < Platform::BaseController
     @app = Platform::Application.find_by_canvas_name(method)
     return render(:action => :canvas_app) unless @app
     
+    @page_title = @app.name
+    
     if @app.auto_signin?
       app_user = Platform::ApplicationUser.for(@app)
       
       unless app_user
-        redirect_url = "/platform/apps/#{@app.canvas_name}"
-        return redirect_to( :controller => '/platform/oauth', :action => :authorize, 
-                            :response_type => :token, :client_id => @app.key, 
-                            :display => :web, :redirect_url => redirect_url)
+        @canvas_url = "http://#{Platform::Config.site_base_url}/platform/oauth/authorize?response_type=token&client_id=#{@app.key}&display=iframe&redirect_url=#{CGI.escape(@app.canvas_url)}"
+        return render(:action => :canvas_app)
       end
 
       tokens = @app.valid_tokens_for_user(Platform::Config.current_user)
@@ -121,10 +121,9 @@ class Platform::AppsController < Platform::BaseController
       @access_token = access_token
     end
     
-    @page_title = @app.name
 
     @canvas_url = @app.canvas_url
-    @canvas_uri = URI.parse(@app.canvas_url)
+    canvas_uri = URI.parse(@app.canvas_url)
     [:controller, :action].each do |key| 
       params.delete(key)
     end
@@ -138,8 +137,8 @@ class Platform::AppsController < Platform::BaseController
       query_params << "#{key}=#{CGI.escape(val)}"
     end
     
-    @canvas_url << "/" if @canvas_uri.path.blank?
-    @canvas_url << (@canvas_uri.query.blank? ? "?" : "&")
+    @canvas_url << "/" if canvas_uri.path.blank?
+    @canvas_url << (canvas_uri.query.blank? ? "?" : "&")
     @canvas_url << query_params.join('&')
     
     render :action => :canvas_app 

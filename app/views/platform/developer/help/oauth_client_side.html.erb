@@ -1,153 +1,207 @@
 <%= render :partial => "header" %>
-
 <div class="documentation_section_title">
-  <%= tr("Client Side Authorization Flow") %>
+    <%= tr("Client Side Authorization Flow") %>
 </div>
-
 <div class="documentation_section">
-  <p>
-    Client side authentication and authorization is very similar to the server side. The difference is in the parameters that are passed to the server and the response fields that you get back. 
-  </p>
-  
-  <h2>Authentication & Authorization</h2>
-  <p> 
-    To enter the authentication/authorization client flow, you must pass the following parameters to the authorization url:
-		(Notice that response_type is now requred and must be set to "access_token")
-  </p>
-
-  <h3>Oauth URL</h3>
-  <div class="code_snippet">
-    https://www.geni.com/oauth/authorize
-  </div>
-
-  <h3>Parameters</h3>
-  <p>
-  <table class="documentation_table">
-     <tr>
-      <th style="width:150px;"><%=tr("Param Name") %></th>
-      <th><%=tr("Description") %></th>
-      <th style="width:150px;"><%=tr("Required") %></th>
-     </tr>
-     <tr>
-      <td>client_id</td>
-      <td>Application key generated during the app registration.</td>
-      <td>true</td>
-     </tr>
-     <tr>
-      <td>redirect_uri</td>
-      <td>Url that the user's browser will be redirected back to once app authorization is completed. You can specify this url in app settings as a Callback URL, or pass it as a paremeter. 
-      If you pass it as a parameter, parameter value will be used and the app setting will be ignored. The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.</td>
-      <td>true</td>
-     </tr>
-     <tr>
-      <td>response_type</td>
-      <td>For the client side flow the response type must be set to "token".</td>
-      <td>true</td>
-     </tr>
-     <tr>
-      <td>scope</td>
-      <td>A comma delimited list of permissions that the application needs. By default the scope is to set to a full permission set. This is subject to change in the upcoming releases.</td>
-      <td>false</td>
-     </tr>
-     <tr>
-      <td>display</td>
-      <td>For the server side flow the display parameter is defaulted to "web"</td>
-      <td>false</td>
-     </tr>
-  </table>
-  </p>
-	
-	<h3>Example</h3>
-  <div class="code_snippet">
-    https://www.geni.com/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
-  </div>
-
-  <p>
-    If the user is already logged in, we validate the login cookie that we have stored on the user's browser, authenticating the user. If the user is not logged in, they are prompted to enter their credentials:
-  </p>  
-  
-  <p style="text-align:center">
-  <%=image_tag("/platform/images/help/login_web.png", :style=>"width:600px;")%>
-  </p>
-  
-  <p>
-    Once we have successfully authenticated the user, we will prompt the user to authorize your application:
-  </p>
-  
-  <p style="text-align:center">
-  <%=image_tag("/platform/images/help/auth_web.png", :style=>"width:600px;")%>
-  </p>
-  
-  <p>
-    If the user presses Don't Allow, your app is not authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with the following error information as a URI fragment:
-  </p>
-
-  <h3><%=tr("Returned Fields") %></h3>
-  <p>
-  <table class="documentation_table">
-     <tr>
-      <th style="width:150px;"><%=tr("Name") %></th>
-      <th style="width:150px;"><%=tr("Type") %></th>
-      <th><%=tr("Description") %></th>
-     </tr>
-     <tr>
-      <td style="widtd:150px;">status</td>
-      <td style="widtd:150px;">String</td>
-      <td>If user cancels tde autdorization flow, tde status will be set to "unauthorized"</td>
-     </tr>
-     <tr>
-      <td style="widtd:150px;">message</td>
-      <td style="widtd:150px;">String</td>
-      <td>Error message</td>
-     </tr>
-  </table>
-  </p>
-
-  <h3>Example</h3>
-  <div class="code_snippet">
-    http://YOUR_URL#status=unauthorized&message=user+canceled
-  </div>
-    
-  <p> 
-    If the user presses Allow, your app is authorized. The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri with an access token as a URI fragment:
-  </p>
-
-  <h3><%=tr("Returned Fields") %></h3>
-  <p>
-  <table class="documentation_table">
-     <tr>
-      <th style="width:150px;"><%=tr("Name") %></th>
-      <th style="width:150px;"><%=tr("Type") %></th>
-      <th><%=tr("Description") %></th>
-     </tr>
-     <tr>
-      <td style="widtd:150px;">access_token</td>
-      <td style="widtd:150px;">String</td>
-      <td>Access token to be used with every request to Geni API. It must be passed as a parameter:
-         https://www.geni.com/api/profile?access_token=ACCESS_TOKEN
-      </td>
-     </tr>
-     <tr>
-      <td style="widtd:150px;">expires_in</td>
-      <td style="widtd:150px;">Number</td>
-      <td>Seconds until the token will expire</td>
-     </tr>
-  </table>     
-  </p>      
-
-  <h3>Example</h3>
-	<div class="code_snippet">
-    http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
-  </div>
-
-  <h2>Cross Domain API Calls</h2>
-  <p> 
-    Geni supports cross-domain API calls using <a href="">JSONP</a> script tag injection. Below is a simple example for Geni JSONP API call.
-		You must provide a valid access token in order to make an JSONP API call.  
-  </p>
-	
-<h3>Example</h3>
-<pre class="code_snippet">
+    <p>
+        <%=tr("Client side authentication and authorization flow is very similar to the server side flow.") %>
+				<%=tr("The difference is in the parameters passed to the server and in the response fields that you get back.") %>
+    </p>
+    <h2><%=tr("Authentication & Authorization") %></h2>
+    <p>
+        <%=tr("To enter the authentication/authorization client-side flow, you must pass the following parameters to the authorization URL:")%>
+    </p>
+    <h3><%=tr("Oauth URL")%></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize
+    </div>
+    <h3><%=tr("Parameters")%></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Required") %>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    client_id
+                </td>
+                <td>
+                    <%=tr("Application key generated during the app registration.")%>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    redirect_uri
+                </td>
+                <td>
+                    <%=tr("URL that the user's browser will be redirected back to once the application authorization is completed.") %>
+                    <%=tr("You can specify this URL in your application settings as a Callback URL, or pass it as a request paremeter.") %>
+                    <%=tr("The redirect_uri must be within the same domain as the Site Domain you specified in the application settings.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    response_type
+                </td>
+                <td>
+                    <%=tr("For the server side flow the response type is defaulted to \"token\" and you don't need to pass it as a parameter.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    scope
+                </td>
+                <td>
+                    <%=tr("A comma delimited list of permissions that the application needs.") %> <%=tr("By default the scope is set to a full data access.") %><%=tr("This is subject to change in the upcoming releases.") %>
+                </td>
+                <td>
+                    false
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    display
+                </td>
+                <td>
+                    <%=tr("For the server side flow the display parameter is defaulted to \"web\".") %>
+                </td>
+                <td>
+                    false
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
+    </div>
+    <p>
+        <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %><%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
+    </p>
+    <p style="text-align:center">
+        <%=image_tag("/platform/images/help/login_web.png", :style=>"width:600px;", :class => "screenshot") %>
+    </p>
+    <p>
+        <%=tr("Once we have successfully authenticated the user, we will prompt the user to authorize your application:") %>
+    </p>
+    <p style="text-align:center">
+        <%=image_tag("/platform/images/help/auth_web.png", :style=>"width:600px;", :class => "screenshot") %>
+    </p>
+    <p>
+        <%=tr("If the user presses Don't Allow, your app is not authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    status
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("If user cancels the authorization flow, the status will be set to \"unauthorized\".") %>
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    message
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Error message") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example") %></h3>
+    <div class="code_snippet">
+        http://YOUR_URL#status=unauthorized&message=user+canceled
+    </div>
+    <p>
+        <%=tr("If the user presses Allow, your app is authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with an authorization code:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    access_token
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Access token to be used with every API request")%> 
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    expires_in
+                </td>
+                <td style="widtd:150px;">
+                    Number
+                </td>
+                <td>
+                    <%=tr("Seconds until the token will expire")%>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+    </div>
+    <h2><%=tr("Cross Domain API Calls")%></h2>
+    <p>
+    	 <%=tr("{site_title} Platform supports cross-domain API calls using [link: JSONP] framework.", "", :site_title => Platform::Config.site_title, :link => ["http://en.wikipedia.org/wiki/JSONP"]) %> 
+       <%=tr("Below is a simple example for Geni JSONP API call.")%> 
+			 <%=tr("You must provide a valid access token in order to make an JSONP API call.")%> 
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <pre class="code_snippet">
 var Geni = {callbacks:{}, client_id:"YOUR_APP_KEY", access_token:""};
 
 function jsonp(url, params, callback) {
@@ -201,13 +255,10 @@ if (Geni.access_token == "") {
 }
 
 </pre>
-
-<h3>Geni JavaScript Client SDK</h3>
-<p>
-	Geni comes with a <%=link_to("full featured javascript library", :action => :sdk_js)%> that allows you to build dynamic web applications in the browser with Geni's data. 
-	It supports authentication, autherization and API calls to get Geni data. 
-</p>
-
+    <h3><%=tr("{site_title} JavaScript Client SDK", "", :site_title => Platform::Config.site_title)%></h3>
+    <p>
+    	<%=tr("{site_title} Platform comes with a [link: full featured JavaScript library] that allows you to build dynamic web applications in the browser with {site_title}'s data.", "", :site_title => Platform::Config.site_title, :link => ["/platform/developer/help/sdk_js"])%>
+			<%=tr("It supports authentication, autherization and API calls to get the site data.")%>
+    </p>
 </div>
-
 <%= render :partial => "footer" %>

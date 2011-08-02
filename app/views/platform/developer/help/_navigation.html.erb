@@ -56,7 +56,7 @@
   <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_mobile' %>"><%=link_to(tr("Mobile Apps"), :action => :oauth_mobile, :version => @version)%></div>
   <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_trusted_client' %>"><%=link_to(tr("Trusted Apps"), :action => :oauth_trusted_client, :version => @version)%></div>
 
-  <div class="section_link <%="selected" if @controller.action_name == 'oauth_extensions' %>"><%=link_to(tr("Geni Extensions"), :action => :oauth_extensions, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'oauth_extensions' %>"><%=link_to(tr("{site_title} Extensions", "", :site_title => Platform::Config.site_title), :action => :oauth_extensions, :version => @version)%></div>
   
   <div class="navigation_header"><%=tr("SDKs & Tools")%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'sdk_js' %>"><%=link_to(tr("JavaScript SDK"), :action => :sdk_js, :version => @version)%></div>

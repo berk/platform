@@ -264,6 +264,10 @@ class Platform::Config
     site_info[:title] 
   end
   
+  def self.site_base_url
+    site_info[:base_url]
+  end  
+  
   def self.default_url
     site_info[:default_url]
   end

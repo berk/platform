@@ -1,81 +1,80 @@
 <%= render :partial => "header" %>
 
 <div class="documentation_section_title">
-  <%= tr("Authentication with #{Tr8n::Config.site_title}") %>
+  <%= tr("Authentication with {site_title}", "", :site_title => Tr8n::Config.site_title) %>
 </div>
 
 <div class="documentation_section">
 	<p>
-    <%= Tr8n::Config.site_title %> Platform uses the <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20">Oauth 2.0 protocol</a> for authentication and authorization.
-		We support a number of different flows that you can use within your website, desktop and mobile applications.  
+		<%=tr("{site_title} Platform uses the [link: Oauth 2.0 protocol] for authentication and authorization.", "", :site_title => Tr8n::Config.site_title, :link => ["http://tools.ietf.org/html/draft-ietf-oauth-v2-20"]) %>
+		<%=tr("The Platform supports a number of different flows that you can use within your website, desktop and mobile applications.")%>  
   </p>
 	<p>
-		This document outlines the various mechanisms <%= Tr8n::Config.site_title %> Platform uses to support each of those flows. 
-		
+		<%=tr("This document outlines the various mechanisms {site_title} Platform uses to support each of those flows.", "", :site_title => Tr8n::Config.site_title)%> 
   </p>  	
 
-  <h2>Authenticaton Flows</h2>
+  <h2><%=tr("Authenticaton Flows")%></h2>
   <p>
   	<table class="documentation_table">
   		<tr>
-  			<th style="width:100px;">Flow Name</th>
-				<th style="width:150px;">Oauth 2.0 Specification</th>
-				<th>Description</th>
+  			<th style="width:100px;"><%=tr("Flow Name")%></th>
+				<th style="width:150px;"><%=tr("Oauth 2.0 Specification")%></th>
+				<th><%=tr("Description")%></th>
   		</tr>
 			<tr>
 				<td>
-					<%=link_to("Server Side Flow", :action => :oauth_server_side)%>
+					<%=link_to(tr("Server Side Flow"), :action => :oauth_server_side)%>
 				</td>
 				<td>
-					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1">Authentication Code</a>
+					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1"><%=tr("Authentication Code")%></a>
 				</td>
 				<td>
-					Use this flow if your application needs to call Geni's API from the server side
+					<%=tr("Use this flow if your application needs to call Geni's API from the server side")%>
 				</td>
 			</tr>
       <tr>
         <td>
-          <%=link_to("Client Side Flow", :action => :oauth_client_side)%>
+          <%=link_to(tr("Client Side Flow"), :action => :oauth_client_side)%>
         </td>
         <td>
-          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
         </td>
         <td>
-          Use this flow if your application needs to call Geni's API from a client, such as JavaScript in a Web browser or from a native mobile or desktop application. 
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <%=link_to("Client Side Flow", :action => :oauth_desktop)%>
-        </td>
-        <td>
-          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
-        </td>
-        <td>
-          Customized version of the Client Side Flow targeted for Desktop applications.
+          <%=tr("Use this flow if your application needs to call {site_title}'s API from a client, such as JavaScript in a Web browser or from a native mobile or desktop application.", "", :site_title => Tr8n::Config.site_title)%>
         </td>
       </tr>
       <tr>
         <td>
-          <%=link_to("Mobile App Flow", :action => :oauth_mobile)%>
+          <%=link_to(tr("Client Side Flow"), :action => :oauth_desktop)%>
         </td>
         <td>
-          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2">Implicit Grant</a>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
         </td>
         <td>
-          Customized version of the Client Side Flow targeted for Mobile applications.
+          <%=tr("Customized version of the Client Side Flow targeted for Desktop applications.")%>
         </td>
       </tr>
       <tr>
         <td>
-          <%=link_to("Trusted App Flow", :action => :oauth_trusted_client)%>
+          <%=link_to(tr("Mobile App Flow"), :action => :oauth_mobile)%>
         </td>
         <td>
-          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.3">Resource Owner Password Credentials</a>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
         </td>
         <td>
-          Use this flow only if your application has a trust relationship with the user and no other flow can work for your application. For example, if you have a highly privileged desktop application and user wants to give your application explicit access to the user data.
-					This flow is not enabled by default. If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.
+          <%=tr("Customized version of the Client Side Flow targeted for Mobile applications.")%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%=link_to(tr("Trusted App Flow"), :action => :oauth_trusted_client)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.3"><%=tr("Resource Owner Password Credentials") %></a>
+        </td>
+        <td>
+          <%=tr("Use this flow only if your application has a trust relationship with the user and no other flow can work for your application.")%> <%=tr("For example, if you have a highly privileged desktop application and user wants to give your application explicit access to the user data.") %>
+					<%=tr("This flow is not enabled by default.") %> <%=tr("If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.")%>
         </td>
       </tr>
       <!-- tr>
