@@ -70,7 +70,6 @@
                 <td>
                     <%=tr("A comma delimited list of permissions that the application needs.") %>
 										<%=tr("By default the scope is set to a full data access.") %>
-										<%=tr("This is subject to change in the upcoming releases.") %>
                 </td>
                 <td>
                     false
@@ -105,7 +104,8 @@
         https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL
     </div>
     <p>
-        <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %><%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
+        <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %>
+				<%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
     </p>
     <p style="text-align:center">
         <%=image_tag("/platform/images/help/login_web.png", :style=>"width:600px;", :class => "screenshot") %>
@@ -117,7 +117,8 @@
         <%=image_tag("/platform/images/help/auth_web.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
     <p>
-        <%=tr("If the user presses Don't Allow, your app is not authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:") %>
+        <%=tr("If the user presses Don't Allow, your app is not authorized.") %>
+				<%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:") %>
     </p>
     <h3><%=tr("Returned Fields") %></h3>
     <p>
@@ -214,17 +215,6 @@
             </tr>
             <tr>
                 <td style="widtd:150px;">
-                    sig
-                </td>
-                <td style="widtd:150px;">
-                    String
-                </td>
-                <td>
-                    <%=tr("Signature is used to validate the authenticity of the response.") %>
-                </td>
-            </tr>
-            <tr>
-                <td style="widtd:150px;">
                     state
                 </td>
                 <td style="widtd:150px;">
@@ -282,8 +272,6 @@
                 </td>
                 <td>
                     <%=tr("Application secret generated during the registration process and availble in the application settings.") %>
-                    <%=tr("The app secret is available from the Developer App and should not be shared with anyone or embedded in any code that you will distribute
-                    (you should use the client-side flow for these scenarios).") %>
                 </td>
                 <td>
                     true

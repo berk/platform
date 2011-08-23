@@ -1,12 +1,16 @@
 var field_count = 0;
 var base_api_url = "";
+var base_site_url = "";
+var api_explorer_app_id = "";
 var api_history = {};
 var api_history_index = -1;
 var api_result_json = "";
 var api_result_object_keys = [];
 
-function initApiExplorer(base_url, api_history_string) {
-  base_api_url = base_url;
+function initApiExplorer(app_id, site_url, api_url, api_history_string) {
+	api_explorer_app_id = app_id;
+	base_site_url = site_url;
+  base_api_url = api_url;
   api_history = JSON.parse(api_history_string);
   updateHistoryButtons();
 } 
@@ -16,6 +20,26 @@ function hidePopups() {
   Platform.Effects.hide("api_history"); 
   Platform.Effects.hide("api_options"); 
 } 
+
+/************************************************************************************
+** Access Token Functions
+************************************************************************************/
+function getAccessToken() {
+  var width = 600;
+  var height = 600;
+  var top = (parseInt(window.innerHeight)-height)/2;
+  var left = (parseInt(window.innerWidth)-width)/2;
+	var land_url = base_site_url + "/platform/developer/api_explorer/oauth_lander";
+	if (land_url.indexOf("http") == -1) {
+		land_url = "http://" + land_url;
+	}
+	var oauth_url = '/platform/oauth/authorize?client_id=' + api_explorer_app_id + '&response_type=token&display=mobile&redirect_url=' + escape(land_url)
+  var win = window.open(oauth_url, 'oauthx_auth', 'width=' + width +',height=' + height + ',top=' + top  + ',left=' + left);
+} 
+
+function updateAccessToken(token) {
+	Platform.element("access_token").value = token;
+}
 
 /************************************************************************************
 ** Clipboard Functions
@@ -66,7 +90,7 @@ function copyUrlToClipboard(trigger) {
   var params = generateRequestParams();
   var link_location = "" + window.location;
   link_location = link_location.split("?")[0];
-  link_location = link_location + "?path=" + Platform.value("api_path") + "&method=" + Platform.value("request_method") + "&version=" + Platform.value("api_version");
+  link_location = link_location + "?path=" + Platform.value("api_path") + "&method=" + Platform.value("request_method") + "&api_version=" + Platform.value("api_version");
   
   for (key in params) {
     if (key == "") continue;
@@ -98,7 +122,7 @@ function toggleApiOptions(trigger) {
     Platform.Effects.show("api_options");
 		
     Platform.Utils.update("api_options_container", "/platform/developer/api_explorer/options", {
-      parameters: {version:Platform.value("api_version")}
+      parameters: {api_version:Platform.value("api_version")}
     });
 		
   } else {
@@ -114,7 +138,7 @@ function switchApiVersion() {
 		
   	Platform.Utils.update("api_options_container", "/platform/developer/api_explorer/options", {
   		parameters: {
-  			version: Platform.value("api_version")
+  			api_version: Platform.value("api_version")
   		}
   	});
   }
@@ -379,11 +403,14 @@ function submitRequest() {
   
   var params = generateRequestParams();
   // add access token
-  
-	// add version
-	params['version'] = Platform.value('api_version');
+	if (Platform.element("access_token") && Platform.value("access_token") != "") {
+  	params['access_token'] = Platform.value("access_token");
+  }
 	
-  saveCallToHistory(Platform.value("api_path"), Platform.value("request_method"), params);
+	// add version
+	params['api_version'] = Platform.value('api_version');
+	
+//  saveCallToHistory(Platform.value("api_path"), Platform.value("request_method"), params);
 
 	var path =  Platform.value("api_path");
 	var method = Platform.value("request_method");
@@ -428,12 +455,12 @@ function updateApi(path, method, params) {
   switchRequestMethod();
   removeAllPostFields();
   for (key in params) {
-		if (key == 'version') continue;
+		if (key == 'api_version') continue;
     addPostField(key, params[key]);
   }
 	
-	if (params['version']) {
-    Platform.element('api_version').value = params['version']; 		
+	if (params['api_version']) {
+    Platform.element('api_version').value = params['api_version']; 		
 	}
 }
 

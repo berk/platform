@@ -1,13 +1,13 @@
 <% doc_server = "http://api-preview.geni.com" %>
 
 <div style="border-bottom: 1px solid #ccc; margin:10px; font-weight:bold;">
-  <div style="float:right">Version <%=@version%></div>
+  <div style="float:right">Version <%=@api_version%></div>
   <%=tr("#{Platform::Config.site_title} API List")%> 
 </div>
 
 <%
-  ref = Platform::Config.api_reference(@version)
-  columns = Platform::Config.api_explorer_groups(@version) 
+  ref = Platform::Config.api_reference(@api_version)
+  columns = Platform::Config.api_explorer_groups(@api_version) 
   col_size = 100 / columns.size
 %>
 
@@ -21,7 +21,7 @@
 		      <div class="api_list">
 		        <%=platform_toggler_tag("#{object_key}_api")%>
 		        <%=link_to_function(object_key.titleize, "updateApi('#{object_key}', '#{object[:method] || 'GET'}', {})")%>
-		        <%=platform_documentation_tag(:path => object[:path], :version => @version)%>
+		        <%=platform_documentation_tag(:path => object[:path], :version => @api_version)%>
 		      </div>
 		      <div id="<%=object_key%>_api" class="api_method_list">
 		      	<% if object[:actions] %> 
@@ -30,7 +30,7 @@
 								<% object_action = object[:actions][action_key] %>
 		            <li>
 		                <%=link_to_function(action_key, "updateApi('#{object_action[:path]}', '#{object_action[:method] || 'GET'}', {})")%>
-                    <%=platform_documentation_tag(:path => object_action[:path], :version => @version)%>
+                    <%=platform_documentation_tag(:path => object_action[:path], :version => @api_version)%>
 		            </li>
 								<% end %>
 	            </ul>

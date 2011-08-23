@@ -40,14 +40,17 @@ class Platform::Developer::ApiExplorerController < Platform::Developer::BaseCont
   end
   
   def options
-    
     render(:layout => false)
+  end
+  
+  def oauth_lander
+    render :layout => false
   end
   
 private
  
   def prepare_api_version
-    @version = params[:version] || Platform::Config.api_default_version
+    @api_version = params[:api_version] || Platform::Config.api_default_version
   end
     
 end

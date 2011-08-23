@@ -53,7 +53,7 @@
 							<td style="width:30%">
 		             <div style="height:130px; padding:5px; margin:3px; text-align:center;">
 		                <div style="">
-		                   <%= image_tag(@client_application.logo_url, :class => "icn projects_icn img", :style => "width:75px;height:75px;") %>
+		                   <%= image_tag(@client_application.logo_url, :style => "width:75px;height:75px;") %>
 		                </div> 
 		                <div style="font-size:12px; padding-top:10px;">
 		                  <%= link_to(h(@client_application.name), {:controller => '/platform/apps', :action => :view, :id => @client_application.id}, {:target => "_top"}) %><br>

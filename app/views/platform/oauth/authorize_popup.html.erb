@@ -1,7 +1,9 @@
 <%= render :partial => "layouts/html_head", :locals => {:new_styles => true} %>
 <body>
   <div class="page_hd hd pvm phl">
-  <%= link_to(tr('Not {user}?', 'Client application action label', :user => [own_profile, :name]), '/logout?display=popup', :class => "flt_r small mvs") %>
+    <div style="float:right;padding-top:5px;font-weight:bold;">
+      <%=link_to(tr("Not {user}?", "", :user => [Platform::Config.current_user, :name]), :controller => "/login", :action => :out, :display => params[:display], :client_id => @client_application.id)%>
+    </div>
     <div href="/" class="i logo"></div>
   </div>
   <div class="page_bd bd">

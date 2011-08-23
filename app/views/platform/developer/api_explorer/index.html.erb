@@ -10,23 +10,27 @@
 </div>
 
 <div class="section_box">
-	<!-- table style="width:100%">
-		<tr>
-			<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
-			<td><%=text_field_tag(:access_token, "", :label=>"Paste an existing Access Token, or click to generate one", :style=>"width:660px;")%> &nbsp;
-			   <%=link_to_function("X", "")%> 
-			</td>
-			<td style="width:150px; text-align:right;">
-				<%= link_to_function(trl('Get Access Token', 'Client application action label'), "", :class=>'button super blue medium') %>
-			</td>
-		</tr>
-	</table -->
-
+	<% if Platform::Config.api_explorer_app? %>
+	  <div class="section_box" style="margin-top:5px;margin-bottom:0px;">
+			<table style="width:100%">
+				<tr>
+					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
+					<td><%=text_field_tag(:access_token, "", :style=>"width:630px;")%> &nbsp;
+					   <%=link_to_function("X", "Platform.element('access_token').value = '';")%> 
+					</td>
+					<td style="width:150px; text-align:right;">
+						<%= link_to_function(trl('Get Access Token', 'Client application action label'), "getAccessToken()", :class=>'button super blue medium') %>
+					</td>
+				</tr>
+			</table>
+	  </div>
+	<% end %>
+	
   <div class="section_box" style="margin-top:5px;background-color:#EFF8FF">
   	<table>
   		<tr>
         <td style="width:50px;">
-          <%=select_tag("api_version", options_for_select(Platform::Config.api_supported_version_options, @version), :onChange=>"switchApiVersion()")%>
+          <%=select_tag("api_version", options_for_select(Platform::Config.api_supported_version_options, @api_version), :onChange=>"switchApiVersion()")%>
         </td>
   			<td style="width:80px;">
 				  <%=select_tag("request_method", options_for_select(['GET', 'POST', 'PUT', 'DELETE'], params[:method] || 'GET'), :onChange=>"switchRequestMethod()")%>
@@ -103,14 +107,14 @@
 <script>
 
 Platform.Utils.addEvent(window, 'load', function() {
-	initApiExplorer('<%=Platform::Config.api_base_url%>', '<%=@api_history%>');
+	initApiExplorer('<%=Platform::Config.api_explorer_app_id%>', '<%=Platform::Config.site_base_url%>', '<%=Platform::Config.api_base_url%>', '<%=@api_history%>');
 	<% params.each do |key, value| %>
-	 <% next if ['controller', 'action', 'access_token', 'method', 'path', 'version'].include?(key) %>
+	 <% next if ['controller', 'action', 'access_token', 'method', 'path', 'api_version'].include?(key) %>
 	 addPostField('<%=key%>', '<%=value%>');
 	<% end %>
 	
-	<% if params['version'] %>
-	Platform.element("api_version").value = "<%=params['version']%>";
+	<% if params['api_version'] %>
+	Platform.element("api_version").value = "<%=params['api_version']%>";
 	<% end %>
 });
 

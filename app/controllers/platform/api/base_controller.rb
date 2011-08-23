@@ -199,9 +199,9 @@ private
       hash['next_page']     = next_page if limit == obj.size
       obj = hash
     end
-
+    
     # what is to_opts for?
-    to_opts = params.merge(:max_models => limit, :viewer => Platform::Config.current_user)
+    to_opts = params.merge(:max_models => limit, :viewer => Platform::Config.current_user, :api_version => api_version)
     respond_to do |format|
       format.json   do
         json = obj.to_json(to_opts)
@@ -481,7 +481,7 @@ private
   ############################################################################
   
   def api_version
-    @api_version ||= params[:version] || client_app.try(:api_version) || Platform::Config.api_default_version
+    @api_version ||= params[:api_version] || client_app.try(:api_version) || Platform::Config.api_default_version
   end
   
   def api_reference_for_path(ref, path)
@@ -499,7 +499,7 @@ private
   def validate_response_structure(json)
     return unless Platform::Config.enable_api_verification?
     
-    path = request.url.split(Platform::Config.api_base_url).last.split('?').first
+    path = request.url.split(Platform::Config.api_base_url).last.split('?').first.split("-").first
 #    pp request.url, path
     
     path = 'profile' if path.blank? # make this configurable option
@@ -523,7 +523,7 @@ private
       end
     end
     
-    handle_document_structure_error("Unsupported or undocumented fields: #{undocumented_fields.join(', ')}") if undocumented_fields.any?        
+    handle_document_structure_error("Unsupported or undocumented fields for API version #{api_version}, path #{path}: #{undocumented_fields.join(', ')}") if undocumented_fields.any?        
   end
   
 end

@@ -41,8 +41,9 @@ class Platform::OauthController < Platform::BaseController
       return redirect_with_response(:error_description => "invalid client application id", :error => :unauthorized_client)
     end
 
+    save_oauth_login_redirect_params
+
     if Platform::Config.current_user_is_guest?
-      save_oauth_login_redirect_params
       return redirect_to(:controller => Platform::Config.login_url, :client_id => request_param(:client_id), :display => display)
     end
 
@@ -169,18 +170,9 @@ private
   def save_oauth_login_redirect_params
     session[:oauth_login_redirect_params] = params
   end
-  
-  def valid_signature?
-    # enable signature verification, always
-    return true if request_param(:sig).blank?
-    payload = ""
-    params.keys.sort.each do |key|
-      next if ['controller', 'action', 'sig'].include?(key.to_s)
-      payload << "#{key}=#{params[key]}"
-    end
-    payload << client_application.secret
-    digested = Digest::MD5.hexdigest(payload)
-    digested == request_param(:sig)
+
+  def remove_oauth_login_redirect_params
+    session[:oauth_login_redirect_params] = nil
   end
 
   def request_param(key)
@@ -238,6 +230,14 @@ private
     display == "desktop"
   end
 
+  def iframe?
+    display == "iframe"
+  end
+
+  def mobile?
+    display == "mobile"
+  end
+
   # needs to be configured through Platform::Config
   def authenticate_user(username, password)
     User.authenticate(username, password)
@@ -279,15 +279,6 @@ private
       return render_response(:error_description => "password must be provided", :error => :invalid_request)
     end
 
-#    do we need to require signature?
-#    if request_param(:sig).blank?
-#      return render_response(:error_description => "signature must be provided", :error => :invalid_request)
-#    end
-
-    unless valid_signature?
-      return render_response(:error_description => "invalid signature", :error => :invalid_request)
-    end
-
     user = authenticate_user(request_param(:username), request_param(:password))
     unless user
       return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
@@ -319,17 +310,19 @@ private
   # authorize with response_type = code
   def oauth2_authorize_code
     if request.post?
+      remove_oauth_login_redirect_params
+
       if params[:authorize] == '1'
         Platform::ApplicationUser.touch(client_application)
         code = client_application.create_request_token(:user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
         return redirect_with_response(:code => code.code, :expires_in => (code.valid_to.to_i - Time.now.to_i))
       end
       
-      if client_application.auto_signin?
+      if iframe? and client_application.auto_signin?
         return redirect_to(Platform::Config.default_url)
       end
       
-      return redirect_with_response(:status => :unauthorized, :message => "user canceled")
+      return redirect_with_response(:status => :unauthorized, :message => "canceled")
     end   
 
     render_action("authorize")
@@ -338,17 +331,19 @@ private
   # authorize with response_type = token
   def oauth2_authorize_token
     if request.post?
+      remove_oauth_login_redirect_params
+
       if params[:authorize] == '1'
         Platform::ApplicationUser.touch(client_application)
         access_token = client_application.create_access_token(:user=>Platform::Config.current_user, :scope=>scope)
         return redirect_with_response(:access_token => access_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
       end
 
-      if client_application.auto_signin?
+      if iframe? and client_application.auto_signin?
         return redirect_to(Platform::Config.default_url)
       end
 
-      return redirect_with_response(:status => :unauthorized, :message => "user canceled")
+      return redirect_with_response(:status => :unauthorized, :message => "canceled")
     end   
 
     render_action("authorize")
@@ -357,14 +352,16 @@ private
   def redirect_url_valid?(url)
     return true if xd?
     
-    if redirect_url == "#{client_application.id}://authorize"
-      # make sure the user_agent is an iphone
-      return true
+    begin
+      URI.parse(url)
+    rescue
+      return false
     end
+
     true
   end
 
-  # redirects require signature 
+  # used by the authorization process
   def redirect_with_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
     
@@ -373,17 +370,6 @@ private
     
     # more scope validation must be done
     response_params[:scope] = request_param(:scope) if request_param(:scope)
-
-    # prepare signature
-    if client_application
-      payload = ""
-      response_params.keys.apply(:to_s).sort.each do |key| 
-        payload << "#{key}=#{CGI.escape(response_params[key.to_sym].to_s)}"
-      end
-      payload << client_application.secret
-      response_params[:sig] = Digest::MD5.hexdigest(payload)
-      # pp :before, payload, response_params[:sig]
-    end
     
     # process xd popup
     if xd?
@@ -413,17 +399,13 @@ private
       return render_action("authorize_failure")
     end
     
-    #support the client_id://authorize - schema for iOS SDK
-    if redirect_url == "#{client_application.key}://authorize"
-      redirect_to("#{redirect_url}?#{response_query}")
-    else
-      redirect_uri = URI.parse(redirect_url)
-      redirect_uri.path = (redirect_uri.path.blank? ? "/" : redirect_uri.path)
-      redirect_uri.query = redirect_uri.query.blank? ? response_query : redirect_uri.query + "&#{response_query}"
-      redirect_to(redirect_uri.to_s)
-    end    
+    redirect_uri = URI.parse(redirect_url)
+    redirect_uri.path = (redirect_uri.path.blank? ? "/" : redirect_uri.path) unless mobile? # mobile apps will not have path
+    redirect_uri.query = redirect_uri.query.blank? ? response_query : redirect_uri.query + "&#{response_query}"
+    redirect_to(redirect_uri.to_s)
   end
   
+  # used by the request token process
   def render_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
     

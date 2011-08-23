@@ -568,6 +568,10 @@ class Platform::Config
     api[:max_models]
   end
   
+  def self.site_base_url
+    api[:base_url]
+  end  
+  
   def self.api_base_url
     api[:base_url]
   end  
@@ -584,6 +588,13 @@ class Platform::Config
     api[:default_version]
   end
   
+  def self.api_explorer_app_id
+    config[:api_explorer_app_id]
+  end
+  
+  def self.api_explorer_app?
+    !api_explorer_app_id.blank?
+  end
   #########################################################
   # API References
   #########################################################
