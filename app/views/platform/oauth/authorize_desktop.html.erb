@@ -53,7 +53,6 @@
 		</div>
 			
 		<div class="module small quiet prose">
-			<%= trl("You can revoke {application}'s access at any time in your [link: Application Settings] page.", "", :application => @client_application.name, :link => lambda{|str| link_to(str, "/account_settings/applications", :target => "_blank")}) %><br />
 			<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => [@client_application.terms_of_service_url], :link2 => [@client_application.privacy_policy_url])%>
 		</div>
             
