@@ -1,0 +1,335 @@
+<table style="width:100%;margin-bottom:20px;">
+	<tr>
+		<td colspan="3">
+		  <div class="edit_section_header">
+			   <%=tr('Basic Information', 'Client application section') %>
+			</div>
+		</td>
+	</tr>	
+	<% if @current_app || @app.version %>
+  <tr>
+    <th>
+      <%=tr('Version:', 'Client application field label')%>
+    </td>
+    <td>
+      <%=form.text_field :version, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required.")%>
+      <%=tr("New version of your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	<% end %>
+	<tr>
+		<th>
+			<%=tr('Application Name:', 'Client application field label')%>
+		</td>
+		<td>
+			<%=form.text_field :name, :class=>'xxlong_input'%>
+		</td>	
+		<td class="comments">
+			<%=tr("Required.")%>
+			<%=tr("Name of your application.", 'Client application field comment')%>
+		</td>	
+	</tr>
+  <tr>
+    <th>
+      <%=tr('Description:', 'Client application field label')%>
+    </td>
+    <td>
+      <%=form.text_area :description, :class=>'xxlong_input', :style=>"height:150px;"%>
+    </td> 
+    <td class="comments">
+    	<%=tr("Description of your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Icon:', 'Client application field label')%>
+    </th>
+    <td>
+      <div id="icon_field" style="display:none">
+        <%= file_field_tag "new_icon", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_icon' %>
+      </div>
+      <div id="icon_preview"> 
+	    	<span style="float:right; font-size:10px;">
+	    		<%=link_to_function(tr("Change your icon", 'Client application field action'), "$('icon_preview').hide();$('icon_field').show();")%>
+	    	</span>
+	      <%=image_tag(@app.icon_url, :style => "width:16px;height:16px;")%>
+			</div>	
+    </td> 
+    <td class="comments">
+      <%=tr("Appears next to your app name throughout the site (16x16)", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Logo:', 'Client application field label')%>
+    </th>
+    <td>
+    	<div id="logo_field" style="display:none">
+    		<%= file_field_tag "new_logo", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_logo' %>
+    	</div>
+			<div id="logo_preview">	
+	      <span style="float:right; font-size:10px;">
+	        <%=link_to_function(tr("Change your logo", 'Client application field action'), "$('logo_preview').hide();$('logo_field').show();")%>
+	      </span>
+	      <%=image_tag(@app.logo_url, :style => "width:75px;height:75px;")%>
+			</div>
+    </td> 
+    <td class="comments">
+      <%=tr("Appears in the app directory (75x75)", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Language:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=select_tag("application[locale]", options_for_select(@languages, @app.locale || Tr8n::Config.default_locale)) %>
+    </td> 
+    <td class="comments">
+      <%=tr("The native language of your app.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Contact Email:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :contact_email, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("The email address where we can contact you or your company", 'Client application field comment')%>
+    </td> 
+  </tr>
+
+  <tr>
+    <th>
+      <%=tr('Support URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :support_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Privacy Policy URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :privacy_policy_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    	<%=tr("All apps must have and display a Privacy Policy.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Terms of Service URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :terms_of_service_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+    	<%=tr("The URL to your app's Terms of Service.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <td colspan="3">
+      <div class="edit_section_header" style="margin-top:10px;">
+         <%=tr('Website Settings', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+  
+  <tr>
+    <th>
+      <%=tr('Site URL:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required: URL of your site.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Site Domain:', 'Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :site_domain, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required: Domain to enable authentication (subdomains included).", 'Client application field comment')%>
+    </td> 
+  </tr>	
+	
+  <tr>
+    <td colspan="3">
+      <div class="edit_section_header" style="margin-top:10px;">
+         <%=tr('Authentication', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Application Type:','Client application field label')%>
+    </th>
+    <td style="height:30px;">
+        <label for="option1" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'web', :id => "option1", :style=>"vertical-align: top;" %> Web</label>
+				&nbsp; 
+        <label for="option2" style="vertical-align: middle"><%=form.radio_button :mobile_application_type, 'native', :id => "option2", :style=>"vertical-align: top;" %> Native/Desktop</label>
+    </td> 
+    <td class="comments">
+      <%=tr("Choose your application type.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr("{site_title} API Version:", 'Client application field label', :site_title => Platform::Config.site_title)%>
+    </td>
+    <td>
+      <%=select_tag("application[api_version]", options_for_select(Platform::Config.api_supported_version_options, @app.api_version)) %>
+    </td> 
+    <td class="comments">
+      <%=tr("Required.")%>
+      <%=tr("API version your application is using.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Callback URL:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :callback_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We'll direct users to this URL when they authorize your application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	
+  <tr>
+    <th>
+      <%=tr('Deauthorize Callback URL:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :deauthorize_callback_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We will post to this URL when user removes the application.", 'Client application field comment')%>
+    </td> 
+  </tr>
+	 
+<% if Platform::Config.enable_embedded_applications? %>
+  <tr>
+    <td colspan="3">
+      <div class="edit_section_header" style="margin-top:10px;">
+         <%=tr('On {site_title}', 'Client application section', :site_title => Platform::Config.site_title) %>
+      </div>
+    </td>
+  </tr>
+
+  <tr>
+    <th>
+      <%=tr('Canvas Page:','Client application field label')%>
+    </th>
+    <td>
+      http://<%=Platform::Config.site_base_url %>/platform/apps/<%=form.text_field :canvas_name, :class=>'long_input'%>/
+    </td> 
+    <td class="comments">
+      <%=tr("The base URL of your app on the site.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Canvas URL:','Client application field label')%>
+    </th>
+    <td style="height:30px;">
+      <%=form.text_field :canvas_url, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We will pull the content for your app's canvas pages from this base URL.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('IFrame Size:','Client application field label')%>
+    </th>
+    <td style="height:30px;">
+        <label for="resize_option1" style="vertical-align: middle"><%=form.radio_button :auto_resize, false, :id => "resize_option1", :style=>"vertical-align: top;" %> <%=tr("Show scrollbars")%> </label>
+        <label for="resize_option2" style="vertical-align: middle"><%=form.radio_button :auto_resize, true, :id => "resize_option2", :style=>"vertical-align: top;" %> <%=tr("Auto-resize")%></label>
+    </td> 
+    <td class="comments">
+      <%=tr("Choose \"Auto-resize\" if you are going to make the iFrame grow to the height of your app's content", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Authorization:','Client application field label')%>
+    </th>
+    <td style="height:30px;">
+        <label for="signin_option1" style="vertical-align: middle"><%=form.radio_button :auto_signin, true, :id => "signin_option1", :style=>"vertical-align: top;" %> <%=tr("Platform will handle authorization")%></label>
+        <label for="signin_option2" style="vertical-align: middle"><%=form.radio_button :auto_signin, false, :id => "signin_option2", :style=>"vertical-align: top;" %> <%=tr("App will handle authorization") %></label>
+    </td> 
+    <td class="comments">
+      <%=tr("Choose \"App will handle authorization\" if your application will handle the authorization. Otherwise we will make sure the user has authorized your application and will pass you an access token as a parameter.", 'Client application field comment')%>
+    </td> 
+  </tr>
+<% end %>
+
+<% if Platform::Config.enable_mobile_applications? %>
+  <tr>
+    <td colspan="3">
+      <div class="edit_section_header" style="margin-top:10px;">
+         <%=tr('Mobile Application', 'Client application section') %>
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      <%=tr('iOS Bundle ID:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :ios_bundle_id, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("Required.")%>    	
+      <%=tr("iOS Bundle ID for iOS native app.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('iTunes App Store ID:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :itunes_app_store_id, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We will use it for linking to your application on the App Store.", 'Client application field comment')%>
+    </td> 
+  </tr>
+  <tr>
+    <th>
+      <%=tr('Android Key Hash:','Client application field label')%>
+    </th>
+    <td>
+      <%=form.text_field :android_key_hash, :class=>'xxlong_input'%>
+    </td> 
+    <td class="comments">
+      <%=tr("We will use it for extra security during authentication.", 'Client application field comment')%>
+    </td> 
+  </tr>
+<% end %>
+	
+</table>

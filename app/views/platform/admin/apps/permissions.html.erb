@@ -1,0 +1,7 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%= will_filter(@permissions) %>
+<%= will_filter_table_tag(@permissions) %>
+  
+<%= render :partial => "/platform/admin/common/footer" %>

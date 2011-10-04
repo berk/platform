@@ -1,0 +1,85 @@
+<%= render :partial => "/platform/developer/common/header" %>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+</script>
+
+<div class="section_title">
+  <div style="float:right; font-size:12px; padding-top:5px;">
+     <%=link_to(tr("edit developer information", "Developer preferences link"), :controller => "/platform/developer", :action => :info)%>
+		 |
+     <%=link_to(tr("dashboard preferences", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>
+  </div>
+  
+  <%=tr("{user}'s Dashboard", "Dashboard section title", :user => [platform_current_developer, :name]) %>
+</div>
+
+<div class="section_box" style="background-color:#FDFFF0;">
+    <table style="width:100%">
+      <tr>
+        <td style="width:90%; padding-top:3px;">
+          <table>
+            <tr>
+              <td style="vertical-align:top;padding-right:2px; width:60px;">
+                <%=platform_user_mugshot_tag(platform_current_user, :linked => true)%>
+              </td>
+              <td style="vertical-align:top">
+                <table>
+                  <tr>
+                    <td style="width:150px;"><%=tr("Registered On:", "Dashboard section header") %></td>
+                    <td><%=platform_current_developer.created_at.trl%></td>
+                  </tr>
+                  <tr>
+                    <td><%=tr("Your Total Applications:", "Dashboard section header") %></td>
+                    <td><%=link_to(platform_current_developer.applications.count, :controller => "/platform/developer/apps")%></td>
+                  </tr>
+                  <tr>
+                    <td style="vertical-align:top;"><%=tr("Dashboard Applications:", "Dashboard section header") %></td>
+                    <td style="vertical-align:top;">
+                      <% apps = [] %>
+                      <% @apps.each do |app|
+                          apps << link_to(app.versioned_name, :anchor => "app_#{app.id}")  
+                         end %>       
+                      <%= apps.join(" | ") %> (<%=link_to(tr("change", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>)
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </td>       
+        
+        <td style="width:10%;padding-top:3px;padding-right:3px;">
+          <!-- %=render :partial => "developer_metric", :locals => {:translator_metric => Tr8n::Config.current_translator.total_metric, :lang => nil} % -->
+        </td>       
+      </tr>
+    </table>  
+</div>
+
+<% @apps.each do |app| %>
+  <div class="section_title">
+    <div style="float:right; font-size:12px; font-weight:normal; padding-top:5px;">
+      <%=link_to(tr("info", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Info')%>
+      | <%=link_to(tr("reviews", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Reviews')%>
+      | <%=link_to(tr("discussions", "Application action link"), :controller => "/platform/apps", :action => :view, :id => app.id, :sec => 'Discussions')%>
+      | <%=link_to(tr("configure", "Application action link"), :controller => "/platform/developer/apps", :action => :index, :id => app.id)%>
+    </div>
+
+    <%=platform_toggler_tag("app_content_#{app.id}")%>
+    
+    <%=image_tag(app.icon_url, :title=>app.name) %>&nbsp;
+    <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.versioned_name%></a>
+  </div>
+  
+  <div id="app_content_<%=app.id%>" class="section_box colored">
+    <%=render :partial=>"statistics", :locals => {:app => app}%>
+		
+    <%=render :partial=>"reviews", :locals => {:app => app}%>
+
+    <%=render :partial=>"discussions", :locals => {:app => app}%>
+		
+  </div>
+<% end %>
+	
+
+<%= render :partial => "/platform/developer/common/footer" %>

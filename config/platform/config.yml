@@ -1,0 +1,109 @@
+#############################################################################
+# Platform Configuration
+#
+# Default settings for all environments
+# 
+# You can overload any feature for any environment by changing the 
+# environment settings at the bottom of the file. 
+#
+# Alternatively, you can overload any of the methods of Platform::Config
+#############################################################################
+
+defaults: &defaults
+  enable_platform:              true     
+  enable_app_directory:         true
+  enable_embedded_applications: true
+  enable_mobile_applications:   true
+  enable_developer_agreement:   true
+  enable_app_statistics:        true
+  enable_api_log:               true
+  
+  #############################################################################
+  # Platform best run with caching enabled
+  # You can configure cache adapter and store parameters by providing the
+  # the name of your class implementation and the store settings. For example:
+  #
+  #
+  # cache_adapter:  ActiveSupport::Cache
+  # cache_store:    memory_store
+  # cache_store:    file_store
+  # cache_store:    drb_store
+  # cache_store:    [mem_cache_store, 'localhost:11211']
+  #
+  # Alternatively you can provide your own implementation of cache by setting
+  # the adapter to your own class.
+  #############################################################################
+  caching:
+    enabled:                  false
+    adapter:                  "Tr8n::GeniCacheAdapter"
+    version:                  1 # you can change the version to invalidate the cache
+      
+  #############################################################################
+  # By default, Platform will use its own logger. If you set it to false,
+  # it will use default Rails logger.
+  #############################################################################
+  logger:
+    enabled:                  true
+    log_path:                 "log/platform.log"      # location of the log file
+      
+  #############################################################################
+  # Site Integration Settings
+  #############################################################################
+  site_info:
+    title:                    "Platform"
+    contact_email:            "support@railsplatform.com"
+    default_url:              "/platform/home"
+    login_url:                "/login"
+    platform_layout:          "platform"
+    admin_layout:             "platform_admin"
+    user_info:
+      enabled:                false
+      current_user_method:    "current_user"
+      logout_method:          "logout!"
+      class_name:             "Platform::PlatformUser"
+      methods:
+        id:                   "id"
+        name:                 "name"
+        email:                "email"
+        link:                 "path"
+        mugshot:              "mugshot"
+        admin:                "admin?"
+        guest:                "guest?"
+    
+  #############################################################################
+  # API Settings
+  #############################################################################
+  API:
+    enabled:                  true
+    base_url:                 "localhost:3000/api/"
+    logging_enabled:          true          
+    admin_email:              "api@geni.com"
+    allow_public:             true
+    cookies_enabled:          true
+    max_models:               50
+    request_limit:            3
+    request_window:           1
+    token_lifetime:           86400
+    versions:                 ['1.0.0', '2.0.0']
+    user:
+      create_enabled:         true
+      
+          
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+  
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+production:
+  <<: *defaults

@@ -1,0 +1,66 @@
+#############################################################################
+# Platform Features Configuration
+#
+# Default settings for all environments
+# 
+# You can overload any feature for any environment by changing the 
+# environment settings at the bottom of the file
+#############################################################################
+
+defaults: &defaults
+  enabled_features: [dashboard, apps, forum, api_explorer, help]
+  
+  dashboard:
+    title:            Dashboard
+    link:             /platform/developer/dashboard
+    controller:       dashboard
+    actions:          [index]
+    manager_only:     false
+  
+  apps:
+    title:            Applications
+    link:             /platform/developer/apps
+    controller:       apps
+    actions:          [index, view]
+    manager_only:     false
+
+  forum:
+    title:            Discussions
+    link:             /platform/developer/forum
+    controller:       forum
+    actions:          [index, topic, message]
+    manager_only:     false
+  
+  help:
+    title:            Help
+    link:             /platform/developer/help
+    controller:       help
+    actions:          []
+    manager_only:     false
+
+  api_explorer:
+    title:            API Explorer
+    link:             /platform/developer/api_explorer
+    controller:       api_explorer
+    actions:          [index]
+    manager_only:     false
+    
+    
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+production:
+  <<: *defaults

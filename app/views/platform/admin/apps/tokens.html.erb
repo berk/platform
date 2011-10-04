@@ -1,0 +1,18 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%= will_filter(@tokens) %>
+<%= will_filter_table_tag(@tokens, :columns => [
+      :id, 
+      :type,
+      :token,
+      [:user_id, lambda{|token| link_to(token.user ? token.user.name : token.user_id, :controller => "/admin/users", :action => :user, :user => token.user_id)}],
+      [:application_id, lambda{|token| link_to(token.application ? token.application.name : token.application_id, {:action => :view, :app_id=>token.application_id})}],
+      :created_at,
+      :updated_at,
+      :authorized_at,
+      :invalidated_at,
+      :valid_to
+  ]) %>
+	
+<%= render :partial => "/platform/admin/common/footer" %>

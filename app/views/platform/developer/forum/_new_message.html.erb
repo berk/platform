@@ -1,0 +1,28 @@
+<div class="section_title">
+  <%=tr("Reply to This Discussion") %>
+	<a name="reply_message">&nbsp;</a>
+</div>
+
+<div class="section_box colored">
+  <% form_tag({:action => :topic}, {:method => :post, :id => "forum_topic_form"}) do %>
+    <%=hidden_field_tag(:topic_id, @topic.id)%>
+    
+    <table style="width:99%">
+      <tr>
+        <td style="width:80px; text-align:right; padding-right:10px; font-weight:bold;">
+          <%=tr("Your Reply:") %>
+        </td>
+        <td>
+          <%=text_area_tag(:message, "", :style=>"width:99%; height:70px")%>
+        </td>
+      </tr>
+    </table>
+    
+    <div style="padding-top:20px; padding-bottom:10px;text-align:center">
+        <button type="submit" class="translator_btn translator_submit_btn" onClick="Platform.Effects.submit('forum_topic_form'); return false;">
+            <span><%=tr("Reply to This Discussion")%></span>
+        </button>
+    </div>
+  <% end %>
+  
+</div>  

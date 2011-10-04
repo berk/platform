@@ -1,0 +1,369 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= tr("Authentication with {site_title}", "", :site_title => Tr8n::Config.site_title) %>
+</div>
+
+<div class="documentation_section">
+	<p>
+		<%=tr("{site_title} Platform uses the [link: OAuth 2.0 protocol] for authentication and authorization.", "", :site_title => Tr8n::Config.site_title, :link => ["http://tools.ietf.org/html/draft-ietf-oauth-v2-20"]) %>
+		<%=tr("The Platform supports a number of different flows that you can use within your website, desktop and mobile applications.")%>  
+  </p>
+
+  <h2><%=tr("Authenticaton/Authorization Flows")%></h2>
+  <p>
+    <%=tr("The following table outlines the various mechanisms {site_title} Platform uses to support each of those flows.", "", :site_title => Tr8n::Config.site_title)%> 
+  </p>    
+  <p>
+  	<table class="documentation_table">
+  		<tr>
+  			<th style="width:100px;"><%=tr("Flow Name")%></th>
+				<th style="width:150px;"><%=tr("OAuth 2.0 Specification")%></th>
+				<th><%=tr("Description")%></th>
+  		</tr>
+			<tr>
+				<td>
+					<%=link_to(tr("Server Side Flow"), :action => :oauth_server_side)%>
+				</td>
+				<td>
+					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1"><%=tr("Authentication Code")%></a>
+				</td>
+				<td>
+					<%=tr("Use this flow if your application needs to call Geni's API from the server side")%>
+				</td>
+			</tr>
+      <tr>
+        <td>
+          <%=link_to(tr("Client Side Flow"), :action => :oauth_client_side)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
+        </td>
+        <td>
+          <%=tr("Use this flow if your application needs to call {site_title}'s API from a client, such as JavaScript in a Web browser or from a native mobile or desktop application.", "", :site_title => Tr8n::Config.site_title)%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%=link_to(tr("Client Side Flow"), :action => :oauth_desktop)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
+        </td>
+        <td>
+          <%=tr("Customized version of the Client Side Flow targeted for Desktop applications.")%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%=link_to(tr("Mobile App Flow"), :action => :oauth_mobile)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2"><%=tr("Implicit Grant")%></a>
+        </td>
+        <td>
+          <%=tr("Customized version of the Client Side Flow targeted for Mobile applications.")%>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <%=link_to(tr("Trusted App Flow"), :action => :oauth_trusted_client)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.3"><%=tr("Resource Owner Password Credentials") %></a>
+        </td>
+        <td>
+          <%=tr("Use this flow only if your application has a trust relationship with the user and no other flow can work for your application.")%> <%=tr("For example, if you have a highly privileged desktop application and user wants to give your application explicit access to the user data.") %>
+					<%=tr("This flow is not enabled by default.") %> <%=tr("If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.")%>
+        </td>
+      </tr>
+      <!-- tr>
+        <td>
+        	<%=link_to("App Login Flow", :action => :oauth_app_login)%>
+        </td>
+        <td>
+          <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.4">Client Credentials</a>
+        </td>
+        <td>
+          Use this flow if your application needs to take various administrative actions, such as retrieving statistics data. The calls will not be made on behalf of the user, but on behalf of the app itself. 
+        </td>
+      </tr -->
+  	</table>
+  </p>
+
+  <h2><%=tr("Authorization Request")%></h2>
+	<p>
+		<%=tr("Authorization process uses web interface that allows users to login to the site and authorize your application to have access to their data.")%>
+	</p>
+  <h3><%=tr("Request URL") %></h3>
+  <div class="code_snippet">
+      https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize
+  </div>
+	
+  <h3><%=tr("Parameters") %></h3>
+  <p>
+      <table class="documentation_table">
+          <tr>
+              <th style="width:150px;">
+                  <%=tr("Name") %>
+              </th>
+              <th>
+                  <%=tr("Description") %>
+              </th>
+              <th style="width:150px;">
+                  <%=tr("Required") %>
+              </th>
+          </tr>
+          <tr>
+              <td>
+                  client_id
+              </td>
+              <td>
+                  <%=tr("Application key (or id) is generated during the application registration.") %>
+              </td>
+              <td>
+                  <%=tr("Required for all flows")%>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  redirect_uri
+              </td>
+              <td>
+                  <%=tr("URL that the user's browser will be redirected to once the application authorization is complete.") %>
+                  <%=tr("You can specify this URL in your application settings as a Callback URL, or pass it as a request paremeter.") %>
+                  <%=tr("The redirect_uri must be within the same domain as the Site Domain you specified in the application settings.") %>
+              </td>
+              <td>
+                  <%=tr("Required for all flows")%>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  response_type
+              </td>
+              <td>
+                  <%=tr("Available options: {opts}.", "", :opts => "code, token") %>
+									<%=tr("Default: ")%> code
+              </td>
+              <td>
+                  false
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  scope
+              </td>
+              <td>
+                  <%=tr("A comma delimited list of permissions that the application needs.") %>
+                  <%=tr("By default the scope is set to a full data access.") %>
+              </td>
+              <td>
+                  false
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  display
+              </td>
+              <td>
+              	   <%=tr("Provides a mechanism to select an appropriate template to display the authorization flow.")%>
+                   <%=tr("Available options: {opts}.", "", :opts => "web, mobile, desktop, iframe") %>
+									 <%=tr("Default: ")%> web
+              </td>
+              <td>
+                  false
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  state
+              </td>
+              <td>
+                  <%=tr("Used for additional parameters and [link: CSRF protection].", "", :link => ["http://en.wikipedia.org/wiki/Cross-site_request_forgery"]) %>
+              </td>
+              <td>
+                  false
+              </td>
+          </tr>
+      </table>
+  </p>
+  <h3><%=tr("Example") %></h3>
+  <div class="code_snippet">
+      https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL
+  </div>	
+	
+  <h3><%=tr("Returned Fields") %></h3>
+	<p>
+		<%=tr("Return fields will vary based on the flow and the request parameters you pass in.")%>
+		<%=tr("See the flow you are interested in for more information.")%>
+	</p>	
+
+
+  <h2><%=tr("Request Token API")%></h2>
+  <p>
+    <%=tr("Request token API is used to exchange athorization code or a refresh token for a valid access token.")%>
+		<%=tr("Depending on the flow you chose, you will have different options for calling this API.")%>
+		<%=tr("This API will always return results encoded in JSON format.")%>
+  </p>
+  <h3><%=tr("End Point") %></h3>
+  <div class="code_snippet">
+      https://<%=Platform::Config.site_base_url %>/platform/oauth/request_token
+  </div>
+  <h3><%=tr("Parameters") %></h3>
+  <p>
+      <table class="documentation_table">
+          <tr>
+              <th style="width:150px;">
+                  <%=tr("Name") %>
+              </th>
+              <th>
+                  <%=tr("Description") %>
+              </th>
+              <th style="width:150px;">
+                  <%=tr("Required") %>
+              </th>
+          </tr>
+          <tr>
+              <td>
+                  client_id
+              </td>
+              <td>
+                  <%=tr("Application key (or id) is generated during the app registration.") %>
+              </td>
+              <td>
+                  <%=tr("Required for all flows")%>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  client_secret
+              </td>
+              <td>
+                  <%=tr("Application secret generated during the registration process and availble in the application settings.") %>
+                  <%=tr("The app secret should never be shared with anyone or embedded in any code that you will distribute (you should use the client-side flow for these scenarios).") %>
+              </td>
+              <td>
+                  <%=tr("Required for certain flows")%>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  redirect_uri
+              </td>
+              <td>
+                  <%=tr("URL that was used to get the authorization code.") %>
+									<%=tr("The redirect_uri must be within the same domain as the Site Domain you specify in the application settings.") %>
+              </td>
+              <td>
+                  <%=tr("Required for certain flows")%>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  grant_type
+              </td>
+              <td>
+                  <%=tr("Available options: {opts}.", "", :opts => "authorization_code, password, refresh_token") %>
+                  <%=tr("For the server side flow the response type is defaulted to \"authorization_code\".") %>
+              </td>
+              <td>
+                  true
+              </td>
+          </tr>
+      </table>
+  </p>
+	<p>
+		<%=tr("There are additional parameters based on the flow and the grant_type value.")%>
+	</p>
+
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+    <%=tr("Return fields will vary based on the flow and the request parameters.")%>
+    <%=tr("See the flow you are interested in from the list above.")%>
+  </p>  
+
+  <h2><%=tr("Validate Token API")%></h2>
+  <p>
+    <%=tr("Verifies whether the token is valid.")%>
+  </p>
+  <h3><%=tr("End Point") %></h3>
+  <div class="code_snippet">
+      https://<%=Platform::Config.site_base_url %>/platform/oauth/validate_token
+  </div>
+  <h3><%=tr("Parameters") %></h3>
+  <p>
+      <table class="documentation_table">
+          <tr>
+              <th style="width:150px;">
+                  <%=tr("Name") %>
+              </th>
+              <th>
+                  <%=tr("Description") %>
+              </th>
+              <th style="width:150px;">
+                  <%=tr("Required") %>
+              </th>
+          </tr>
+          <tr>
+              <td>
+                  access_token
+              </td>
+              <td>
+                  <%=tr("Access token to be validated.") %>
+              </td>
+              <td>
+                  true
+              </td>
+          </tr>
+      </table>
+	</p>
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+    <%=tr("Returns a flag that indicates whether the token is valid or not.")%>
+  </p>  
+
+
+  <h2><%=tr("Invalidate Token API")%></h2>
+  <p>
+    <%=tr("Invalidates the token.")%>
+  </p>
+  <h3><%=tr("End Point") %></h3>
+  <div class="code_snippet">
+      https://<%=Platform::Config.site_base_url %>/platform/oauth/invalidate_token
+  </div>
+  <h3><%=tr("Parameters") %></h3>
+  <p>
+      <table class="documentation_table">
+          <tr>
+              <th style="width:150px;">
+                  <%=tr("Name") %>
+              </th>
+              <th>
+                  <%=tr("Description") %>
+              </th>
+              <th style="width:150px;">
+                  <%=tr("Required") %>
+              </th>
+          </tr>
+          <tr>
+              <td>
+                  access_token
+              </td>
+              <td>
+                  <%=tr("Access token to be invalidated.") %>
+              </td>
+              <td>
+                  true
+              </td>
+          </tr>
+      </table>
+  </p>
+  <h3><%=tr("Returned Fields") %></h3>
+  <p>
+    <%=tr("Returns a flag that indicates whether the token was invalidated.")%>
+  </p>  
+			        
+</div>
+
+<%= render :partial => "footer" %>

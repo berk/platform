@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" name="viewport">
+    <link href="/stylesheets/fonts.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+
+  <link href="/stylesheets/reset.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/grids.css?1303331333" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/general.css?1309203571" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/page_specific.css?1309203571" media="" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/print.css?1309203571" media="print" rel="stylesheet" type="text/css" /> 
+  <link href="/stylesheets/header.css?1309203571" media="screen" rel="stylesheet" type="text/css" />  
+  <link href="/tr8n/stylesheets/tr8n.css?1303331524" media="screen" rel="stylesheet" type="text/css" /> 
+	
+</head>
+<body style="margin:0px;">
+	<center>
+	  <div style="width:700px; border:1px dotted #ccc; margin-bottom:30px;">
+	    <div style="background:url('/platform/images/oauth/perm_tile.gif'); height:15px;">&nbsp;</div>
+	    
+			<div style="margin:20px; text-align:left;">
+				<div style="border-bottom:1px solid #ccc; font-size:20px; font-weight:bold;">
+					<%=tr("Authorization Request")%>
+				</div>
+				
+				<div style="margin-top:10px;margin-bottom:10px;">
+			    <%=tr("{application} is requesting permission to access your Geni account.", "API permission", {:application => link_to(@client_application.name, {:controller => '/platform/apps', :action => :view, :id => @client_application.id}, {:target => "_top"})}) %>
+	      </div>
+				
+	      <div style="padding:10px;">
+					<table style="width:100%">
+						<tr>
+							<td style="vertical-align:top">
+								<table>
+									<tr>
+										<td style="vertical-align:top">
+								       <%=image_tag(Platform::Config.user_mugshot(Platform::Config.current_user), :style => "padding-right:15px;")%>			
+										</td>
+										<td>
+				              <div style="font-weight:bold;"><%=tr("Access to my profile information")%></div>
+				              <div style="margin-top:10px; color:#666; padding-right:15px; ">
+				                 <%=tr("Includes name, profile picture, gender, family, photos, videos and any information available on my profile or through my user account.")%>
+				              </div>
+										</td>
+									</tr>
+								</table>
+							</td>
+							<td style="vertical-align:middle">
+								<%=image_tag("/platform/images/oauth/right_grey.png")%>
+							</td>	
+							<td style="width:30%">
+		             <div style="height:130px; padding:5px; margin:3px; text-align:center;">
+		                <div style="">
+		                   <%= image_tag(@client_application.logo_url, :style => "width:75px;height:75px;") %>
+		                </div> 
+		                <div style="font-size:12px; padding-top:10px;">
+		                  <%= link_to(h(@client_application.name), {:controller => '/platform/apps', :action => :view, :id => @client_application.id}, {:target => "_top"}) %><br>
+		                </div>
+		                <div style="font-size:11px; padding-top:10px;">
+		                 <%= platform_app_rank_tag(@client_application) %>
+		                </div>
+		             </div>
+							</td>
+						</tr>
+					</table>
+	      </div>
+				  
+	      <div style="margin-top:10px; color: #888;">
+	        <%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => [@client_application.terms_of_service_url], :link2 => [@client_application.privacy_policy_url])%>
+				</div>
+			</div>
+			
+			<div style="background:#eee; text-align:left; padding:10px; vertical-align:middle; ">
+			  <table style="width:100%">
+			  	<tr>
+			  		<td style='text-align:left; vertical-align:middle;'>
+			  		</td>
+						<td style='text-align:right;'>
+			        <%= link_to_function(trl('Allow', 'Client application action label'), %Q{$('authorize').value = 1; $S('auth_form')}, :class=>'button super blue medium') %>
+			        <%= link_to_function(trl("Don't Allow", 'Client application action label'), %Q{$('authorize').value = 0; $S('auth_form')}, :class=>'button super blue medium') %>
+						</td>
+			  	</tr>
+			  </table>
+			</div>	
+	  </div>
+	</center>
+	
+	<%= render :partial => "authorize_form" %>
+<script>
+  function $(element_id) {
+    if (typeof element_id == 'string') return document.getElementById(element_id);
+    return element_id;
+  }
+  
+  function $S(element_id) {
+    $(element_id).submit();   
+  } 
+</script>  
+
+</body>
+</html>

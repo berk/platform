@@ -1,0 +1,123 @@
+<%= render :partial => "/platform/developer/common/header" %>
+<%= javascript_include_tag("/platform/javascripts/api_explorer.js") %>
+<%= stylesheet_link_tag("/platform/stylesheets/api_explorer.css") %>
+
+<div class="section_title">
+  <div style="float:right; padding-top:6px; font-size:12px; color: #ccc;">
+  </div>
+  
+  <%=tr("#{Platform::Config.site_info[:title]} API Explorer", nil) %>  
+</div>
+
+<div class="section_box">
+	<% if Platform::Config.api_explorer_app? %>
+	  <div class="section_box" style="margin-top:5px;margin-bottom:0px;">
+			<table style="width:100%">
+				<tr>
+					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
+					<td><%=text_field_tag(:access_token, "", :style=>"width:630px;")%> &nbsp;
+					   <%=link_to_function("X", "Platform.element('access_token').value = '';")%> 
+					</td>
+					<td style="width:150px; text-align:right;">
+						<%= link_to_function(trl('Get Access Token', 'Client application action label'), "getAccessToken()", :class=>'button super blue medium') %>
+					</td>
+				</tr>
+			</table>
+	  </div>
+	<% end %>
+	
+  <div class="section_box" style="margin-top:5px;background-color:#EFF8FF">
+  	<table>
+  		<tr>
+        <td style="width:50px;">
+          <%=select_tag("api_version", options_for_select(Platform::Config.api_supported_version_options, @api_version), :onChange=>"switchApiVersion()")%>
+        </td>
+  			<td style="width:80px;">
+				  <%=select_tag("request_method", options_for_select(['GET', 'POST', 'PUT', 'DELETE'], params[:method] || 'GET'), :onChange=>"switchRequestMethod()")%>
+  			</td>
+				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
+				  <span style="float:right;padding-right:5px;"><%=link_to_function(image_tag("/platform/images/arrow_down.gif"), "toggleApiOptions(this)")%></span>
+				  <span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, params[:path], :style=>"width:530px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) {api_history_index=-1; submitRequest();}")%>			
+				</td>
+				<td style="padding-left:5px;text-align:right;">
+          <%= link_to_function(trl('Submit', 'Client application action label'), "api_history_index=-1; submitRequest();", :class=>'button super blue medium') %>
+				</td>
+  		</tr>
+			<tr>
+				<td></td><td></td>
+				<td style="border:0px;">
+					<div style="padding-top:5px;" id="post_params">
+					  <div id="post_fields">
+					  </div>
+						<div style="padding-top:5px;">
+				      <%=link_to_function(tr("+ add a param"), "addPostField('', '')")%>
+							<span id="remove_all_params_link" style="display:none">
+								| 
+								<%=link_to_function(tr("remove all"), "removeAllPostFields()")%>
+							</span>
+						</div>
+					</div>
+				</td>
+				<td></td>
+			</tr>
+  	</table>
+  </div>	
+
+  <div style="font-size:12px; background-color:#eee;padding:3px;border:1px dotted #ccc;">
+	  <div style="float:right;"> 
+	    <%=link_to_function('<<', "makePreviousCall()", :class=>"button super gray small", :id => "history_previous") %>
+	    <%=link_to_function('>>', "makeNextCall()", :class=>"button super gray small", :id => "history_next") %>
+  	  <%=link_to_function(image_tag("/platform/images/arrow_down.gif", :style=>"vertical-align:middle"), "toggleApiHistory(this)", :class=>"button super gray small")%>
+		</div>
+		
+		<%=link_to_function(image_tag("/platform/images/clipboard_icon.gif", :style=>"height:14px;"), "copyToClipboard(this)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("/platform/images/world_link.png", :style=>"height:14px;"), "copyUrlToClipboard(this)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("/platform/images/minus_node.png", :style=>"height:14px;"), "expandAllResultObjects(false)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("/platform/images/plus_node.png", :style=>"height:14px;"), "expandAllResultObjects(true)", :class=>"button super gray small", :id => "") %>
+  </div>	
+  <div class="section_box response_data" id="response_data" style="margin-top:5px;">
+    
+  </div>
+	
+  <div class="section_box status" id="status" style="margin-bottom:0px;">
+      
+  </div>
+	
+</div>
+
+<div id="api_options" class="api_options" style="display:none;">
+	<div id="api_options_container" class="inner">
+	</div>
+</div>
+
+<div id="api_history" class="api_options" style="display:none;">
+  <div id="api_history_container" class="inner">
+  </div>
+</div>
+
+<div id="api_clipboard" class="api_options" style="display:none;">
+  <div id="api_clipboard_container" class="inner">
+  	<%=text_area_tag("api_clipboard_text", "", :style => "width:745px;height:300px;")%>
+		<div style="padding-top:5px;color:#444;">
+		  <%=tr("Use ctrl+c to copy the contents of the text area to your clipboard.")%>
+		</div>
+  </div>
+</div>
+
+<script>
+
+Platform.Utils.addEvent(window, 'load', function() {
+	initApiExplorer('<%=Platform::Config.api_explorer_app_id%>', '<%=Platform::Config.site_base_url%>', '<%=Platform::Config.api_base_url%>', '<%=@api_history%>');
+	<% params.each do |key, value| %>
+	 <% next if ['controller', 'action', 'access_token', 'method', 'path', 'api_version'].include?(key) %>
+	 addPostField('<%=key%>', '<%=value%>');
+	<% end %>
+	
+	<% if params['api_version'] %>
+	Platform.element("api_version").value = "<%=params['api_version']%>";
+	<% end %>
+});
+
+</script>	
+
+<%= render :partial => "/platform/developer/common/footer" %>

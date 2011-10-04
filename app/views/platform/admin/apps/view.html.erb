@@ -1,0 +1,170 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs", :locals => {:current_tab => 'Application Info'} %>
+
+<table class="admin_table">
+    <tr>
+        <th width="160">
+            Application Id
+        </th>
+        <td>
+            <%=@app.id %>
+        </td>
+    </tr>
+    <tr>
+        <th>Developer</th>
+        <td><%=link_to(@app.developer.name, "") %></td>
+    </tr>
+    <tr>
+        <th>Icon</th>
+        <td><%=image_tag(@app.icon_url) %></td>
+    </tr>
+    <tr>
+        <th>Logo</th>
+        <td><%=image_tag(@app.logo_url) %></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td><%=h(@app.name) %></td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td><%=h(@app.description) %></td>
+    </tr>
+    <tr>
+        <th>Locale</th>
+        <td><%=h(@app.locale) %></td>
+    </tr>
+    <tr>
+        <th>Contact Email</th>
+        <td><%=h(@app.contact_email) %></td>
+    </tr>
+    <tr>
+        <th>URL</th>
+        <td><%=link_to(@app.url, @app.url) if @app.url %></td>
+    </tr>
+    <tr>
+        <th>Support URL</th>
+        <td><%=link_to(@app.support_url, @app.support_url) if @app.support_url %></td>
+    </tr>
+    <tr>
+        <th>Callback URL</th>
+        <td><%=@app.callback_url %></td>
+    </tr>
+    <tr>
+        <th>Deauthorize Callback URL</th>
+        <td><%=@app.deauthorize_callback_url %></td>
+    </tr>
+    <tr>
+        <th>Permissions</th>
+        <td><%=@app.permissions %></td>
+    </tr>
+    <tr>
+        <th>Key</th>
+        <td><%=@app.key %></td>
+    </tr>
+    <tr>
+        <th>Secret</th>
+        <td><%=@app.secret %></td>
+    </tr>
+    <tr>
+        <th>Rank</th>
+        <td><%=@app.rank %></td>
+    </tr>
+    <tr>
+        <th>State</th>
+        <td><%=@app.state %>
+<%
+              html = []
+              if @app.submitted?
+                 html << link_to("Approve", {:action => :approve, :app_id => @app.id}, :confirm => "Are you sure you want to approve this application?")
+                 html << link_to("Reject", {:action => :reject, :app_id => @app.id}, :confirm => "Are you sure you want to reject this application?")
+              end
+
+              if @app.blocked?
+                 html << link_to("Unblock", {:action => :unblock, :app_id => @app.id}, :confirm => "Are you sure you want to unblock this application?")
+              else   
+                 html << link_to("Block", {:action => :block, :app_id => @app.id}, :confirm => "Are you sure you want to block this application?")
+              end
+%>				
+           - <%= html.join(" | ") %>
+				</td>
+    </tr>
+    <tr>
+        <th>Privacy Policy URL</th>
+        <td><%=@app.privacy_policy_url %></td>
+    </tr>
+    <tr>
+        <th>Terms of Service URL</th>
+        <td><%=@app.terms_of_service_url %></td>
+    </tr>
+    <tr>
+        <th>Canvas Page Name</th>
+        <td><%=@app.canvas_name %></td>
+    </tr>
+    <tr>
+        <th>Canvas URL</th>
+        <td><%=@app.canvas_url %></td>
+    </tr>
+    <tr>
+        <th>Canvas IFrame Auto-Resize</th>
+        <td><%=@app.auto_resize %></td>
+    </tr>
+    <tr>
+        <th>Auto Sign-In</th>
+        <td><%=@app.auto_signin %></td>
+    </tr>
+    <tr>
+        <th>Mobile Application Type</th>
+        <td><%=@app.mobile_application_type %></td>
+    </tr>
+    <tr>
+        <th>iOS Bundle Id</th>
+        <td><%=@app.ios_bundle_id %></td>
+    </tr>
+    <tr>
+        <th>iTunes App Store Id</th>
+        <td><%=@app.itunes_app_store_id %></td>
+    </tr>
+    <tr>
+        <th>Android Key Hash</th>
+        <td><%=@app.android_key_hash %></td>
+    </tr>
+    <tr>
+        <th>Created At</th>
+        <td><%=@app.created_at %></td>
+    </tr>
+    <tr>
+        <th>Updated At</th>
+        <td><%=@app.updated_at %></td>
+    </tr>
+    <tr>
+        <th>Categories</th>
+        <td>
+					<div id="app_categories_<%=@app.id%>">  
+            <%=render(:partial => "categories", :locals => {:app => @app})%>
+					</div> 
+				</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+        	 <% html = [] 
+              html << link_to_function("Manage Categories", "assignCategories(#{@app.id})")
+              html << link_to("View Access Tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>@app.id})
+
+              Platform::Application.permissions.each do |perm|
+	              if @app.has_permission?(perm)
+	                 html << link_to("Remove <strong>'#{perm}'</strong> permission", {:action => :remove_permission, :perm => perm, :app_id => @app.id}, :confirm => "Are you sure you want to remove #{perm} permission?")
+	              else   
+	                 html << link_to("Add <strong>'#{perm}'</strong> permission", {:action => :set_permission, :perm => perm,  :app_id => @app.id}, :confirm => "Are you sure you want to add #{perm} permission?")
+	              end
+              end  
+           %>
+					 <%= html.join(" | ") %>
+        </td>
+    </tr>
+</table>
+
+<%= render :partial => "categories_scripts" %>
+
+<%= render :partial => "/platform/admin/common/footer" %>

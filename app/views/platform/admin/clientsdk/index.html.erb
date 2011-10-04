@@ -1,0 +1,89 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%=javascript_include_tag("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")%>
+<%=javascript_include_tag("/public/javascripts/geni_connect.js")%>
+
+<ul id="debug" style="font-family:arial;font-size:11px;position:absolute;right:0;top:0;background:lightyellow;padding:10px;margin:0;list-style-type:none;white-space:nowrap"></ul>
+
+<h1>Geni Connect</h1>
+<p>Authorization not working right now :(</p>
+
+<button id="connect_btn">Connect</button>
+<button id="disconnect_btn">Disconnect</button>
+<button id="logout_btn">Logout</button>
+
+
+<br><br>
+<pre style="font-size:11px;background:#f5f5f5;padding:10px;width:500px">
+
+// Authorize App
+Geni.Auth.connect();
+
+// Revoke Application Authorization
+Geni.Auth.disconnect();
+
+// Logout of Geni
+Geni.Auth.logout();
+
+// Make API Call
+Geni.api('/profile',function(r) {
+  var html = '&lt;table&gt;';
+  for (var key in r) {
+    html += (
+      '&lt;tr&gt;' +
+      '&lt;th&gt;' + key + '&lt;/th&gt;' +
+      '&lt;td&gt;' + r[key] + '&lt;/td&gt;' +
+      '&lt;/tr&gt;'
+    );
+  }
+  document.getElementById('profile_data').innerHTML = html;
+})
+
+</pre>
+<button id="user_btn">Get User Data</button>
+<br><br>
+<div id="profile_data"></div>
+
+<script>
+
+
+$('#connect_btn').click(function(){
+  Geni.Auth.connect();
+})
+
+$('#disconnect_btn').click(function(){
+  Geni.Auth.disconnect();
+})
+
+$('#logout_btn').click(function(){
+  Geni.Auth.logout();
+})
+
+$('#user_btn').click(function(){
+  var div = document.getElementById('profile_data');
+  Geni.api('/profile',function(r) {
+    var html = '<table>';
+    for (var key in r) {
+      html += (
+        '<tr>' +
+          '<th>' + key + '</th>' +
+          '<td>' + r[key] + '</td>' +
+        '</tr>'
+      );
+    }
+    div.innerHTML = html;
+  })
+})
+
+
+
+Geni.Event.bind('log',function(args) {
+  $('#debug')[0].innerHTML += "<li>" + args + "</li>";
+  
+  
+})
+
+
+
+</script>

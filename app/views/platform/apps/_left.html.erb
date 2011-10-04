@@ -1,0 +1,20 @@
+<div style="text-align:center; border:1px dotted #ccc;padding:10px;">
+  <%= link_to(image_tag(@app.logo_url, :style => "width:75px;height:75px;"), :action => :view, :id => @app.id, :sec => 'Info') %>  
+</div>
+
+<div style="border: 1px dotted #ccc; margin-top:10px; padding-top:10px; margin-bottom:10px; background: #f9f8f7; vertical-align:top; ">
+  <% @sections.each do |cat| %>
+    <% if cat == @section %>
+        <div class="cat_item cat_item_selected">
+    <% else %>
+        <div class="cat_item">    
+    <% end %>
+      <%=link_to(cat, {:id => @app.id, :sec=>cat}) %>
+    </div>
+  <% end %>           
+</div>
+
+<%= render(:partial => "/platform/apps/rank_module", :locals => {:app => @app} )%>   
+<%= render(:partial => "/platform/apps/monthly_users_module", :locals => {:app => @app} )%>   
+<%= render(:partial => "/platform/apps/categories_module", :locals => {:app => @app} )%>   
+<%= render(:partial => "/platform/apps/actions_module", :locals => {:app => @app} )%>   

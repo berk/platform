@@ -1,0 +1,64 @@
+<html>
+	<head>
+		
+    <%=javascript_include_tag("/platform/javascripts/ua.js")%>
+    <%=javascript_include_tag("/platform/javascripts/ftiens4.js")%>
+		
+		<STYLE>
+			BODY {
+		      background-color: white;}
+		    TD {
+		      font-size: 10pt; 
+		      font-family: verdana,helvetica; 
+		      text-decoration: none;
+		      white-space:nowrap;}
+		    A {
+		      text-decoration: none;
+		      color: black;}
+	  			
+			.tree_root {
+				 font-size: 12pt; 
+				 font-family: verdana,helvetica; 
+				 text-decoration: bold;
+				 color: black;}
+				 
+			.tree_item {
+				 font-size: 10pt; 
+				 font-family: verdana,helvetica; 
+				 text-decoration: none;
+				 color: black;}
+				 
+		</STYLE>
+		
+		<SCRIPT>
+		var selectedCategoryId = '<%=@category.id%>';
+		var selectedCategoryName = '<%=@category.name%>';
+		
+		USETEXTLINKS = 1  
+		STARTALLOPEN = 0
+		HIGHLIGHT = 1
+		PRESERVESTATE = 1
+		USEICONS = 0
+		BUILDALL = 1
+		HIGHLIGHT_BG = "lightgrey"
+		
+		function openSubCategory(id, name) {
+			top.openSubCategory(id, name);
+		}
+		
+		<%= generate_categories_javascript(@root) %>
+		
+		</SCRIPT>
+
+	</head>
+	<body topmargin=0>
+		<A style="font-size:7pt;text-decoration:none;color:silver;visibility:hidden;" href="http://www.treemenu.net/" target=_blank>Javascript Tree Menu</A>
+		
+		<SCRIPT>initializeDocument()</SCRIPT>
+		
+		<script>
+			top.openSubCategory(selectedCategoryId, selectedCategoryName);
+		</script>		
+	</body>
+</html>
+

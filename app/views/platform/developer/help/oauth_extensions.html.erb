@@ -1,0 +1,342 @@
+<%= render :partial => "header" %>
+<div class="documentation_section_title">
+    <%= tr("{site_title} Extensions", "", :site_title => Platform::Config.site_title) %>
+</div>
+<div class="documentation_section">
+    <p>
+        <%=tr("{site_title} Platform provides a mechanism for creating your own embedded applications (extensions) for the site.", "", :site_title => Platform::Config.site_title) %>
+        <%=tr("{site_title}  extensions are applications that are launched inside of an iframe on the site.", "", :site_title => Platform::Config.site_title) %>
+    </p>
+    <p>
+        <%=tr("This document provides you with steps for creating your own extension and embed it into the site.")%> 
+    </p>
+    <h3><%=tr("Embedded Application Example") %></h3>
+    <p>
+    	 <%=tr("Below is an example of a Photo Gallery extension that loads user's photo albums and displays them using an interactive layout.")%>
+       <%=tr("The embedded application is running inside of an iFrame and is served by a server outside of {site_title}.", "", :site_title => Platform::Config.site_title)%> 
+    </p>
+    <p style="text-align:center">
+        <%=image_tag("/platform/images/help/ext.png", :style=>"width:600px;", :class => "screenshot") %>
+    </p>
+    <h2><%=tr("Embedded Application Registration") %></h2>
+    <p>
+       <%=tr("In order to create an embedded application, you have to provide the following information:")%>
+    </p>
+    <p style="text-align:center">
+        <%=image_tag("/platform/images/help/app_reg_ext.png", :style=>"width:600px;", :class => "screenshot") %>
+    </p>
+		
+    <h3><%=tr("Application Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+                <th style="width:100px;">
+                    <%=tr("Required") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Site URL")%>
+                </td>
+                <td>
+                    <%=tr("URL where user will be taken to for full application functionality.")%> 
+                </td>
+                <td>
+                  false
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Site Domain")%>
+                </td>
+                <td>
+                	  <%=tr("Used for security purposes.")%>
+                    <%=tr("Application authorization will not succeed unless you provide your site domain.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Application Type")%>
+                </td>
+                <td>
+                    <%=tr("For a site extension, this field must be set to \"Web\".")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("API Version")%>
+                </td>
+                <td>
+                    <%=tr("Default API version to be used, unless it is provided in the API request.")%> 
+                </td>
+                <td>
+                  false
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Callback URL")%>
+                </td>
+                <td>
+                    <%=tr("Default callback URL (redirect_uri) that will be used for application authorization callback, unless it is provided in the parameters of the oauth request.")%> 
+                </td>
+                <td>
+                  false
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Deauthorization Callback URL")%>
+                </td>
+                <td>
+                    <%=tr("When user removes (deauthorizes) your application, we will call this URL with user information.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Canvas Page")%>
+                </td>
+                <td>
+                    <%=tr("Name of the canvas page that will be used to identify your application on {site_title}.", "", :site_title => Platform::Config.site_title)%>
+										<%=tr("This name must be unique and distinctively identify your application.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Canvas URL")%>
+                </td>
+                <td>
+                    <%=tr("URL of your application's main page.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("iFrame Size")%>
+                </td>
+                <td>
+                	  <%=tr("You have two options: limit application to the default 800x640 size of the iFrame and display scrollbars if your content is larger than the default size or make the application height grow with your content size.")%> 
+                    <%=tr("Choose \"Auto-resize\" if you are going to make the iFrame grow to the height of your app's content.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    <%=tr("Authorization")%>
+                </td>
+                <td>
+                    <%=tr("Choose \"App will handle authorization\" if your application will handle the authorization. Otherwise we will make sure the user has authorized your application and will pass you an access token as a parameter.")%> 
+                </td>
+                <td>
+                  true
+                </td>
+            </tr>
+        </table>
+    </p>
+				
+    <h2><%=tr("Authorization Flow") %></h2>
+    <p>
+        <%=tr("There are two ways you could authorize your embedded application.")%> 
+				<%=tr("If you chose to let Geni handle authorization then we will check if the user has authorized your application, and if not, we will present the authorization screen.")%>
+        <%=tr("Once user has authorized your app, we will pass you a valid access token as a parameter to your apps canvas URL.")%>
+				<%=tr("Alternatively, you can take the userto the authorization flow yourself, by redirecting the iframce to the authorization URL.")%>
+    </p>
+		
+    <h3><%=tr("Oauth URL")%></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize
+    </div>
+    <h3><%=tr("Parameters")%></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Required") %>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    client_id
+                </td>
+                <td>
+                    <%=tr("Application key generated during the app registration.")%>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    redirect_uri
+                </td>
+                <td>
+                    <%=tr("URL that the user's browser will be redirected back to once the application authorization is completed.") %>
+                    <%=tr("You can specify this URL in your application settings as a Callback URL, or pass it as a request paremeter.") %>
+                    <%=tr("The redirect_uri must be within the same domain as the Site Domain you specified in the application settings.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    response_type
+                </td>
+                <td>
+                    <%=tr("For the server side flow the response type is defaulted to \"token\" and you don't need to pass it as a parameter.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    scope
+                </td>
+                <td>
+                    <%=tr("A comma delimited list of permissions that the application needs.") %> <%=tr("By default the scope is set to a full data access.") %><%=tr("This is subject to change in the upcoming releases.") %>
+                </td>
+                <td>
+                    false
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    display
+                </td>
+                <td>
+                    <%=tr("For the server side flow the display parameter is defaulted to \"web\".") %>
+                </td>
+                <td>
+                    false
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
+    </div>
+    <p style="text-align:center">
+       <%=image_tag("/platform/images/help/auth_iframe.png", :style=>"width:600px;", :class => "screenshot") %>
+    </p>
+    <p>
+        <%=tr("If the user presses Don't Allow, your app is not authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    status
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("If user cancels the authorization flow, the status will be set to \"unauthorized\".") %>
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    message
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Error message") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example") %></h3>
+    <div class="code_snippet">
+        http://YOUR_URL#status=unauthorized&message=user+canceled
+    </div>
+    <p>
+        <%=tr("If the user presses Allow, your app is authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with an authorization code:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    access_token
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Access token to be used with every API request")%> 
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    expires_in
+                </td>
+                <td style="widtd:150px;">
+                    Number
+                </td>
+                <td>
+                    <%=tr("Seconds until the token will expire")%>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        http://YOUR_URL#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+    </div>		
+</div>
+<%= render :partial => "footer" %>

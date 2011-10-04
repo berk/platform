@@ -1,0 +1,8 @@
+<div style="text-align:left; border:1px dotted #ccc; padding:10px; margin-top:5px;">
+  <div style="color:#888; padding-bottom:8px; font-size:18px; font-weight:bold;">
+	   <%=(@app.last_monthly_metric ? @app.last_monthly_metric.active_user_count : 0)%>
+	</div>
+  <div style="color:#666; font-size:11px;">
+    <%=tr("monthly active {count|user}", '', :count => (@app.last_monthly_metric ? @app.last_monthly_metric.active_user_count : 0))%>
+	</div>	
+</div>

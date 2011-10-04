@@ -1,0 +1,84 @@
+<style>
+	.apps_list {
+		
+	}
+
+  .apps_list tr:hover {
+  	background: #eee;
+  }
+	
+  .apps_list th {
+  	text-align:left;
+		font-weight:bold;
+		padding-bottom:5px;
+    border-bottom: 1px solid black;
+  }
+
+  .apps_list td {
+    padding-top:2px;
+		border-bottom: 1px dotted #ddd;
+  }
+</style>
+<div id="apps_info_container">
+  <%=render(:partial => "header", :locals => {:section => "apps_info", :label => "Dashboard Applications", :description => "Section title", :mode => mode})%>
+  
+  <% form_tag({:action => :update_settings}, {:id => 'apps_info_form', :method => :post}) do %>
+    <div class="section_box colored">
+      <div style="float:right; padding-right:5px;">
+          <%=platform_help_icon_tag %>
+      </div>
+      <div ondblclick="switchSectionMode('apps_info', 'edit')">
+      	
+				<table class="apps_list">
+					<tr>
+						  <th style="width:300px;">Application Name</th>
+              <th style="width:150px;">Active Users</th>
+              <th>New Users</th>
+					</tr>	
+				<% @apps.each do |app| %>
+				  <tr>
+				  	 <td>
+					  	 <% if mode == :edit %>  
+					  	   <%=check_box_tag(app.id, "checked", @selected_app_ids.include?(app.id.to_s))%>
+               <% end %>
+					     <% if @selected_app_ids.include?(app.id.to_s) %>
+					       <strong><%=app.versioned_name%></strong>
+							 <% else %>	 
+                 <%=app.versioned_name%>
+							 <% end %>
+             </td>    
+						 <td>
+						 	  <%=app.last_total_metric ? app.last_total_metric.active_user_count : 0 %>
+						 </td>
+             <td>
+                <%=app.last_total_metric ? app.last_total_metric.new_user_count : 0 %>
+             </td>
+					 </tr>
+					 <% app.children.each do |child| %>
+		          <tr>
+		          	 <td style="padding-left:10px">
+			             <% if mode == :edit %>  
+			               <%=check_box_tag(child.id, "checked", @selected_app_ids.include?(child.id.to_s))%>
+                   <% end %>
+                   <% if @selected_app_ids.include?(child.id.to_s) %>
+                     <strong><%=child.versioned_name%></strong>
+                   <% else %>  
+                     <%=child.versioned_name%>
+                   <% end %>
+								 </td>
+		             <td>
+		                <%=child.last_total_metric ? child.last_total_metric.active_user_count : 0 %>
+		             </td>
+		             <td>
+		                <%=child.last_total_metric ? child.last_total_metric.new_user_count : 0 %>
+		             </td>
+               </tr>						    
+					 <% end %>
+					</tr>
+				<% end %>
+        </table>
+				
+      </div>
+    </div>
+  <% end %>
+</div>

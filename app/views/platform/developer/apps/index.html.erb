@@ -1,0 +1,375 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+<style>
+  .app_item {
+    padding-left:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+  }
+  
+  .app_selected {
+    padding-left:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+    background:#406790;
+    color:white;
+  }
+
+  .app_selected a {
+    color:white;
+  }
+  
+  .app_footer {
+    margin-top:20px;
+    font-size:12px;
+    border: 1px dotted #ccc; 
+    padding:10px; 
+    background: #F0F2F7; 
+  }
+
+  .app_menu {
+    float:right;
+    font-size:12px;
+    border: 1px dotted #ccc; 
+    padding:10px; 
+    background: #F0F2F7;
+    width:150px;
+    height:100px; 
+  }
+
+  .app_menu div {
+   padding-bottom: 5px;  
+   margin-bottom: 5px;  
+   border-bottom: 1px dotted #ccc;
+  }
+  
+  .app_key_value {
+    padding-bottom:10px;
+  }
+  
+  .app_key {
+    color: #888;
+		padding-bottom: 2px;
+  }
+  
+  .app_value {
+    color: black;
+  }
+	
+	.app_item:hover {
+		background-color: #eee;
+	}
+</style>
+
+<div class="section_title">
+  <div style="float:right; padding-top:6px; font-size:12px; color: #ccc;">
+     <%=link_to(tr('+ Register New Application', 'Client application action label'), {:action=>:new}) if @apps.any? %>
+  </div>
+
+   <%= tr('My Applications', 'Client application section title') %> 
+</div>
+
+<% if @apps.empty? %>
+<div style="padding:40px; margin-left:10px;margin-right:10px;text-align:center; font-size: 14px;">
+  <%=tr("You haven't registered any applications yet.")%> <%=tr("[link: Click here] to register a new application.", "", :link => ["/platform/developer/apps/new"])%>
+</div>
+<% else %>
+<div style="padding-bottom:20px; margin-left:0px; margin-right:10px;">
+  <table style="width:100%">
+    <tr>
+      <td style="border: 1px dotted #ddd; padding-top:10px; margin-top:10px; margin-bottom:15px; background: #f9f9f9;  vertical-align:top; width:200px;">
+          <% @apps.each do |app| %>
+            <% if app == @menu_app %>
+                <div class="<%= (@app != @menu_app) ? 'app_item' : 'app_selected' %>">
+                  <%=image_tag(app.icon_url, :style => "vertical-align:middle;")%> &nbsp;
+                  <%=link_to(app.name, {:id=>app.id}) %>
+                </div>  
+		            <% app.children.each do |app| %>
+								  <div class="<%=  (@app == app) ? 'app_selected' : 'app_item' %>" style="padding-left:40px;">
+                    <%=image_tag(app.icon_url, :style => "vertical-align:middle;")%> &nbsp;
+								    <%=link_to(tr("Version {version}", "", :version => (app.version || "1.0")), {:id=>app.id})%>
+									</div>
+		            <% end %>
+            <% else %>
+                <div class="app_item">    
+			            <%=image_tag(app.icon_url, :style => "vertical-align:middle;")%> &nbsp;
+			            <%=link_to(app.name, {:id=>app.id}) %>
+								</div>	
+            <% end %>
+          <% end %>
+      </td>
+      
+     <td style="padding-left:20px; padding-right:0px; background-color:white; vertical-align:top;">
+          <div style="border-bottom:1px solid #ccc; padding-bottom:10px;">
+            <table>
+              <tr>
+                <td style="align-vertical:top; width:90px;" rowspan="2">
+                   <%=image_tag(@app.logo_url)%> 
+                </td>
+                <td style="align-vertical:top;">
+			            <div style="float:right;">
+			              <%= platform_app_rank_tag(@app) %>
+			            </div> 
+								
+                  <div style="font-size:18px;padding-bottom:3px;"><%=@app.name%></div>
+									<div style="color:#444;">
+										<% if @app.version %>
+										 <%= tr("Version")  %> <%=@app.version %>
+										<% end %> 
+									</div>
+                </td>
+              </tr>
+							<tr>
+								<td style="vertical-align:bottom;">
+                  <% if Platform::Config.enable_app_directory? %>
+                    <div style="font-size:12px;color:#666;">Directory Status:
+                      <% if @app.approved? %>  
+                         <span style='color:green'>approved</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Your application is now listed in the [link: App Directory].", "", :link => ["/platform/apps"])%></div>
+                      <% elsif @app.submitted? %>
+                         <span style='color:#ADAD00'>submitted</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Your application is being reviewed.")%>
+												    <%=tr("Once it is approved, it will appear in the [link: App Directory].", "", :link => ["/platform/apps"])%>
+												 </div>
+                      <% else %>
+                         <span style='color:red'>not submitted</span>
+                         <div style="font-size:11px;color:#999;"><%=tr("Once you have completed your application, you may submit it to the [link: App Directory].", "", :link => ["/platform/apps"])%></div>
+                      <% end %>  
+                    </div>
+                  <% end -%> 
+								</td>
+							</tr>
+            </table> 
+          </div> 
+
+          <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
+             <div>
+               <table>
+                  <tr>
+                    <td style="color:#666;width:200px;">
+                      <%=tr("Monthly Active Users", 'Client application label')%>
+                    </td>               
+                    <td style="color:#666;width:200px;">
+                      <%=tr("Monthly New Users", 'Client application label')%>
+                    </td>               
+                    <td style="color:#666;width:200px;">
+                      <%=tr("Total Users", 'Client application label')%>
+                    </td>               
+                    <td style="color:#666;width:200px;">
+                      <%=tr("Total Reviews", 'Client application label')%>
+                    </td>               
+                  </tr>
+                  <tr>
+                    <td style="font-size:20px;">
+                      <%=(@app.last_monthly_metric ? @app.last_monthly_metric.active_user_count : 0) %>
+                    </td>
+                    <td style="font-size:20px;">
+                      <%=(@app.last_monthly_metric ? @app.last_monthly_metric.new_user_count : 0) %>
+                    </td>
+                    <td style="font-size:20px;">
+                      <%=(@app.last_total_metric ? @app.last_total_metric.user_count : 0) %>
+                    </td>
+                    <td style="font-size:20px;">
+                      <%= @app.rating_count %>
+                    </td>
+                  </tr>
+               </table>
+             </div>
+          </div>
+					
+          <div style="margin-top:10px; padding:10px; border: 1px dotted #ccc;">
+            <div class="app_fields_section_header">
+              <%=tr('Application Info', 'Client application section')%>
+            </div>
+					
+					  <div id="app_info"> 
+	            <div class="app_menu">
+	              <div><%=link_to(tr("Edit Settings"), :action => :edit, :id => @app.id)%></div>
+								<% unless @app.parent %>
+	                <% if Platform::Config.enable_app_directory? %>
+	                  <% unless @app.submitted? or @app.approved? %>  
+	                  <div><%=link_to(tr("Submit to App Directory"), {:action => :submit, :id => @app.id}, {:confirm => "Are you sure you want to submit this application to the app directory?"})%></div>
+	                  <% end %>
+	                <% end %>
+									
+	                 <div><%=link_to(tr("Create New Version"), {:action => :create_version, :id => @app.id}, {:confirm => "Are you sure you want to create a new version of your application?"})%></div>
+								<% end %> 
+	              <div><%=link_to(tr("Delete Application"), {:action => :delete, :id => @app.id}, {:confirm => "Are you sure you want to delete this application?"})%></div>
+	            </div>
+
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('App Id:', 'Client application field label')%></div>
+	              <div class="app_value"><%=@app.id%></div>
+	            </div>
+	
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Key:', 'Client application field label')%></div>
+	              <div class="app_value"><%=@app.key%></div>
+	            </div>
+	            
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Secret:', 'Client application field label')%></div>
+	              <div class="app_value"><%=@app.secret%>
+								 <span>(<%=link_to("reset", {:action => :reset_secret, :id => @app.id}, {:confirm => "Are you sure you want to reset application secret?"})%>)</span>
+								</div>
+	            </div>
+
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr("{site_title} API Version:", 'Client application field label', :site_title => Platform::Config.site_title)%></div>
+                <div class="app_value"><%=@app.api_version%></div>
+              </div>
+            </div>
+						
+            <div class="app_fields_section_header">
+              <span style='float:right'>
+                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+              </span>
+              <%= platform_toggler_tag("basic_info") %> 
+              <%=tr('Basic Info', 'Client application section')%>
+            </div>
+
+            <div id="basic_info"> 
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Description:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.description%></div>
+              </div>
+						
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Language:', 'Client application field label')%></div>
+                <div class="app_value"><%=Tr8n::Language.for(@app.locale || Tr8n::Config.default_locale).english_name %></div>
+              </div>
+						
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Contact Email:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.contact_email %></div>
+              </div>
+	
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Support URL:', 'Client application field label')%></div>
+	              <div class="app_value"><%=link_to(@app.support_url, @app.support_url) if @app.support_url %></div>
+	            </div>
+	
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Privacy Policy URL:', 'Client application field label')%></div>
+	              <div class="app_value"><%=link_to(@app.privacy_policy_url, @app.privacy_policy_url) if @app.privacy_policy_url %></div>
+	            </div>
+	
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Terms of Service URL:', 'Client application field label')%></div>
+	              <div class="app_value"><%=link_to(@app.terms_of_service_url, @app.terms_of_service_url) if @app.terms_of_service_url %></div>
+	            </div>
+            </div>  
+            
+            <div class="app_fields_section_header">
+              <span style='float:right'>
+                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+              </span>
+              <%= platform_toggler_tag("website_settings") %> 
+              <%=tr('Website Settings', 'Client application section')%>
+            </div>
+            <div id="website_settings"> 
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Site URL:', 'Client application field label')%></div>
+                <div class="app_value"><%=link_to(@app.url, @app.url) if @app.url %></div>
+              </div>
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Site Domain:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.site_domain %></div>
+              </div>
+						</div>
+						
+            <div class="app_fields_section_header">
+              <span style='float:right'>
+                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+              </span>
+              <%= platform_toggler_tag("authentication") %> 
+              <%=tr('Authentication', 'Client application section')%>
+            </div>
+            <div id="authentication"> 
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Application Type:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.mobile_application_type%></div>
+              </div>
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Callback URL:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.callback_url%></div>
+              </div>
+
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Deauthorize Callback URL:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.deauthorize_callback_url%></div>
+              </div>
+            </div>
+												
+            <% if Registry.platform.embedded_apps_enabled? %>
+	            <div class="app_fields_section_header">
+							  <span style='float:right'>
+							  	<%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+							  </span>
+							  <%= platform_toggler_tag("integration_section") %> 
+	              <%=tr('On {site_title}', 'Client application section', :site_title => Platform::Config.site_title)%>
+	            </div>
+	            
+							<div id="integration_section">
+		            <div class="app_key_value"> 
+		              <div class="app_key"><%=tr('Canvas Page:', 'Client application field label')%></div>
+		              <div class="app_value"><%=link_to(@app.app_url, @app.app_url) %></div>
+		            </div>
+		
+		            <div class="app_key_value"> 
+		              <div class="app_key"><%=tr('Canvas URL:', 'Client application field label')%></div>
+		              <div class="app_value"><%=link_to(@app.canvas_url, @app.canvas_url) unless @app.canvas_url.blank? %></div>
+		            </div>
+		
+		            <div class="app_key_value"> 
+		              <div class="app_key"><%=tr('IFrame Size:', 'Client application field label')%></div>
+		              <div class="app_value"><%=@app.auto_resize? ? "Auto-resize" : "Show scrollbars"%></div>
+		            </div>
+
+                <div class="app_key_value"> 
+                  <div class="app_key"><%=tr('Authorization:', 'Client application field label')%></div>
+                  <div class="app_value"><%=@app.auto_signin? ? "Auto-signin" : "Application will handle authorization"%></div>
+                </div>
+	            </div>
+            <% end %> 
+             
+            <% if Platform::Config.enable_mobile_applications? %>
+	            <div class="app_fields_section_header">
+	              <span style='float:right'>
+	                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+	              </span>
+	              <%= platform_toggler_tag("mobile_section") %> 
+	              <%=tr('Mobile Application', 'Client application section')%>
+	            </div>
+	            
+	            <div id="mobile_section">
+	              
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('iOS Bundle ID:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.ios_bundle_id%></div>
+	              </div>
+								
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('iTunes App Store ID:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.itunes_app_store_id%></div>
+	              </div>
+								
+	              <div class="app_key_value"> 
+	                <div class="app_key"><%=tr('Android Hash Key:', 'Client application field label')%></div>
+	                <div class="app_value"><%=@app.android_key_hash%></div>
+	              </div>
+	            </div>						 
+						 
+						 <% end %>
+						 
+          </div>
+      </td>
+    </tr>   
+  </table>
+</div>
+<% end %>
+<%= render :partial => "/platform/developer/common/footer" %>

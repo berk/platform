@@ -1,0 +1,15 @@
+<% if @app %>
+  <div style="margin-bottom:10px;">
+    <iframe id="app_content_frame" src="<%=@canvas_url%>" scrolling="<%=@app.auto_resize? ? 'no' : 'auto'%>" style="border:0px;width:100%;height:640px;"></iframe>
+	</div>
+<% else %>
+	<div style="font-size:18px; text-align:center; padding-bottom:20px;">
+		Invalid application name. This application does not exist.
+	</div>
+<% end %>
+
+<script>
+  function resizeFrame(height) {
+    document.getElementById('app_content_frame').style.height = parseInt(height)+60 + "px";
+  }
+</script>

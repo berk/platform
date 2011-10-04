@@ -1,0 +1,23 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+  <%=render(:partial => "basic_info", :locals => {:mode => :view}) %>
+
+<%= render :partial => "/platform/developer/common/footer" %>
+
+<script>
+  function switchSectionMode(section, mode) {
+    Platform.Utils.update(section + '_container', '/platform/developer/info/update_section', {
+      parameters: {section:section, mode:mode}
+    });
+  }
+  
+  function submitSection(section) {
+    var params = Platform.Utils.serializeForm(section + '_form');
+    params['section'] = section;
+    Platform.Utils.update(section + '_container', '/platform/developer/info/update_section', {
+      parameters: params,
+      method: 'post'
+    });
+  }
+</script>
+

@@ -1,0 +1,133 @@
+#############################################################################
+# Platform Configuration
+#
+# Default settings for all environments
+# 
+# You can overload any feature for any environment by changing the 
+# environment settings at the bottom of the file. 
+#
+# Alternatively, you can overload any of the methods of Platform::Config
+#############################################################################
+
+defaults: &defaults
+  enable_platform:              true     
+  enable_app_directory:         true
+  enable_embedded_applications: true
+  enable_mobile_applications:   true
+  enable_developer_agreement:   false
+  enable_app_statistics:        false
+  enable_api_verification:      false
+  api_explorer_app_id:          -1  
+
+  #############################################################################
+  # Platform best run with caching enabled
+  # You can configure cache adapter and store parameters by providing the
+  # the name of your class implementation and the store settings. For example:
+  #
+  #
+  # cache_adapter:  ActiveSupport::Cache
+  # cache_store:    memory_store
+  # cache_store:    file_store
+  # cache_store:    drb_store
+  # cache_store:    [mem_cache_store, 'localhost:11211']
+  #
+  # Alternatively you can provide your own implementation of cache by setting
+  # the adapter to your own class.
+  #############################################################################
+  caching:
+    enabled:                  true
+    adapter:                  "Tr8n::GeniCacheAdapter"
+    version:                  1 # you can change the version to invalidate the cache
+      
+  #############################################################################
+  # By default, Platform will use its own logger. If you set it to false,
+  # it will use default Rails logger.
+  #############################################################################
+  logger:
+    enabled:                  true
+    log_path:                 log/platform.log      # location of the log file
+      
+  #############################################################################
+  # Site Integration Settings
+  #############################################################################
+  site_info:
+    title:                    "Sample"
+    base_url:                 "localhost:3000"
+    contact_email:            platform@geni.com
+    default_url:              "/home"
+    login_url:                "/login"
+    platform_layout:          application
+    admin_layout:             admin
+    oauth_layout:             minimal
+    system_user_id:           10
+    media_directory:          "/media/p1"
+    user_info:
+      enabled:                true
+      current_user_method:    current_user
+      logout_method:          "logout!"
+      class_name:             User
+      methods:
+        id:                   id
+        name:                 name
+        email:                "email"
+        link:                 path
+        mugshot:              square_mugshot_url
+        admin:                superuser?
+        guest:                guest?
+        locale:               language
+    media_info:              
+      enabled:                true
+      class_name:             "Platform::Media::Image"
+      write_method:           "write"
+      logo_url_method:        "media_url(:logo)"
+      icon_url_method:        "media_url(:icon)"
+  
+  #############################################################################
+  # API Settings
+  #############################################################################
+  API:
+    enabled:                  true
+    base_url:                 "localhost:3000/api/"
+    config_path:              "config/platform/api"
+    logging_enabled:          true          
+    admin_email:              scott.steadman@geni.com
+    allow_public:             true
+    cookies_enabled:          true
+    max_models:               50
+    request_limit:            3
+    request_window:           1
+    token_lifetime:           86400
+    supported_versions:       ['1', '0']
+    default_version:          '1'    
+    explorer_groups:
+      '0':                    [['document', 'photo'], ['project', 'video', 'union'], ['profile']]
+      '1':                    [['user', 'project', 'photo_album', 'union', 'surname'], ['document', 'photo', 'video', 'revision'], ['profile']]
+    user:
+      create_enabled:         true
+  
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+  enable_api_verification:      true
+  api_explorer_app_id:          "TBUDuxvLLqY7ndxjzS5hnPykVMl1hIN29RwfKjh1"  
+        
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+  api_explorer_app_id:          "ci9EG77hmXg53AEsKlRuDe9TL2beeGupq6slAHMX"  
+
+production:
+  <<: *defaults
+  api_explorer_app_id:          "ci9EG77hmXg53AEsKlRuDe9TL2beeGupq6slAHMX"  
+
+sandbox:
+  <<: *defaults
+  api_explorer_app_id:          "tAGjqNSsCYfbDP3At9Qaf3UDrcZfIHbJH7Jp29Nn"  
