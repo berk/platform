@@ -147,6 +147,10 @@ class Platform::Application < ActiveRecord::Base
     has_permission?(:grant_type_password)
   end
 
+  def allow_grant_type_client_credentials?
+    true # for now, all applications have a right to get client_token
+  end
+
   # Ticket 19180
   def allow_unlimited_models(value=true)
     set_permission(:unlimited_models, value)
@@ -185,11 +189,17 @@ class Platform::Application < ActiveRecord::Base
   end
 
   def create_access_token(params={})
-    Platform::Oauth::AccessToken.create(params.merge(:application => self))
+    access_token = Platform::Oauth::AccessToken.create(params.merge(:application => self))
+    Platform::ApplicationUser.touch(self, access_token.user)
+    access_token
   end
 
   def create_refresh_token(params={})
     Platform::Oauth::RefreshToken.create(params.merge(:application => self))
+  end
+
+  def create_client_token(params={})
+    Platform::Oauth::ClientToken.create(params.merge(:application => self))
   end
 
   def admin_link

@@ -21,37 +21,18 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::Oauth::OauthToken < ActiveRecord::Base
-  set_table_name :platform_oauth_tokens
+class Platform::Oauth::ClientToken < Platform::Oauth::OauthToken
 
-  belongs_to :application, :class_name => "Platform::Application"
-  belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
-
-  validates_uniqueness_of :token
-  validates_presence_of   :application
-  validates_presence_of   :token
-
-  before_validation :generate_keys, :on => :create
-
-  def invalidated?
-#    invalidate! if valid_to && invalidated_at.nil? && Time.now > valid_to
-#    invalidated_at.try(:<=, Time.now)
-    
-    invalidated_at != nil
+  def code
+    token
   end
 
-  def invalidate!
-    update_attributes(:invalidated_at => Time.now)
-  end
-
-  def authorized?
-    authorized_at && !invalidated?
-  end
-
-protected
+  protected
 
   def generate_keys
-    self.token = Platform::Helper.generate_key(40)[0,40]
+    self.token = Platform::Helper.generate_key(20)[0,20]
+    self.valid_to = 60.minutes.from_now
+    self.authorized_at = Time.now
   end
 
 end

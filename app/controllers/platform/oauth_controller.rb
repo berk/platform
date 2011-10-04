@@ -75,8 +75,7 @@ class Platform::OauthController < Platform::BaseController
   end
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.2
-  # supported grant_type = authorization_code, password, refresh_token
-  # unsupported grant_types = client_credentials 
+  # supported grant_type = authorization_code, password, refresh_token, client_credentials
   def request_token
     if request_param(:client_id).blank?
       return render_response(:error_description => "client_id must be provided", :error => :invalid_request)
@@ -86,7 +85,7 @@ class Platform::OauthController < Platform::BaseController
       return render_response(:error_description => "invalid client application id", :error => :unauthorized_client)
     end
     
-    unless ["authorization_code", "password", "refresh_token"].include?(grant_type)
+    unless ["authorization_code", "password", "refresh_token", "client_credentials"].include?(grant_type)
       return render_response(:error_description => "only authorization_code, password and refresh_token grant types are currently supported", :error => :unsupported_grant_type)
     end
 
@@ -249,19 +248,18 @@ private
       return render_response(:error_description => "code must be provided", :error => :invalid_request)
     end
     
-    verifier = Platform::Oauth::RequestToken.find(:first, :conditions => ["application_id = ? and token = ? and valid_to > ? and invalidated_at is null", 
+    request_token = Platform::Oauth::RequestToken.find(:first, :conditions => ["application_id = ? and token = ? and valid_to > ? and invalidated_at is null", 
                                                              client_application.id, request_param(:code), Time.now])
-    unless verifier
+    unless request_token
       return render_response(:error_description => "invalid verification code", :error => :invalid_request)
     end
     
-    if verifier.callback_url != redirect_url
+    if request_token.callback_url != redirect_url
       return render_response(:error_description => "redirection url must match the url used for the code request", :error => :invalid_request)
     end
     
-    access_token = verifier.exchange!
+    access_token = request_token.exchange!
     refresh_token = client_application.create_refresh_token(:user=>access_token.user, :scope=>scope)
-    Platform::ApplicationUser.touch(client_application, access_token.user)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
   end
 
@@ -286,8 +284,18 @@ private
     
     access_token = client_application.create_access_token(:user=>user, :scope=>scope)
     refresh_token = client_application.create_refresh_token(:user=>user, :scope=>scope)
-    Platform::ApplicationUser.touch(client_application, user)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
+  end
+
+  # request token with grant_type = client_credentials
+  def oauth2_request_token_client_credentials
+    unless client_application.allow_grant_type_client_credentials?
+      return render_response(:error_description => "this application is not authorized to use grant_type client_credentials", :error => :unauthorized_application)
+    end
+    
+    client_token = client_application.create_client_token(:scope=>scope)
+    refresh_token = client_application.create_refresh_token(:scope=>scope)
+    render_response(:access_token => client_token.token, :refresh_token => refresh_token.token, :expires_in => (client_token.valid_to.to_i - Time.now.to_i))
   end
 
   # request token with grant_type = refresh_token
@@ -296,14 +304,13 @@ private
       return render_response(:error_description => "refresh_token must be provided", :error => :invalid_request)
     end
     
-    refresher = Platform::Oauth::RefreshToken.find(:first, :conditions => ["application_id = ? and token = ? and invalidated_at is null", client_application.id, request_param(:refresh_token)])
-    unless refresher
+    refresh_token = Platform::Oauth::RefreshToken.find(:first, :conditions => ["application_id = ? and token = ? and invalidated_at is null", client_application.id, request_param(:refresh_token)])
+    unless refresh_token
       return render_response(:error_description => "invalid refresh token", :error => :invalid_request)
     end
     
-    access_token = refresher.exchange!
+    access_token = refresh_token.exchange!
     refresh_token = client_application.create_refresh_token(:user=>access_token.user, :scope=>scope)
-    Platform::ApplicationUser.touch(client_application, access_token.user)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
   end
 

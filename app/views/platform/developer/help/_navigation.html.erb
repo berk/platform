@@ -55,6 +55,7 @@
   <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_desktop' %>"><%=link_to(tr("Desktop Apps"), :action => :oauth_desktop, :version => @version)%></div>
   <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_mobile' %>"><%=link_to(tr("Mobile Apps"), :action => :oauth_mobile, :version => @version)%></div>
   <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_trusted_client' %>"><%=link_to(tr("Trusted Apps"), :action => :oauth_trusted_client, :version => @version)%></div>
+  <div style="padding-left:15px;" class="section_link <%="selected" if @controller.action_name == 'oauth_app_login' %>"><%=link_to(tr("App Login"), :action => :oauth_app_login, :version => @version)%></div>
 
   <div class="section_link <%="selected" if @controller.action_name == 'oauth_extensions' %>"><%=link_to(tr("{site_title} Extensions", "", :site_title => Platform::Config.site_title), :action => :oauth_extensions, :version => @version)%></div>
   

@@ -23,10 +23,13 @@
 
 class Platform::Oauth::RefreshToken < Platform::Oauth::OauthToken
 
-  validates_presence_of :user
-
   def exchange!(params={})
-    token = Platform::Oauth::AccessToken.create!(:user => user, :application => application)
+    if user
+      token = application.create_access_token(:user => user, :scope => scope)
+    else
+      token = application.create_client_token(:scope => scope)
+    end    
+    
     invalidate!
     token
   end

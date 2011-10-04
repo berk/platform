@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2010-2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -21,37 +21,29 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::Oauth::OauthToken < ActiveRecord::Base
-  set_table_name :platform_oauth_tokens
+require 'rails/generators'
+require 'rails/generators/migration'
 
-  belongs_to :application, :class_name => "Platform::Application"
-  belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
+class PlatformGenerator < Rails::Generators::Base
+  include Rails::Generators::Migration
 
-  validates_uniqueness_of :token
-  validates_presence_of   :application
-  validates_presence_of   :token
-
-  before_validation :generate_keys, :on => :create
-
-  def invalidated?
-#    invalidate! if valid_to && invalidated_at.nil? && Time.now > valid_to
-#    invalidated_at.try(:<=, Time.now)
-    
-    invalidated_at != nil
+  def self.source_root
+    @source_root ||= File.expand_path('../templates', __FILE__)
   end
 
-  def invalidate!
-    update_attributes(:invalidated_at => Time.now)
+  # Implement the required interface for Rails::Generators::Migration.
+  def self.next_migration_number(dirname)
+    if ActiveRecord::Base.timestamped_migrations
+      Time.now.utc.strftime("%Y%m%d%H%M%S")
+    else
+      "%.3d" % (current_migration_number(dirname) + 1)
+    end
   end
 
-  def authorized?
-    authorized_at && !invalidated?
+  def create_migration_file
+    migration_template 'create_platform_tables.rb', 'db/migrate/create_platform_tables.rb'
+    source = File.expand_path('../../../../config/platform', __FILE__)
+    target = "#{Rails.root}/config"
+    system "rsync -ruv #{source} #{target}"
   end
-
-protected
-
-  def generate_keys
-    self.token = Platform::Helper.generate_key(40)[0,40]
-  end
-
 end
