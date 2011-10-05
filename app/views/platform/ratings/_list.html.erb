@@ -1,4 +1,4 @@
-  <div class="apps_header">
+  <div class="section_title" style="padding-top:0px;">
     <% if @ratings.any? and params['sec'] != 'Reviews' %>
     <span style="float:right; font-size:12px;">
       <%=link_to("view all", :controller => "/platform/apps", :action => :view, :id => @app.id, :sec => 'Reviews')%>
@@ -8,7 +8,7 @@
     <%=tr("Reviews")%>
   </div>
 
-  <div class="apps_section">
+  <div class="section">
      <%= render(:partial => "/platform/ratings/new", :locals => {:app => @app} )%>   
      
      <div style="margin-top:10px; border-top: 1px solid #ccc;">

@@ -9,9 +9,9 @@
   <%=tr("#{Platform::Config.site_info[:title]} API Explorer", nil) %>  
 </div>
 
-<div class="section_box">
+<div class="section">
 	<% if Platform::Config.api_explorer_app? %>
-	  <div class="section_box" style="margin-top:5px;margin-bottom:0px;">
+	  <div class="section" style="margin-top:5px;margin-bottom:0px;">
 			<table style="width:100%">
 				<tr>
 					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
@@ -29,7 +29,7 @@
 	  </div>
 	<% end %>
 	
-  <div class="section_box" style="margin-top:5px;background-color:#EFF8FF">
+  <div class="section blue" style="margin-top:10px;">
   	<table>
   		<tr>
         <td style="width:50px;">
@@ -85,11 +85,12 @@
     <%=link_to_function(image_tag("platform/minus_node.png", :style=>"height:14px;"), "expandAllResultObjects(false)", :class=>"button super gray small", :id => "") %>
     <%=link_to_function(image_tag("platform/plus_node.png", :style=>"height:14px;"), "expandAllResultObjects(true)", :class=>"button super gray small", :id => "") %>
   </div>	
-  <div class="section_box response_data" id="response_data" style="margin-top:5px;">
+
+  <div class="section grey response_data" id="response_data" style="margin-top:5px;">
     
   </div>
 	
-  <div class="section_box status" id="status" style="margin-bottom:0px;">
+  <div class="section blue status" id="status" style="margin-bottom:0px;">
       
   </div>
 	

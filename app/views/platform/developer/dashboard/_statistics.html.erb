@@ -1,4 +1,4 @@
-<div style="background-color:#EFF8FF; border: 1px dotted #ccc; font-size: 12px; padding:5px; margin-top:3x; margin-bottom:10px; color: black;">
+<div class="section blue">
   <%=tr("This application has {count||total user}.", "Dashboard section header", :count => (app.last_total_metric ? app.last_total_metric.user_count : 0))%>
 </div>
 
@@ -31,8 +31,8 @@
 <div id="stats_content_<%=app.id%>" style="">
 	<table style="width:100%">
 	  <tr>
-      <td style="width:50%; padding-top:3px; padding-right:3px; padding-bottom:10px;">
-					<div style="text-align:center; width:100%; border:1px dotted #ccc; background-color:white;">
+      <td style="width:50%; padding-bottom:10px;">
+					<div class="section" style="text-align:center;">
 					  <div style="font-size:14px; padding:3px;"> 
 					    <%=tr("Daily Active Users", "Dashboard section header") %>
 					  </div>
@@ -57,7 +57,7 @@
 					    %>
 					
 					    var chart = new google.visualization.LineChart(document.getElementById("daily_active_users_chart_<%=app.id%>"));
-					    chart.draw(data, {width: 450, height: 200});
+					    chart.draw(data, {width: 420, height: 200});
 					  </script>
 					
 					
@@ -66,8 +66,8 @@
 					  </div>
 					</div>
       </td>      	  	
-	    <td style="width:50%;padding-top:3px; padding-bottom:10px;">
-          <div style="text-align:center; width:100%; border:1px dotted #ccc; background-color:white;">
+	    <td style="width:50%; padding-bottom:10px;">
+					<div class="section" style="text-align:center;">
             <div style="font-size:14px; padding:3px;"> 
               <%=tr("Daily New Users", "Dashboard section header") %>
             </div>
@@ -90,7 +90,7 @@
                 end 
               %>
               var chart = new google.visualization.LineChart(document.getElementById("daily_new_users_chart_<%=app.id%>"));
-              chart.draw(data, {width: 450, height: 200});
+              chart.draw(data, {width: 420, height: 200});
             </script>
           
           

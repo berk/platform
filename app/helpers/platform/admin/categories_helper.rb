@@ -48,7 +48,7 @@ module Platform::Admin::CategoriesHelper
     html << "foldersTree.treeID = 'categoriesTree'"
     html << "foldersTree.xID = '#{root.id}'"
     generate_tree(html, root, "foldersTree", checkboxes)
-    html.join("; \n")
+    html.join("; \n").html_safe
   end
   
 end

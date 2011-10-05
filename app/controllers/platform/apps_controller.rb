@@ -54,8 +54,7 @@ class Platform::AppsController < Platform::BaseController
     @app = Platform::Application.find(params[:id])
     @sections = ["Info", "Reviews", "Discussions"]
     @section = params[:sec] || "Info"
-    @ratings = Platform::Rating.paginate(:conditions => ["object_type = ? and object_id = ?", @app.class.name, @app.id], 
-                                          :page => page, :per_page => per_page, :order => "updated_at desc")
+    @ratings = Platform::Rating.where("object_type = ? and object_id = ?", @app.class.name, @app.id).order("updated_at desc").page(page).per(per_page)
                                           
     params[:sec] ||= 'Info'
     if params[:sec] == 'Discussions'
@@ -66,9 +65,9 @@ class Platform::AppsController < Platform::BaseController
           params[:page] += 1 unless (@topic.post_count % per_page.to_i == 0) 
           params[:page] = 1 if params[:page] == 0
         end
-        @messages = Platform::ForumMessage.paginate(:all, :conditions => ["forum_topic_id = ?", @topic.id], :page => page, :per_page => per_page, :order => "created_at asc")
+        @messages = Platform::ForumMessage.where("forum_topic_id = ?", @topic.id).order("created_at asc").page(page).per(per_page)
       else  
-        @topics = Platform::ForumTopic.paginate(:all, :conditions => ["subject_type = ? and subject_id = ?", @app.class.name, @app.id], :page => page, :per_page => per_page, :order => "created_at desc")
+        @topics = Platform::ForumTopic.where("subject_type = ? and subject_id = ?", @app.class.name, @app.id).order("created_at asc").page(page).per(per_page)
       end
     end
   end
@@ -98,7 +97,7 @@ class Platform::AppsController < Platform::BaseController
     render :layout => false
   end
   
-  def method_missing(method, *args)
+  def xmethod_missing(method, *args)
     @app = Platform::Application.find_by_canvas_name(method)
     return render(:action => :canvas_app) unless @app
     

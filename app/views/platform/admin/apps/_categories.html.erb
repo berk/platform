@@ -1,7 +1,7 @@
 <% if app.application_categories.any? %>
 	<% app.application_categories.each do |ac| %>
 	   <div style="padding-bottom:1px;">
-	   	  	<%=ac.category.full_name%> <%= ac.featured? ? "<strong>(featured)</strong>" : "" %> - 
+	   	  	<%=ac.category.full_name.html_safe%> <%= ac.featured? ? "<strong>(featured)</strong>" : "" %> - 
 					<%
 					  html = []
 	          if ac.featured? 
@@ -11,7 +11,7 @@
 	          end 
 	          html << link_to_function("Delete", "assignCategory(#{app.id}, #{ac.category.id}, false)")
 	        %>
-					<%=html.join(" | ")%>
+					<%=html.join(" | ").html_safe%>
 			</div>		 
 	<% end %>
 <% end %>

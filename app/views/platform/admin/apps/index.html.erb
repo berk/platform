@@ -14,7 +14,7 @@
       html << "<div id='app_categories_#{app.id}'>"  
       html << render(:partial => "categories", :locals => {:app => app})
       html << "</div>"
-      html.join("\n") 
+      html.join("\n").html_safe
   }],
   :state,
   :created_at,

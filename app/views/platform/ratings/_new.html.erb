@@ -1,5 +1,5 @@
- <div class="section_box colored">
-   <% form_tag({:controller => '/platform/ratings', :action => :submit_app_rating, :app_id => app.id}, {:id => :app_rating_form}) do %>
+ <div class="section grey">
+   <%= form_tag({:controller => '/platform/ratings', :action => :submit_app_rating, :app_id => app.id}, {:id => :app_rating_form}) do %>
      <%=hidden_field_tag(:rating_value, '0')%>                 
      <table style="width:100%" cellpadding="5px">
        <tr>
@@ -8,7 +8,7 @@
            <div onMouseOut="ratingBlockMouseOut()">
              <% html = []
                 1.upto(5) do |index|
-                  html << image_tag("/tr8n/images/rating_star0.png", :id => "rating#{index}", :onMouseOver => "ratingMouseOver(#{index})", :onMouseOut => "ratingMouseOut(#{index})",  :onClick => "ratingSelected(#{index})", :style => "cursor:pointer")     
+                  html << image_tag("platform/rating_star0.png", :id => "rating#{index}", :onMouseOver => "ratingMouseOver(#{index})", :onMouseOut => "ratingMouseOut(#{index})",  :onClick => "ratingSelected(#{index})", :style => "cursor:pointer")     
                 end
              %>
              <%=html.join("").html_safe%>
@@ -23,7 +23,9 @@
        </tr>
      </table>
      <div style="text-align:center;padding:10px;">
-      <%=link_to_function(tr('Submit Review', 'Client application action label'), "Platform.Effects.submit('app_rating_form')", :class=>'button super blue medium') %>
+       <button type="submit" class="platform_btn platform_submit_btn" onClick="Platform.Effects.submit('app_rating_form'); return false;">
+           <span><%=tr("Submit Review")%></span>
+       </button>
      </div>
    <% end %>
  </div>
@@ -34,18 +36,18 @@
   
   function ratingMouseOver(index) {
     for (i=1; i<=index; i++) {
-      Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+      Platform.element('rating' + i).src = "/assets/platform/rating_star1.png";
     }
   }
   
   function ratingBlockMouseOut() {
     for (i=1; i<=5; i++) {
-      Platform.element('rating' + i).src = "/tr8n/images/rating_star0.png";
+      Platform.element('rating' + i).src = "/assets/platform/rating_star0.png";
     }
     
     if (selectedRating != 0) {
       for (i=1; i<=selectedRating; i++) {
-        Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+        Platform.element('rating' + i).src = "/assets/platform/rating_star1.png";
       }     
     }
   }
@@ -59,9 +61,9 @@
     
     for (i=1; i<=5; i++) {
       if (i <= selectedRating)
-        Platform.element('rating' + i).src = "/tr8n/images/rating_star1.png";
+        Platform.element('rating' + i).src = "/assets/platform/rating_star1.png";
       else  
-        Platform.element('rating' + i).src = "/tr8n/images/rating_star0.png";
+        Platform.element('rating' + i).src = "/assets/platform/rating_star0.png";
     }     
   }
 

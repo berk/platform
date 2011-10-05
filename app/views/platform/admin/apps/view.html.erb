@@ -86,7 +86,7 @@
                  html << link_to("Block", {:action => :block, :app_id => @app.id}, :confirm => "Are you sure you want to block this application?")
               end
 %>				
-           - <%= html.join(" | ") %>
+           - <%= html.join(" | ").html_safe %>
 				</td>
     </tr>
     <tr>
@@ -154,13 +154,13 @@
 
               Platform::Application.permissions.each do |perm|
 	              if @app.has_permission?(perm)
-	                 html << link_to("Remove <strong>'#{perm}'</strong> permission", {:action => :remove_permission, :perm => perm, :app_id => @app.id}, :confirm => "Are you sure you want to remove #{perm} permission?")
+	                 html << link_to("Remove <strong>'#{perm}'</strong> permission".html_safe, {:action => :remove_permission, :perm => perm, :app_id => @app.id}, :confirm => "Are you sure you want to remove #{perm} permission?")
 	              else   
-	                 html << link_to("Add <strong>'#{perm}'</strong> permission", {:action => :set_permission, :perm => perm,  :app_id => @app.id}, :confirm => "Are you sure you want to add #{perm} permission?")
+	                 html << link_to("Add <strong>'#{perm}'</strong> permission".html_safe, {:action => :set_permission, :perm => perm,  :app_id => @app.id}, :confirm => "Are you sure you want to add #{perm} permission?")
 	              end
               end  
            %>
-					 <%= html.join(" | ") %>
+					 <%= raw(html.join(" | ")) %>
         </td>
     </tr>
 </table>

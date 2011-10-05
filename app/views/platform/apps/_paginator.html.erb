@@ -1,4 +1,4 @@
-<%=tr("Page {num} of {count}", "", {:num => apps.current_page, :count => apps.total_pages})%> 
+<%=tr("Page {num} of {count}", "", {:num => apps.current_page, :count => apps.num_pages})%> 
 &nbsp;
-<%=link_to_function('<<', "goPage('#{element_id}', '#{apps.previous_page}')", :class=>"button super #{apps.previous_page.blank? ? 'gray' : 'blue'} small") %>
-<%=link_to_function('>>', "goPage('#{element_id}', '#{apps.next_page}')", :class=>"button super #{apps.next_page.blank? ? 'gray' : 'blue'} small") %>
+<%=link_to_function('<<', "goPage('#{element_id}', '#{apps.current_page-1}')", :class=>"button super #{apps.first_page? ? 'gray' : 'blue'} small") %>
+<%=link_to_function('>>', "goPage('#{element_id}', '#{apps.current_page+1}')", :class=>"button super #{apps.last_page? ? 'gray' : 'blue'} small") %>

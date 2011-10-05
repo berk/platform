@@ -1,8 +1,8 @@
-<div class="apps_header">
+<div class="section_title" style="padding-top:0px;">
    <%=tr("Discussion Topics") %> 
 </div>
 
-<div class="apps_section">
+<div class="section">
   <% if @topics.any? %>
 	
     <table style="width:100%;">
@@ -62,14 +62,8 @@
       <% end %>
     </table>
 
-    <div style="margin-bottom:5px; padding-top:5px; border-top: 1px solid #ccc;">
-      <table style="width:100%;">
-        <tr>
-          <td align='left'><%= page_entries_info(@topics, :entry_name => "forum topic", :skip_decorations => true) %></td>
-          <td align='right'><%= will_paginate(@topics, :skip_decorations => true, :style => "text-align:right;") %></td>
-        </tr>
-      </table>
-    </div>
+		<%= platform_paginator_tag(@topics, :subject => "forum topic") %>
+
   <% else %>
 	  <div style="padding:10px; text-align:center; color: #888;">  
 	     <%= tr("This application does not have any discussions. Be the first one to start a new discussion.") %>

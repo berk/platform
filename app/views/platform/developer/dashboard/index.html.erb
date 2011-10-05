@@ -14,7 +14,7 @@
   <%=tr("{user}'s Dashboard", "Dashboard section title", :user => [platform_current_developer, :name]) %>
 </div>
 
-<div class="section_box" style="background-color:#FDFFF0;">
+<div class="section yellow">
     <table style="width:100%">
       <tr>
         <td style="width:90%; padding-top:3px;">
@@ -71,7 +71,7 @@
     <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.versioned_name%></a>
   </div>
   
-  <div id="app_content_<%=app.id%>" class="section_box colored">
+  <div id="app_content_<%=app.id%>" class="section grey">
     <%=render :partial=>"statistics", :locals => {:app => app}%>
 		
     <%=render :partial=>"reviews", :locals => {:app => app}%>

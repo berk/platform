@@ -3,7 +3,7 @@
   block_width = "#{100/per_row}%"
   block_height ||= "120px;"
 %> 
-    <div class="apps_header">
+    <div class="section_title" style="padding-top:0px;">
       <span style="float:right; font-size:12px; font-weight:normal">
 			  <%=render(:partial => "paginator", :locals => {:apps => apps, :element_id => "featured_apps"})%> 
       </span>
@@ -14,7 +14,7 @@
         <tr>
           <% apps.each_with_index do |app, index| %>
             <td style="width:<%=block_width%>;text-align:left">
-                   <div style="height:<%=block_height%>; border: 1px dotted #ccc; padding:5px; margin:3px;">
+                   <div class="section" style="height:<%=block_height%>; padding:5px; margin:3px;">
                       <div style="float:right;padding-left:10px;padding-bottom:1px;">
                          <%= link_to(image_tag(app.logo_url), {:action => :view, :id => app.id}) %>
                       </div> 

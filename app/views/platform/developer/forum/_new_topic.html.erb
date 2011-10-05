@@ -2,7 +2,7 @@
    <%=tr("Start a New Discussion Topic")%>
 </div>
 
-<div class="section_box colored">
+<div class="section grey">
   <%= form_tag({:action => :topic}, {:method => :post, :id => "forum_topic_form"}) do %>
     <%=hidden_field_tag(:language_id, params[:language_id])%>
     

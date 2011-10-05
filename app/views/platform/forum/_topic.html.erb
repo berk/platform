@@ -1,8 +1,8 @@
 <div class="apps_header">
   <div style="float:right; padding-top:20px; font-size:12px; color: #ccc;">
-    <%=link_to(image_tag("/tr8n/images/reply.png") + " " + tr("Reply", "Reply button for forum topics"), params.merge(:anchor => :reply_message)) %> 
+    <%=link_to(image_tag("platform/reply.png") + " " + tr("Reply", "Reply button for forum topics"), params.merge(:anchor => :reply_message)) %> 
     &nbsp; |  &nbsp; 
-    <%=link_to(image_tag("/tr8n/images/plus.png") + " " + tr("Start a new discussion topic"), :controller => '/platform/apps', :action => :view, :id => @app.id, :sec => 'Discussions', :mode => :create) %>
+    <%=link_to(image_tag("platform/plus.png") + " " + tr("Start a new discussion topic"), :controller => '/platform/apps', :action => :view, :id => @app.id, :sec => 'Discussions', :mode => :create) %>
   </div>
 
    <%=link_to(tr("Discussions"), :controller => '/platform/apps', :action => :view, :id => @app.id, :sec => 'Discussions')%>

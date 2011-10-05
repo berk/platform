@@ -1,77 +1,25 @@
 <%= render :partial => "/platform/common/header" %>
 
-<style>
-  .apps_header {
-    padding-bottom:3px;
-    margin-bottom:5px;
-    font-size:14px;
-    border-bottom: 1px solid #ccc;
-    font-weight:bold;
-  }
-  
-	.apps_section {
-		text-align:left; 
-		border:1px dotted #ccc; 
-		padding:10px;
-		margin-bottom:10px;
-	}
-	
-  .apps_body {
-    margin-top:5px;
-    padding:0px;
-    font-size:14px;
-    color:#666;
-  }
-  
-  .cat_item {
-    padding-left:10px;
-    padding-top:5px;
-    padding-bottom:5px;
-    font-size:12px;
-    border-bottom: 1px dotted #ccc;
-  }
-  
-  .cat_item_selected {
-    background:#406790;
-    color:white;
-  }
-
-  .cat_item_selected a {
-    color:white;
-  } 
-  
-  th {
-    color: #888;
-  }
-	
-	.apps_section td {
-		padding:3px;
-	} 
-
-  .apps_section th {
-    padding:3px;
-  } 
-  
-</style>
-
 <div class="module page_title lengthy">
   <div class="inner">
-    <div class="hd">
+    <div style="font-size:40px;border-bottom:1px solid #ccc;">
       <span style="float:right;">
-         <%=link_to(tr('Launch Application', 'Client application action label'), @app.app_url, :class=>'button super blue medium') %>
+        <button class="platform_btn platform_submit_btn" onClick="location = '<%= @app.app_url %>';">
+            <span><%=tr("Launch Application")%></span>
+        </button>
       </span>
       
-      <h1><%= @app.name %></h1>
+      <%= @app.name %>
     </div>
   </div>
 </div>
 
 
-<div class="module page_title lengthy">
+<div class="module page_title lengthy" style="margin-top:15px;">
   <div class="inner">
     <table style="width:100%">
       <tr>
-        <td style="width:200px;vertical-align:top;">
+        <td style="width:200px;vertical-align:top;padding-right:10px;">
           <%= render(:partial => "/platform/apps/left", :locals => {:app => @app} )%>   
         </td>
         <td>

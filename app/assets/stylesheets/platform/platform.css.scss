@@ -1,38 +1,148 @@
+/****************************************************************************
+  Copyright (c) 2010-2011 Michael Berkovich, Ian McDaniel
+
+  Permission is hereby granted, free of charge, to any person obtaining
+  a copy of this software and associated documentation files (the
+  "Software"), to deal in the Software without restriction, including
+  without limitation the rights to use, copy, modify, merge, publish,
+  distribute, sublicense, and/or sell copies of the Software, and to
+  permit persons to whom the Software is furnished to do so, subject to
+  the following conditions:
+
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+****************************************************************************/
+
+@mixin rounded-corners($radius) {
+  border-radius: $radius;
+  -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+@mixin shadow($info) {
+	box-shadow:$info;
+	-moz-box-shadow:$info;
+	-webkit-box-shadow:$info;
+}
+
 /****************************************/
 /*** General guidelines
 /****************************************/
 
-.platform                                           {width:100%; font-size:11px; font-family:arial;}
-.platform div                                       {font-family:arial;}    
-.platform a                                         {text-decoration:none; color:#16b; outline:none; border:0px;}
-.platform a:hover                                   {text-decoration:underline}
-.platform a img                                     {border:0px;}
-.platform table                                     {width:100%;border-collapse: collapse; font-size:12px; padding:0px; margin:0px;}
-.platform td                                        {vertical-align:top; padding:0px; spacing:0px;}
-.platform th                                        {vertical-align:top;text-align:left; padding:0px; spacing:0px;}
-.platform input                                     {border:1px solid #ccc; padding:3px; margin: 0px;}    
-.platform textarea                                  {border:1px solid #ccc; padding:3px;}    
-.platform select                                    {border:1px solid #ccc; padding:3px;}
-.platform .pagination                               {text-align:left; padding:0px; margin:0px;}
+.platform {
+	width:100%; 
+	font-size:11px; 
+	font-family:arial;
+	
+	.section {
+		background-color:#fff;
+		padding:10px;
+		margin-bottom:15px;
+		border:solid 1px #e8e8e8;
+		border-color:#e8e8e8 #bababa #bababa #e8e8e8;
+	 	@include rounded-corners(10px);	
+		
+		&.grey {
+			background-color:#f9f8f7;
+		}
 
-/****************************************/
-/*** Classes for the translatable elements
-/****************************************/
-
-.platform_not_translated                           {border-bottom: 2px solid red;}
-.platform_translated                               {border-bottom: 2px solid green;}
-.platform_fallback                                 {border-bottom: 2px solid yellow;}
-.platform_language_case                            {border: 1px dotted blue;}
+		&.blue {
+			background-color:#EFF8FF;
+		}
+		
+		&.yellow {
+			background-color:#FDFFF0;	
+		}
+	}
+	div {
+		font-family:arial;
+	}   
+	a {
+		text-decoration:none; 
+		color:#16b; 
+		outline:none; 
+		border:0px;
+	} 
+	a:hover {
+		text-decoration:underline;
+		img {
+			border:0px;
+		}
+	}
+	table {
+		width:100%;
+		border-collapse: collapse; 
+		font-size:12px; 
+		padding:0px; 
+		margin:0px;
+	}
+	td {
+		vertical-align:top; 
+		padding:0px; 
+		spacing:0px;
+	}
+	th {
+		vertical-align:top;
+		text-align:left; 
+		padding:0px; 
+		spacing:0px;
+	}
+	input {
+		border: 1px solid #ccc; 
+		padding: 3px; 
+		margin: 0px;
+	 	@include rounded-corners(10px);	
+	}   
+	select {
+		border: 1px solid #ccc; 
+		padding: 3px; 
+		margin: 0px;
+		background-color: #E6E6E6;
+	 	@include rounded-corners(10px);	
+	}   
+	textarea {
+		border:1px solid #ccc; 
+		padding:3px;
+	 	@include rounded-corners(10px);	
+	}   
+	select {
+		border:1px solid #ccc; 
+		padding:3px;
+	}  
+	.pagination {
+		text-align:right; 
+		padding:0px; 
+		margin:0px;
+	}
+  .cat_item {
+    padding-left:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+  }
+  .cat_item_selected {
+    background:#5C96D2;
+    color:white;
+  }
+  .cat_item_selected a {
+    color:white;
+  }	
+}
 
 /****************************************/
 /*** Classes for the popup windows
 /****************************************/
 
 .section_title                                  {padding-top:10px; border-bottom: 1px solid #ccc; margin-bottom:10px; color:black;font-size:18px;}  
-.section_box                                    {border: 1px dotted #ccc; padding:10px; margin-top:10px; margin-bottom:15px;}
-.section_box.colored                            {background: #f9f8f7;}
-.section_box.locked                             {background: #F1FFEF;}
-     
 .small_section_title                            {padding-top:5px; border-bottom: 1px solid #ccc; margin-bottom:10px; color:black; font-size:12px; font-weight: bold;}  
 
 .topic_header                                   {color: grey; padding-bottom:5px;}
@@ -93,40 +203,14 @@ button::-moz-focus-inner                        {border:none;}
 .platform .admin_table td.numeric              {text-align: right; }
 .platform .admin_table th.numeric              {text-align: right; }
 
-/****************************************/
-/***  Pure CSS Buttons.
-/***  Learn more ~ http://www.halmatferello.com/lab/pure-css-buttons/
-/***  Licensed under GPL and MIT.
-/****************************************/
-
-.platform_pcb, .platform_pcb span                   {background: url('/assets/platform/buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
-.platform_pcb, a.platform_pcb:link, a.platform_pcb:visited  {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
-
-/* ie 6 hack */
-* html div#frame .platform_pcb                      {color: #333; padding-top: 0px; padding-bottom: 0px; text-decoration: none; }
-
-/* ie 7 hack */
-*:first-child+html .platform_pcb                    {color: #333; padding-top: 0px; padding-bottom: 0px; text-decoration: none; }
-
-.platform_pcb span                                  {background-position: right -326px; padding-right: 14px; }
-a.platform_grey_button                              {background-position: left -219px; padding-top: 3px; }
-a.platform_grey_button span                         {background-position: right -545px; padding-top: 3px; }
-a.platform_grey_button:hover                        {background-position: left -246px; }
-a.platform_grey_button:hover span                   {background-position: right -572px; }
-a.platform_grey_button:active, .grey_active_button  {background-position: left -273px; }
-a.platform_grey_button:active span, .grey_active_button span {background-position: right -599px; }
-body.platform_grey_disabled_button                  {background-position: left -300px; color: #bbb !important; }
-body.platform_grey_disabled_button span             {background-position: right -626px; }
-
-.platform_cancel_link                               {font-size:12px;font-family:arial;}
-
-
 .app_fields {
   font-size:12px;
-  border: 1px dotted #ccc; 
+  border: 1px solid #ccc; 
+	border-color:#e8e8e8 #bababa #bababa #e8e8e8;
   padding:10px; 
   background: #fafafa;
   margin-bottom:20px; 
+ 	@include rounded-corners(10px);	
 }
 
 .app_fields th {
@@ -175,3 +259,39 @@ body.platform_grey_disabled_button span             {background-position: right 
   padding:5px;width:100%;margin-bottom:10px;
   border-top: 1px solid #ccc;
 } 
+
+
+/****************************************/
+/***  Pure CSS Buttons.
+/***  Learn more ~ http://www.halmatferello.com/lab/pure-css-buttons/
+/***  Licensed under GPL and MIT.
+/****************************************/
+
+.platform_pcb {
+	background: url('/assets/platform/buttons.png') no-repeat; 
+	height: 23px; 
+	line-height: 23px; 
+	padding: 3px 0 7px 0; 
+
+	span {
+		background: url('/assets/platform/buttons.png') no-repeat; 
+		height: 23px; 
+		line-height: 23px; 
+		padding: 3px 0 7px 0; 
+	}
+}
+.platform_pcb {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
+a.platform_pcb:link {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; } 
+a.platform_pcb:visited  {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
+
+.platform_pcb span                                  {background-position: right -326px; padding-right: 14px; }
+a.platform_grey_button                              {background-position: left -219px; padding-top: 3px; }
+a.platform_grey_button span                         {background-position: right -545px; padding-top: 3px; }
+a.platform_grey_button:hover                        {background-position: left -246px; }
+a.platform_grey_button:hover span                   {background-position: right -572px; }
+a.platform_grey_button:active, .grey_active_button  {background-position: left -273px; }
+a.platform_grey_button:active span, .grey_active_button span {background-position: right -599px; }
+body.platform_grey_disabled_button                  {background-position: left -300px; color: #bbb !important; }
+body.platform_grey_disabled_button span             {background-position: right -626px; }
+
+.platform_cancel_link                               {font-size:12px;font-family:arial;}
