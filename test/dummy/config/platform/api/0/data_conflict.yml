@@ -1,0 +1,18 @@
+data_conflict:
+  title: "Data Conflict Structure"
+  type: "struct"
+  description: "Returns data conflict elements."
+  fields:
+    profile: 
+      description: "Url (or id) of the profile with data conflicts"
+      type: "Number"
+      public: true
+    managers: 
+      description: "Urls (or ids) of the managers of the profile with data conflicts"
+      type: "Array"
+      array_type: "String"
+      public: true
+    actor: 
+      description: "Url (or id) of the last person to take an action on this merged profile"
+      type: "String"
+      public: true

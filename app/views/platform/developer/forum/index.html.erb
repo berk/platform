@@ -80,14 +80,7 @@
       <% end %>
     </table>
   
-    <div style="margin-bottom:5px; padding-top:5px; border-top: 1px solid #ccc;">
-      <table style="width:100%;">
-        <tr>
-          <td align='left'><%= page_entries_info(@topics, :entry_name => "forum topic", :skip_decorations => true) %></td>
-          <td align='right'><%= will_paginate(@topics, :skip_decorations => true, :style => "text-align:right;") %></td>
-        </tr>
-      </table>
-    </div>
+		<%= platform_paginator_tag(@topics, :subject => "forum topic") %>
 </div>
 <% end %>
 

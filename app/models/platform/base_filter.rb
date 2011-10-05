@@ -21,7 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::BaseFilter < Wf::Filter
+class Platform::BaseFilter < WillFilter::Filter
 
   def default_filters
     [

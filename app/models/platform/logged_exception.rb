@@ -24,11 +24,9 @@
 class Platform::LoggedException < ActiveRecord::Base
   set_table_name :platform_logged_exceptions
 
-  marshal :cause
+  serialize :cause
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
   belongs_to :application, :class_name => "Platform::Application", :foreign_key => :application_id
-
-  RAILS_ROOT = Pathname.new(Rails.root).cleanpath.to_s
 
   def self.create_from_exception(controller, exception, data)
     message = exception.message.inspect
@@ -257,7 +255,7 @@ class Platform::LoggedException < ActiveRecord::Base
         "* URL:#{" #{request.method.to_s.upcase}" unless request.get?} #{request.protocol}#{request.env["HTTP_HOST"]}#{request.request_uri}",
         "* Format: #{request.format.to_s}",
         "* Parameters: #{request.parameters.reject{|key, value| rejected_parameters.include?(key.to_sym)}.inspect}",
-        "* Rails Root: #{RAILS_ROOT}"
+        "* Rails Root: #{Rails.root}"
       ] * "\n")
     end
   end
@@ -272,9 +270,8 @@ class Platform::LoggedException < ActiveRecord::Base
 
   private
 
-    BACKTRACE_REGEX = /^#{Regexp.escape(Rails.root)}/
     def sanitize_backtrace(trace)
-      trace.map{|line| Pathname.new(line.gsub(BACKTRACE_REGEX, "[RAILS_ROOT]")).cleanpath.to_s}
+      trace
     end
 
     def self.email_exception(log, to)

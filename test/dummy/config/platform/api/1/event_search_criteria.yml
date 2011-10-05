@@ -1,0 +1,25 @@
+event_search_criteria:
+  title: "Event Search Criteria Structure"
+  type: "struct"
+  description: "Event search criteria elements."
+  params:
+    year_range: 
+      description: "Year range: circa(default), exact, before, after, or between"
+      type: "String"
+      required: false
+    year: 
+      description: "Event's year. Start year if using between"
+      type: "Number"
+      required: false
+    end_year: 
+      description: "Event's end year if using between"
+      type: "Number"
+      required: false
+    country:  
+      description: "Country where event took place"
+      type: "String"
+      required: false
+    location:  
+      description: "Location where event took place"
+      type: "String"
+      required: false

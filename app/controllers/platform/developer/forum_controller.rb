@@ -24,7 +24,7 @@
 class Platform::Developer::ForumController < Platform::Developer::BaseController
   
   def index
-    @topics = Platform::ForumTopic.paginate(:all, :conditions => ["subject_id is null"], :page => page, :per_page => per_page, :order => "created_at desc")
+    @topics = Platform::ForumTopic.where("subject_id is null").order("created_at desc").page(page).per(per_page)
   end
 
   def topic
@@ -47,7 +47,7 @@ class Platform::Developer::ForumController < Platform::Developer::BaseController
         params[:page] = 1 if params[:page] == 0
       end
 
-      @messages = Platform::ForumMessage.paginate(:all, :conditions => ["forum_topic_id = ?", @topic.id], :page => page, :per_page => per_page, :order => "created_at asc")
+      @messages = Platform::ForumMessage.where("forum_topic_id = ?", @topic.id).order("created_at asc").page(page).per(per_page)
     end
   end
 

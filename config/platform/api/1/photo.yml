@@ -1,0 +1,215 @@
+photo:
+  type: "api"
+  path: "photo"
+  sample: "https://www.geni.com/api/photo-21557506"
+  description: "Returns information about a photo."
+  status: updated 
+  
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of photos on specific urls. For example: https://www.geni.com/api/photo?ids=101,31534,145 returns photo data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the title of a photo: https://www.geni.com/api/photo-21557506?fields=title."
+      required: false
+      
+  fields:
+    id: 
+      description: "The photo's id"
+      type: "String"
+    title: 
+      description: "The photo's title"
+      type: "String"
+    description: 
+      description: "The photo's description"
+      type: "String"
+    url: 
+      description: "The api url of the photo"
+      type: "String"
+    date: 
+      description: "The photo's date"
+      type: "String"
+      status: updated      
+    content_type:
+      description: "The photo's original content type"
+      type: "String"
+    sizes:
+      description: "URLs to the photo's sizes"
+      type: "PhotoImageSizeMap"
+    guid: 
+      description: "The old GUID"
+      type: "String"
+    album_id: 
+      description: "The id of the album where the photo is stored"
+      type: "String"
+    created_at: 
+      description: "Timestamp of when the photo was created"
+      type: "String"
+    updated_at: 
+      description: "Timestamp of when the photo was last updated"
+      type: "String"
+    location: 
+      description: "The photo's location"
+      type: "Location"
+      status: added
+      
+  param_groups:
+    pagination_params:
+      count: 
+        type: "Boolean"
+        description: "Only return the count: true or false (default false)"
+        required: false
+      page: 
+        type: "Number"
+        description: "Page number of results to return. Default 1."
+        required: false
+      per_page: 
+        type: "Number"
+        description: "Number of results per page. Max 50 (default 50)"
+        required: false
+      fields:
+        type: "Array"
+        array_type: "String"
+        description: "You can pass a list of fields you want returned in your call."
+        required: false
+    update_fields: [title, description, date]
+
+  field_groups:
+      
+  actions:
+    add:
+      path: "photo/add" 
+      method: POST
+      status: added
+      description: "Uploads and creates a photo."
+      sample: "https://www.geni.com/api/photo/add?title=foo&text=text-doc"
+      params:
+        title: 
+          description: "The photo's title"
+          type: "String"
+          required: true
+        description: 
+          description: "The photo's description"
+          type: "String"
+          required: false
+        date: 
+          description: "The photo's date in JSON form"
+          type: "Date"
+          required: false
+        file:
+          description: "File to create photo from"
+          type: "Binary"
+          required: false
+        album_id:
+          description: "The id of the album where the photo will be stored"
+          type: "String"
+          required: false
+      fields: *
+      
+    tag: 
+      path: "photo/tag" 
+      method: POST
+      description: "Tags a person in a photo."
+      sample: "https://www.geni.com/api/photo-1/tag/profile-1"
+      fields: *
+      
+    untag: 
+      path: "photo/untag" 
+      method: POST
+      description: "Removes a person tag from a photo."
+      sample: "https://www.geni.com/api/photo-1/untag/profile-1"
+      fields: *
+      
+    tags: 
+      path: "photo/tags" 
+      method: GET
+      description: "Returns a list of people tagged in a photo."
+      sample: "https://www.geni.com/api/photo-339953/tags"
+      params: pagination_params
+      fields:
+        results:
+          description: "The list of profiles tagged in a photo"
+          type: "Array"
+          array_type: "Profile"
+        prev_page:
+          description: "Link to the previous page of results (if any)"
+          type: "String"
+        next_page:
+          description: "Link to the next page of results (if any)"
+          type: "String"
+        page:
+          description: "Page number"
+          type: "Number"
+          
+    update:
+      path: "photo/update" 
+      method: POST
+      status: added
+      description: "Updates photo data and returns the updated photo."
+      sample: "https://www.geni.com/api/photo-1/update?title=foo"
+      params: update_fields
+      fields: " * "
+
+    delete:
+      path: "photo/delete" 
+      method: POST
+      status: added
+      description: "Deletes photo."
+      sample: "https://www.geni.com/api/photo-1/delete"
+      
+    comments: 
+      path: "photo/comments"
+      status: added 
+      method: GET
+      description: "Returns a list of photo comments"
+      sample: "https://www.geni.com/api/photo-1/comments"
+      params: pagination_params
+      fields:
+        results:
+          description: "The list of photo comments"
+          type: "Array"
+          array_type: "Comment"
+        prev_page:
+          description: "Link to the previous page of results (if any)"
+          type: "String"
+        next_page:
+          description: "Link to the next page of results (if any)"
+          type: "String"
+        page:
+          description: "Page number"
+          type: "Number"
+
+    comment: 
+      path: "photo/comment"
+      status: added 
+      method: POST
+      description: "Adds a comment to the photo"
+      sample: "https://www.geni.com/api/photo-1/comment"
+      params: 
+        title: 
+          description: "Comment title"
+          type: "String"
+          required: false
+        text: 
+          description: "Comment text"
+          type: "String"
+          required: true
+      fields:
+        results:
+          description: "The list of photo comments"
+          type: "Array"
+          array_type: "Comment"
+        prev_page:
+          description: "Link to the previous page of results (if any)"
+          type: "String"
+        next_page:
+          description: "Link to the next page of results (if any)"
+          type: "String"
+        page:
+          description: "Page number"
+          type: "Number"
+     

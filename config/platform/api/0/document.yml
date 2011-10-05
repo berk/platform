@@ -1,0 +1,86 @@
+document:
+  type: "api"
+  path: "document"
+  sample: "https://www.geni.com/api/document-339953"
+  description: "Returns information about a document."
+  status: changed
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of documents on specific urls. For example: https://www.geni.com/api/document?ids=101,31534,145 returns document data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the title of a document: https://www.geni.com/api/document-339953?fields=title."
+      required: false
+      
+  fields:
+    id: 
+      description: "The document's node id"
+      type: "String"
+    url: 
+      description: "The api url of the document"
+      type: "String"
+    title: 
+      description: "The document's title"
+      type: "String"
+    date: 
+      description: "The document's date"
+      type: "String"
+      status: changed
+    date_parts: 
+      description: "The document's date broken out into parts"
+      type: "Date"
+      status: deprecated
+    content_type:
+      description: "The document's original content type"
+      type: "String"
+    sizes:
+      description: "URLs to the document's sizes"
+      type: "DocumentImageSizeMap"
+    guid: 
+      description: "The old GUID"
+      type: "String"
+    created_at: 
+      description: "Timestamp of when the document was created"
+      type: "String"
+    updated_at: 
+      description: "Timestamp of when the document was last updated"
+      type: "String"
+    source_url: 
+      description: "Source URL for the document"
+      type: "String"
+    description: 
+      description: "The document's description"
+      type: "String"
+    labels: 
+      description: "The document's labels in a comma separated list"
+      type: "Array"
+      array_type: "String"
+      
+  actions:
+    tag:
+      path: "document/tag" 
+      method: POST
+      description: "Tags a person in a document."
+      sample: "https://www.geni.com/api/document-1/tag/profile-1"
+      fields: *
+    untag: 
+      path: "document/untag" 
+      method: POST
+      description: "Removes a person tag from a document."
+      sample: "https://www.geni.com/api/document-1/untag/profile-1"
+      fields: *
+    tags: 
+      path: "document/tags" 
+      method: GET
+      description: "Returns a list of people tagged in a document."
+      sample: "https://www.geni.com/api/document-339953/tags"
+      fields:
+        results:
+          description: "The list of profiles tagged in a document"
+          type: "Array"
+          array_type: "Profile"
+          

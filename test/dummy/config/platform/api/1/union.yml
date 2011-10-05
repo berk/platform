@@ -1,0 +1,129 @@
+union:
+  title: "Union API"
+  type: "api"
+  path: "union"
+  sample: "https://www.geni.com/api/union-12276689"
+  description: "Returns information about a union."
+  status: updated
+  
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of unions on specific urls. For example: https://www.geni.com/api/union?ids=101,31534,145 returns union data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the status of a union: https://www.geni.com/api/union-12276689?fields=status."
+      required: false
+    only_ids:
+      type: "Boolean"
+      description: "The returned data structures will contain urls to other objects in our system unless the request includes 'only_ids=true.' Passing only_ids will force the system to return ids only."
+      required: false
+  
+  fields:
+    id: 
+      description: "The union's id"
+      type: "String"
+    status: 
+      description: "The status of the union (engaged|current|ex|unknown)"
+      type: "String"
+    marriage_location: 
+      description: "Where the couple was married"
+      type: "Location"
+      status: updated
+    marriage_date: 
+      description: "When the couple was married"
+      type: "Date"
+      status: updated
+    partners: 
+      description: "Array of partners in the union (urls or ids, if requested)"
+      type: "Array"
+      array_type: "String"
+    children: 
+      description: "Array of children in the union (urls or ids, if requested)"
+      type: "Array"
+      array_type: "String"
+
+  param_groups:
+    profile_fields:
+      first_name: 
+        description: "The profile's first name"
+        type: "String"
+        required: false
+      middle_name: 
+        description: "The profile's middle name"
+        type: "String"
+        required: false
+      maiden_name: 
+        description: "The profile's maiden name"
+        type: "String"
+        required: false
+      last_name: 
+        description: "The profile's last name"
+        type: "String"
+        required: false
+      suffix: 
+        description: "The profile's suffix"
+        type: "String"
+        required: false
+      display_name: 
+        description: "The profile's display name"
+        type: "String"
+        required: false
+      gender: 
+        description: "The profile's gender"
+        type: "String"
+        required: false
+      public: 
+        description: "True if the profile is public"
+        type: "Boolean"
+        required: false
+      birth: 
+        description: "Profile's birth event info"
+        type: "Event"
+        required: false
+      baptism: 
+        description: "Profile's baptism event info"
+        type: "Event"
+        required: false
+      death: 
+        description: "Profile's death event info"
+        type: "Event"
+        required: false
+      burial: 
+        description: "Profile's burial event info"
+        type: "Event"
+        required: false
+      is_alive: 
+        description: "True if the profile is living"
+        type: "Boolean"
+        required: false
+      email: 
+        description: "The Profile's email address"
+        type: "String"
+        required: false
+      about_me: 
+        description: "Profile's about me section"
+        type: "String"
+        required: false
+
+  actions:
+    add-child: 
+      path: "union/add-child"
+      method: GET
+      description: "Add a child to a union and return the added profile.<br><br><strong>This method is only available to Geni Pro subscribers.</strong>"
+      sample: "https://www.geni.com/api/union-1/add-child?first_name=child&last_name=smith"
+      status: added
+      params: profile_fields
+      fields: "*"
+    add-partner: 
+      path: "union/add-partner"
+      method: GET
+      description: "Add a partner to a union and return the added profile.<br><br><strong>This method is only available to Geni Pro subscribers.</strong>"
+      sample: "https://www.geni.com/api/union/add-partner?first_name=partner&last_name=smith"
+      status: added
+      params: profile_fields
+      fields: "*"
+   

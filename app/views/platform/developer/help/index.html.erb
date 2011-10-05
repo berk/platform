@@ -1,12 +1,12 @@
 <%= render :partial => "header" %>
 
 <div class="documentation_section_title">
-  <%= tr("Welcome to {site_title} API Documentation", "", :site_title => Tr8n::Config.site_title ) %>
+  <%= tr("Welcome to {site_title} API Documentation", "", :site_title => Platform::Config.site_title ) %>
 </div>
 
 <div class="documentation_section">
 	<p>
-    <%=tr("Thank you for becoming a {site_title} developer.", "", :site_title => Tr8n::Config.site_title )%> 
+    <%=tr("Thank you for becoming a {site_title} developer.", "", :site_title => Platform::Config.site_title )%> 
 		<%=tr("We're happy to provide you with a set of developer tools that will enable you to register, develop and monitor your application on {site_title}.", "", :site_title => Tr8n::Config.site_title)%>
   </p>
 	

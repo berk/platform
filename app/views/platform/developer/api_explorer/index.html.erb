@@ -1,6 +1,6 @@
 <%= render :partial => "/platform/developer/common/header" %>
-<%= javascript_include_tag("/platform/javascripts/api_explorer.js") %>
-<%= stylesheet_link_tag("/platform/stylesheets/api_explorer.css") %>
+<%= javascript_include_tag("platform/api_explorer.js") %>
+<%= stylesheet_link_tag("platform/api_explorer.css") %>
 
 <div class="section_title">
   <div style="float:right; padding-top:6px; font-size:12px; color: #ccc;">
@@ -15,11 +15,14 @@
 			<table style="width:100%">
 				<tr>
 					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
-					<td><%=text_field_tag(:access_token, "", :style=>"width:630px;")%> &nbsp;
+					<td style="vertical-align:middle">
+						 <%=text_field_tag(:access_token, "", :style=>"width:600px;")%> &nbsp;
 					   <%=link_to_function("X", "Platform.element('access_token').value = '';")%> 
 					</td>
 					<td style="width:150px; text-align:right;">
-						<%= link_to_function(trl('Get Access Token', 'Client application action label'), "getAccessToken()", :class=>'button super blue medium') %>
+		        <button class="platform_btn platform_submit_btn" onClick="getAccessToken(); return false;">
+		            <span><%=tr("Get Access Token")%></span>
+		        </button>
 					</td>
 				</tr>
 			</table>
@@ -33,14 +36,21 @@
           <%=select_tag("api_version", options_for_select(Platform::Config.api_supported_version_options, @api_version), :onChange=>"switchApiVersion()")%>
         </td>
   			<td style="width:80px;">
-				  <%=select_tag("request_method", options_for_select(['GET', 'POST', 'PUT', 'DELETE'], params[:method] || 'GET'), :onChange=>"switchRequestMethod()")%>
+				  <%=select_tag("request_method", options_for_select(['GET', 'POST', 'PUT', 'DELETE'], params[:method] || 'GET'), :style=>"", :onChange=>"switchRequestMethod()")%>
   			</td>
-				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
-				  <span style="float:right;padding-right:5px;"><%=link_to_function(image_tag("/platform/images/arrow_down.gif"), "toggleApiOptions(this)")%></span>
-				  <span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, params[:path], :style=>"width:530px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) {api_history_index=-1; submitRequest();}")%>			
+				<td>
+					<table style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;height:23px;">
+						<tr>
+							<td><span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%>/</span></td>
+							<td><%=text_field_tag(:api_path, params[:path], :style=>"width:500px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) {api_history_index=-1; submitRequest();}")%></td>
+							<td><span style="float:right;padding-right:5px;"><%=link_to_function(image_tag("platform/arrow_down.gif"), "toggleApiOptions(this)")%></span></td>
+						</tr>	
+					</table>	
 				</td>
 				<td style="padding-left:5px;text-align:right;">
-          <%= link_to_function(trl('Submit', 'Client application action label'), "api_history_index=-1; submitRequest();", :class=>'button super blue medium') %>
+	        <button class="platform_btn platform_submit_btn" onClick="api_history_index=-1; submitRequest(); return false;">
+	            <span><%=tr("Submit")%></span>
+	        </button>
 				</td>
   		</tr>
 			<tr>
@@ -67,13 +77,13 @@
 	  <div style="float:right;"> 
 	    <%=link_to_function('<<', "makePreviousCall()", :class=>"button super gray small", :id => "history_previous") %>
 	    <%=link_to_function('>>', "makeNextCall()", :class=>"button super gray small", :id => "history_next") %>
-  	  <%=link_to_function(image_tag("/platform/images/arrow_down.gif", :style=>"vertical-align:middle"), "toggleApiHistory(this)", :class=>"button super gray small")%>
+  	  <%=link_to_function(image_tag("platform/arrow_down.gif", :style=>"vertical-align:middle"), "toggleApiHistory(this)", :class=>"button super gray small")%>
 		</div>
 		
-		<%=link_to_function(image_tag("/platform/images/clipboard_icon.gif", :style=>"height:14px;"), "copyToClipboard(this)", :class=>"button super gray small", :id => "") %>
-    <%=link_to_function(image_tag("/platform/images/world_link.png", :style=>"height:14px;"), "copyUrlToClipboard(this)", :class=>"button super gray small", :id => "") %>
-    <%=link_to_function(image_tag("/platform/images/minus_node.png", :style=>"height:14px;"), "expandAllResultObjects(false)", :class=>"button super gray small", :id => "") %>
-    <%=link_to_function(image_tag("/platform/images/plus_node.png", :style=>"height:14px;"), "expandAllResultObjects(true)", :class=>"button super gray small", :id => "") %>
+		<%=link_to_function(image_tag("platform/clipboard_icon.gif", :style=>"height:14px;"), "copyToClipboard(this)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("platform/world_link.png", :style=>"height:14px;"), "copyUrlToClipboard(this)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("platform/minus_node.png", :style=>"height:14px;"), "expandAllResultObjects(false)", :class=>"button super gray small", :id => "") %>
+    <%=link_to_function(image_tag("platform/plus_node.png", :style=>"height:14px;"), "expandAllResultObjects(true)", :class=>"button super gray small", :id => "") %>
   </div>	
   <div class="section_box response_data" id="response_data" style="margin-top:5px;">
     

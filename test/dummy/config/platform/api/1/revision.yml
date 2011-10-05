@@ -1,0 +1,41 @@
+revision:
+  type: "api"
+  path: "revision"
+  sample: "https://www.geni.com/api/revision-1"
+  description: "Returns information about a revision."
+  status: updated
+  
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of revisions on specific urls. For example: https://www.geni.com/api/revision?ids=101,31534,145 returns revision data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the action of a revision: https://www.geni.com/api/revision-1?fields=action."
+      required: false
+  
+  fields:
+    id: 
+      description: "Revision id"
+      type: "String"
+    guid: 
+      description: "Revision guid"
+      type: "String"
+    action: 
+      description: "Action of the revision"
+      type: "String"
+    timestamp: 
+      description: "Server time of the revision"
+      type: "String"
+    date_local: 
+      description: "Date of the revision in the local date"
+      type: "String"
+    time_local: 
+      description: "Time of the revision in the local time"
+      type: "String"
+    story: 
+      description: "HTML story containing full revision description"
+      type: "String"

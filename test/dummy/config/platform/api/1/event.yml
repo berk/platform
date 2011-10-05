@@ -1,0 +1,11 @@
+event:
+  title: "Event Structure"
+  type: "struct"
+  description: "Returns event elements."
+  fields:
+    date: 
+      description: "Dtae of the event"
+      type: "Date"
+    location: 
+      description: "Location of the event"
+      type: "Location"

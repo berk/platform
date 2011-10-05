@@ -49,6 +49,7 @@
 			    ["Site Users", "/admin/users", "users"],
 			    ["Site Admins", "/admin/admins", "admins"],
 			    ["Tr8n Administration", "/tr8n/admin/language", "language"],
+			    ["Platform Administration", "/platform/admin/apps", "apps"],
         ] 
     %>
 		
@@ -69,6 +70,7 @@
 	                                        <% kls = "admin_category_item"
 	                                        ctrl_name = controller.controller_name
 	                                        ctrl_name = 'language' if request.url.index('/tr8n/')
+	                                        ctrl_name = 'apps' if request.url.index('/platform/')
 	                                        if admin[2] == ctrl_name
 	                                          kls = "admin_category_item_selected"
 	                                        end %>

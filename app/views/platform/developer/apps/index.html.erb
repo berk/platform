@@ -75,7 +75,7 @@
 
 <% if @apps.empty? %>
 <div style="padding:40px; margin-left:10px;margin-right:10px;text-align:center; font-size: 14px;">
-  <%=tr("You haven't registered any applications yet.")%> <%=tr("[link: Click here] to register a new application.", "", :link => ["/platform/developer/apps/new"])%>
+  <%=tr("You haven't registered any applications yet.")%> <%=tr("[link: Click here] to register a new application.", "", :link => {:href => "/platform/developer/apps/new"})%>
 </div>
 <% else %>
 <div style="padding-bottom:20px; margin-left:0px; margin-right:10px;">
@@ -305,7 +305,7 @@
               </div>
             </div>
 												
-            <% if Registry.platform.embedded_apps_enabled? %>
+            <% if Platform::Config.enable_embedded_applications? %>
 	            <div class="app_fields_section_header">
 							  <span style='float:right'>
 							  	<%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>

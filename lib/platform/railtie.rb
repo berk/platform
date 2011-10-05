@@ -33,24 +33,18 @@ require 'pp'
     end
 end
 
-# require File.join(File.dirname(__FILE__), 'extensions/array_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/date_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/fixnum_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/hash_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/string_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/time_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/action_view_extension')
-# require File.join(File.dirname(__FILE__), 'extensions/action_controller_extension')
+require File.join(File.dirname(__FILE__), 'extensions/action_view_extension')
+require File.join(File.dirname(__FILE__), 'extensions/action_controller_extension')
 
 module Platform
   class Railtie < ::Rails::Railtie #:nodoc:
     initializer 'platform' do |app|
-      # ActiveSupport.on_load(:action_view) do
-      #   ::ActionView::Base.send :include, Tr8n::ActionViewExtension
-      # end
-      # ActiveSupport.on_load(:action_controller) do
-      #   include Tr8n::ActionControllerExtension
-      # end      
+      ActiveSupport.on_load(:action_view) do
+        ::ActionView::Base.send :include, Platform::ActionViewExtension
+      end
+      ActiveSupport.on_load(:action_controller) do
+        include Platform::ActionControllerExtension
+      end      
     end
   end
 end

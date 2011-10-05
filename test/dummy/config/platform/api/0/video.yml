@@ -1,0 +1,84 @@
+video:
+  title: "Video API"
+  type: "api"
+  path: "video"
+  sample: "https://www.geni.com/api/video-21557506"
+  description: "Returns information about a video."
+  status: changed
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of videos on specific urls. For example: https://www.geni.com/api/video?ids=101,31534,145 returns video data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the title of a video: https://www.geni.com/api/video-21557506?fields=title."
+      required: false
+    page: 
+      type: "Number"
+      description: "For actions that return a list of objects, the API invokes paging (currently set to 20 objects per page). By using the page parameter, apps can select results deeper in the paginated set. Results with multiple pages also contain next, previous, and page keys to keep track of the currently viewed set."
+      required: false
+    only_ids:
+      type: "Boolean"
+      description: "The returned data structures will contain urls to other objects in our system unless the request includes 'only_ids=true.' Passing only_ids will force the system to return ids only."
+      required: false
+  fields:
+    id: 
+      description: "The video's id"
+      type: "String"
+    title: 
+      description: "The video's title"
+      type: "String"
+    url: 
+      description: "The api url of the video"
+      type: "String"
+    date: 
+      description: "The video's date"
+      type: "String"
+      status: changed
+    date_parts: 
+      description: "The video's date broken out into parts"
+      type: "Date"
+      status: deprecated
+    content_type:
+      description: "The video's original content type"
+      type: "String"
+    sizes:
+      description: "URLs to the video's sizes"
+      type: "VideoImageSizeMap"
+    guid: 
+      description: "The old GUID"
+      type: "String"
+    created_at: 
+      description: "Timestamp of when the video was created"
+      type: "String"
+    updated_at: 
+      description: "Timestamp of when the video was last updated"
+      type: "String"
+      
+  actions:
+    tag: 
+      path: "video/tag" 
+      method: POST
+      description: "Tags a person in a video."
+      sample: "https://www.geni.com/api/video-1/tag/profile-1"
+      fields: "*"
+    untag: 
+      path: "video/untag" 
+      method: POST
+      description: "Removes a person tag from a video."
+      sample: "https://www.geni.com/api/video-1/untag/profile-1"
+      fields: "*"
+    tags: 
+      path: "video/tags" 
+      method: GET
+      description: "Returns a list of people tagged in a video."
+      sample: "https://www.geni.com/api/video-339953/tags"
+      fields:
+        results:
+          description: "The list of profiles tagged in a document"
+          type: "Array"
+          array_type: "Profile"
+          

@@ -120,13 +120,11 @@ private
     authenticate_via_oauth 
     authenticate_via_cookie if cookies_enabled? and (not jsonp?)
 
-    if oauth_attempted? and not logged_in?
+    if oauth_attempted_and_failed?
       raise Exception.new('Invalid access token')
     else
       redirect_to_login unless allow_public?
     end
-    
-    verify_signature
   end
 
   def authenticate_via_oauth
@@ -146,14 +144,22 @@ private
   
   def access_token
     unless defined?(@access_token)
-      @access_token = Platform::Application.find_token(params[:access_token])
-    end
-
-    if @access_token.nil? && access_token_param
-      @access_token = Platform::Oauth::AccessToken.first(:conditions => {:token => access_token_param, :invalidated_at => nil})
+      @access_token = nil
+      if access_token_header
+        parts = access_token_header.split(' ')
+        if parts.first == 'Bearer'
+          @access_token = Platform::Application.find_token(parts.last) 
+        end  
+      elsif access_token_param
+        @access_token = Platform::Application.find_token(access_token_param)
+      end  
     end
 
     @access_token
+  end
+
+  def access_token_header
+    @access_token_header ||= request.headers["Authorization"]
   end
 
   def access_token_param
@@ -164,28 +170,16 @@ private
     not Platform::Config.current_user_is_guest?
   end
 
-  def oauth_attempted?
-    access_token_param || request.env['Authorization'] =~ /oauth/i
-  end
+  def oauth_attempted_and_failed?
+    oauth_attempted? and oauth_failed?
+  end  
   
-  def verify_signature
-    return unless client_app and client_app.requires_signature?
+  def oauth_failed?
+    access_token.nil?
+  end
 
-    # enable signature verification, always
-    if params[:sig].blank?
-      raise SignatureError.new("Missing signature")
-    end
-    
-    payload = ""
-    params.keys.sort.each do |key|
-      next if ['controller', 'action', 'sig'].include?(key.to_s)
-      payload << "#{key}=#{params[key]}"
-    end
-    payload << client_app.secret
-    digested = Digest::MD5.hexdigest(payload)
-    unless digested == params[:sig]
-      raise SignatureError.new("Invalid signature")
-    end
+  def oauth_attempted?
+    access_token_param or (access_token_header and access_token_header.index('Bearer'))
   end
 
   ############################################################################

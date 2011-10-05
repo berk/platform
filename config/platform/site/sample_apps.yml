@@ -1,0 +1,100 @@
+defaults: &defaults
+    
+    
+development:
+  <<: *defaults
+
+  birthdays:
+    key: wboMCGul2AymiFP9rKsEPef8LlJsm6UtgS1D23M4
+    secret: 4x0ibejmFCucVjsypCr6qtSdSaoUdFlt3p0lxSVF
+    host: http://localhost:3000
+    remote: http://michael.geni.com:3000
+
+  gconnect:
+    key: UgTezmDrUFnMaBpnG5hTBPXe3wnJZWVWg31D8hmK
+    secret: D2DBwx1LXOPEcgi7QHvpdujaQuCbKzF2qehDv9TI
+    host: http://localhost:3000
+    remote: http://michael.geni.com:3000
+
+  slideshow:
+    key: tvcWADJNfev76eUXeKCjAHta1ccWtDZqDll8PZyR
+    secret: 3LeCZAWAgDnlMzsTbXWG1hnhEmKhSFZkWJItPmFv
+    host: http://localhost:3000
+    remote: http://michael.geni.com:3000
+
+  familylocator:
+    key: grGBsHTnVc3cwQ9TiYyge9IpN1kac1YqypqF2D5m
+    secret: ww0UQuMBCQEmFXaZbzYreVtZ6981gL9Kwj45L17d
+    host: http://localhost:3000
+    remote: http://michael.geni.com:3000
+
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+  birthdays:
+    key: jsv35nt3LjCVrtXZYftUUnhd5fPO9N3CJUu1VXOn
+    secret: OEcLnFMzOxytBgOjYQohsqsBdlFuTqOcCr6p9S6K
+    host: http://stage.geni.com
+    remote: http://stage.geni.com
+  
+  slideshow:
+    key: hLJDiwreIwDK9LTzS7Kr43Gp5LE9z1FgsYVUk9IS
+    secret: p9a8l6MDGrWz6gAyck7gcYzuvWTENhm5vOyOYtk4
+    host: http://stage.geni.com
+    remote: http://stage.geni.com
+
+  familylocator:
+    key: EgBPnuyYtktpksrfSp15kJQVkDIl4GXqBqm2KHMe
+    secret: 0BvuFeupYE54Urfe8iGKEdbI9SWt1bNiuENmGXn6
+    host: http://stage.geni.com
+    remote: http://stage.geni.com
+
+production:
+  <<: *defaults
+  
+  birthdays:
+    key: jsv35nt3LjCVrtXZYftUUnhd5fPO9N3CJUu1VXOn
+    secret: OEcLnFMzOxytBgOjYQohsqsBdlFuTqOcCr6p9S6K
+    host: http://www.geni.com
+    remote: http://www.geni.com
+  
+  slideshow:
+    key: hLJDiwreIwDK9LTzS7Kr43Gp5LE9z1FgsYVUk9IS
+    secret: p9a8l6MDGrWz6gAyck7gcYzuvWTENhm5vOyOYtk4
+    host: http://www.geni.com
+    remote: http://www.geni.com
+
+  familylocator:
+    key: EgBPnuyYtktpksrfSp15kJQVkDIl4GXqBqm2KHMe
+    secret: 0BvuFeupYE54Urfe8iGKEdbI9SWt1bNiuENmGXn6
+    host: http://www.geni.com
+    remote: http://www.geni.com
+  
+
+sandbox:
+  <<: *defaults
+
+  birthdays:
+    key: 0oIBFKbzZKgAbxX33PDAfPp7ToR5fh9ILv1vMFcj
+    secret: zlZr21YyAXFT6IA7VrVuAmzc3GfuBJPKtYt8E4hi
+    host: http://sandbox.geni.com
+    remote: http://sandbox.geni.com
+  
+  slideshow:
+    key: sHO2apUHgOnA7WjlxYC32C8VdKyXos2Hw3CBnz8S
+    secret: NpGPI6ASkeRT1F44QHQyn6DJMUmh5SN9HaqQfP3b
+    host: http://sandbox.geni.com
+    remote: http://sandbox.geni.com
+
+  familylocator:
+    key: flSR9plZZfjb3kTY3hR4FWWgt2HQjKSl9CT4rs7g
+    secret: COucTFo1CBQeR6d2JOVoMSLJ3EeYMPT0aRKmo5YR
+    host: http://sandbox.geni.com
+    remote: http://sandbox.geni.com
+  

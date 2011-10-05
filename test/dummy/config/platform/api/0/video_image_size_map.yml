@@ -1,0 +1,34 @@
+video_image_size_map:
+  title: "Video Image Size Map Structure"
+  type: "struct"
+  description: "Urls of the video image sizes."
+  fields:
+    large: 
+      description: "URL of the large image"
+      type: "String"
+      public: true
+    medium: 
+      description: "URL of the medium image"
+      type: "String"
+      public: true
+    origin: 
+      description: "URL of the original image"
+      type: "String"
+      public: true
+    print: 
+      description: "URL of the print image"
+      type: "String"
+      public: true
+    small: 
+      description: "URL of the small image"
+      type: "String"
+      public: true
+    thumb: 
+      description: "URL of the thumb image"
+      type: "String"
+      public: true
+    thumb2: 
+      description: "URL of the thumb2 image"
+      type: "String"
+      public: true
+      

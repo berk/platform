@@ -1,0 +1,22 @@
+tree_conflict:
+  title: "Tree Conflict Structure"
+  type: "struct"
+  description: "Returns tree conflict elements."
+  fields:
+    profile: 
+      description: "Url (or id) of the profile with tree conflicts"
+      type: "Number"
+      public: true
+    managers: 
+      description: "Urls (or ids) of the managers of the profile with tree conflicts"
+      type: "Array"
+      array_type: "String"
+      public: true
+    actor: 
+      description: "Url (or id) of the last person to take an action on this merged profile"
+      type: "String"
+      public: true
+    issue_type: 
+      description: "Returns 'parent' or 'partner' depending on the conflict type"
+      type: "String"
+      public: true

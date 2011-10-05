@@ -1,7 +1,7 @@
 <%= render :partial => "/platform/admin/common/header" %>
 <%= render :partial => "tabs" %>
 
-<%= will_filter(@tokens) %>
+<%= will_filter_tag(@tokens) %>
 <%= will_filter_table_tag(@tokens, :columns => [
       :id, 
       :type,

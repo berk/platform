@@ -1,11 +1,177 @@
 <%= render :partial => "header" %>
-
 <div class="documentation_section_title">
-  <%= tr("Application Authorization Flow") %>
+    <%= tr("Application Login Flow") %>
 </div>
-
 <div class="documentation_section">
-  
-</div>
+    <p>
+        <%=tr("In this flow, application requests authorization to make calls on its behalf.") %>
+				<%=tr("By using this flow application will get higher rate limits for the public API calls than making unauthorized calls without an access token.") %>
+				<%=tr("Application will also be able to get app related data, such as statistics and metrics.") %>
+    </p>
 
+    <h2><%=tr("Application Authorization") %></h2>
+    <p>
+        <%=tr("In order to authenticate your app, you must pass the following parameter to the request_token endpoint:") %>
+    </p>
+    <h3><%=tr("Oauth Endpoint") %></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/request_token
+    </div>
+    <h3><%=tr("Parameters") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Required") %>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    client_id
+                </td>
+                <td>
+                    <%=tr("Application key generated during the app registration.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    client_secret
+                </td>
+                <td>
+                    <%=tr("Application secret generated during the registration process and availble in the application settings.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    grant_type
+                </td>
+                <td>
+                    <%=tr("For this flow you must set it to \"client_credentials\".") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example") %></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/request_token?client_id=YOUR_APP_ID&client_secret=YOUR_APP_SECRET&grant_type=client_credentials
+    </div>
+    <p>
+        <%=tr("If your app is successfully authenticated, the authorization server will return the access token in a JSON format:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    access_token
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Access token to be used with every API request")%> 
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    expires_in
+                </td>
+                <td style="widtd:150px;">
+                    Number
+                </td>
+                <td>
+                    <%=tr("Seconds until the token will expire") %>
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    refresh_token
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Token that can be used to get a new access token") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example") %></h3>
+    <div class="code_snippet">
+        {"expires_in":86400,"refresh_token":"wEq6FMb3CcfPN6CckQv7","access_token":"sye4NMd130L4wqq13zjqqLHwuHd5jnnKwdVi9S8X"}
+    </div>
+    <p>
+        <%=tr("If your app failed to provide appropriate parameters, you will get one of the errors below in JSON format: ") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+            <tr>
+                <td style="widtd:150px;">
+                    error
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Error code") %>
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    error_description
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Error description") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Examples") %></h3>
+    <div class="code_snippet">
+        {"error_description":"invalid client application id","error":"unauthorized_client"}
+        <br>
+    </div>
+</div>
 <%= render :partial => "footer" %>

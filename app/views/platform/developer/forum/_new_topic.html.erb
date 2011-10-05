@@ -3,7 +3,7 @@
 </div>
 
 <div class="section_box colored">
-  <% form_tag({:action => :topic}, {:method => :post, :id => "forum_topic_form"}) do %>
+  <%= form_tag({:action => :topic}, {:method => :post, :id => "forum_topic_form"}) do %>
     <%=hidden_field_tag(:language_id, params[:language_id])%>
     
     <table style="width:99%">
@@ -26,11 +26,11 @@
     </table>
     
     <div style="padding-top:20px; padding-bottom:10px;text-align:center">
-        <button type="submit" class="translator_btn translator_submit_btn" onClick=" Tr8n.Effects.submit('forum_topic_form'); return false;">
+        <button type="submit" class="platform_btn platform_submit_btn" onClick=" Tr8n.Effects.submit('forum_topic_form'); return false;">
             <span><%=tr("Start a New Discussion")%></span>
         </button>
         <% if include_cancel_button %>
-        or 
+        <%=tr("or") %>
         <%=link_to(tr("Cancel"), :action => :index)%>
         <% end %>  
     </div>

@@ -1,0 +1,54 @@
+union:
+  title: "Union API"
+  type: "api"
+  path: "union"
+  sample: "https://www.geni.com/api/union-12276689"
+  description: "Returns information about a union."
+  status: changed
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of unions on specific urls. For example: https://www.geni.com/api/union?ids=101,31534,145 returns union data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the status of a union: https://www.geni.com/api/union-12276689?fields=status."
+      required: false
+    page: 
+      type: "Number"
+      description: "For actions that return a list of objects, the API invokes paging (currently set to 20 objects per page). By using the page parameter, apps can select results deeper in the paginated set. Results with multiple pages also contain next, previous, and page keys to keep track of the currently viewed set."
+      required: false
+    only_ids:
+      type: "Boolean"
+      description: "The returned data structures will contain urls to other objects in our system unless the request includes 'only_ids=true.' Passing only_ids will force the system to return ids only."
+      required: false
+  fields:
+    id: 
+      description: "The union's id"
+      type: "String"
+    status: 
+      description: "The status of the union (engaged|current|ex|unknown)"
+      type: "String"
+    marriage_location: 
+      description: "Where the couple was married"
+      type: "String"
+      status: changed
+    marriage_date: 
+      description: "When the couple was married"
+      type: "String"
+      status: changed
+    marriage_date_parts: 
+      description: "When the couple was married broken out by parts"
+      type: "String"
+      status: deprecated
+    partners: 
+      description: "Array of partners in the union (urls or ids, if requested)"
+      type: "Array"
+      array_type: "String"
+    children: 
+      description: "Array of children in the union (urls or ids, if requested)"
+      type: "Array"
+      array_type: "String"
+      

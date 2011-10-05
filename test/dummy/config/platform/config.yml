@@ -54,7 +54,7 @@ defaults: &defaults
     title:                    "Sample"
     base_url:                 "localhost:3000"
     contact_email:            platform@geni.com
-    default_url:              "/home"
+    default_url:              "/platform/home"
     login_url:                "/login"
     platform_layout:          application
     admin_layout:             admin
@@ -72,7 +72,7 @@ defaults: &defaults
         email:                "email"
         link:                 path
         mugshot:              square_mugshot_url
-        admin:                superuser?
+        admin:                admin?
         guest:                guest?
         locale:               language
     media_info:              
@@ -87,7 +87,7 @@ defaults: &defaults
   #############################################################################
   API:
     enabled:                  true
-    base_url:                 "localhost:3000/api/"
+    base_url:                 "localhost:3000/api"
     config_path:              "config/platform/api"
     logging_enabled:          true          
     admin_email:              scott.steadman@geni.com

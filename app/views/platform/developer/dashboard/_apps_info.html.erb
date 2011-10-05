@@ -22,7 +22,7 @@
 <div id="apps_info_container">
   <%=render(:partial => "header", :locals => {:section => "apps_info", :label => "Dashboard Applications", :description => "Section title", :mode => mode})%>
   
-  <% form_tag({:action => :update_settings}, {:id => 'apps_info_form', :method => :post}) do %>
+  <%= form_tag({:action => :update_settings}, {:id => 'apps_info_form', :method => :post}) do %>
     <div class="section_box colored">
       <div style="float:right; padding-right:5px;">
           <%=platform_help_icon_tag %>

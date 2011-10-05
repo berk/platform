@@ -5,11 +5,13 @@
 </div>
 
 <div class="app_fields">
-	<% form_for(:application, @app, :url => {:action => :update, :id => @app.id}, :html => {:method => :post, :multipart=>true}) do |form| %>
+	<%= form_for(@app, :as => :application, :url => {:action => :update, :id => @app.id}, :html => {:method => :post, :multipart=>true}) do |form| %>
 	  <%= render :partial=>'form', :locals=>{:form=>form} %>
 	  
 	  <div style="text-align:center; padding:15px;">
-	    <%= submit_tag trl('Save', 'Client application action label'), :class=>'button super blue large' %>
+      <button type="submit" class="platform_btn platform_submit_btn">
+          <span><%=tr('Save')%></span>
+      </button>
 	    <%=tr("or")%> <%=link_to(tr("Cancel"), :action => :index, :id => @app.id)%>
 	  </div>
 	<% end %>

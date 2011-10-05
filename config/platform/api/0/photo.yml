@@ -1,0 +1,89 @@
+photo:
+  type: "api"
+  path: "photo"
+  sample: "https://www.geni.com/api/photo-21557506"
+  description: "Returns information about a photo."
+  status: changed
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of photos on specific urls. For example: https://www.geni.com/api/photo?ids=101,31534,145 returns photo data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the title of a photo: https://www.geni.com/api/photo-21557506?fields=title."
+      required: false
+    page: 
+      type: "Number"
+      description: "For actions that return a list of objects, the API invokes paging (currently set to 20 objects per page). By using the page parameter, apps can select results deeper in the paginated set. Results with multiple pages also contain next, previous, and page keys to keep track of the currently viewed set."
+      required: false
+    only_ids:
+      type: "Boolean"
+      description: "The returned data structures will contain urls to other objects in our system unless the request includes 'only_ids=true.' Passing only_ids will force the system to return ids only."
+      required: false
+  fields:
+    id: 
+      description: "The photo's id"
+      type: "String"
+    title: 
+      description: "The photo's title"
+      type: "String"
+    url: 
+      description: "The api url of the photo"
+      type: "String"
+    date: 
+      description: "The photo's date"
+      type: "String"
+      status: changed
+    date_parts: 
+      description: "The photo's date broken out into parts"
+      type: "Date"
+      status: deprecated
+    content_type:
+      description: "The photo's original content type"
+      type: "String"
+    sizes:
+      description: "URLs to the photo's sizes"
+      type: "PhotoImageSizeMap"
+    guid: 
+      description: "The old GUID"
+      type: "String"
+    album_id: 
+      description: "The id of the album where the photo is stored"
+      type: "String"
+    created_at: 
+      description: "Timestamp of when the photo was created"
+      type: "String"
+    updated_at: 
+      description: "Timestamp of when the photo was last updated"
+      type: "String"
+    description: 
+      description: "The photo's description"
+      type: "String"
+      
+  actions:
+    tag: 
+      path: "photo/tag" 
+      method: POST
+      description: "Tags a person in a photo."
+      sample: "https://www.geni.com/api/photo-1/tag/profile-1"
+      fields: *
+    untag: 
+      path: "photo/untag" 
+      method: POST
+      description: "Removes a person tag from a photo."
+      sample: "https://www.geni.com/api/photo-1/untag/profile-1"
+      fields: *
+    tags: 
+      path: "photo/tags" 
+      method: GET
+      description: "Returns a list of people tagged in a photo."
+      sample: "https://www.geni.com/api/photo-339953/tags"
+      fields:
+        results:
+          description: "The list of profiles tagged in a document"
+          type: "Array"
+          array_type: "Profile"
+          

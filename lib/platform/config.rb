@@ -199,11 +199,11 @@ class Platform::Config
   end
 
   def self.default_app_icon
-    "/platform/images/default_app_icon.gif"
+    "/assets/platform/default_app_icon.gif"
   end
   
   def self.default_app_logo
-    "/platform/images/default_app_logo.gif"
+    "/assets/platform/default_app_logo.gif"
   end  
   
   #########################################################
@@ -622,7 +622,7 @@ class Platform::Config
   #########################################################
 
   def self.silhouette_image(user = current_user)
-    "/platform/images/photo_silhouette.gif"
+    "/assets/platform/photo_silhouette.gif"
   end
 
   def self.features

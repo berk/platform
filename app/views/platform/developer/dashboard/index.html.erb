@@ -6,7 +6,7 @@
 
 <div class="section_title">
   <div style="float:right; font-size:12px; padding-top:5px;">
-     <%=link_to(tr("edit developer information", "Developer preferences link"), :controller => "/platform/developer", :action => :info)%>
+     <%=link_to(tr("edit developer information", "Developer preferences link"), :controller => "/platform/developer/dashboard", :action => :info)%>
 		 |
      <%=link_to(tr("dashboard preferences", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>
   </div>
@@ -40,7 +40,7 @@
                       <% @apps.each do |app|
                           apps << link_to(app.versioned_name, :anchor => "app_#{app.id}")  
                          end %>       
-                      <%= apps.join(" | ") %> (<%=link_to(tr("change", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>)
+                      <%= raw(apps.join(" | ")) %> (<%=link_to(tr("change", "Dashboard preferences link"), :controller => "/platform/developer/dashboard", :action => :settings)%>)
                     </td>
                   </tr>
                 </table>

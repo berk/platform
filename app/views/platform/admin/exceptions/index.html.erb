@@ -1,7 +1,7 @@
 <%= render :partial => "/platform/admin/common/header" %>
 <%= render :partial => "tabs" %>
 
-<%= will_filter(@exceptions) %>
+<%= will_filter_tag(@exceptions) %>
 <%= will_filter_table_tag(@exceptions, :columns => [:exception_class, :controller_name, :action_name, :message, :application_id, :created_at]) %>
 
 <%= render :partial => "/platform/admin/common/footer" %>

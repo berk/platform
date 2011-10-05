@@ -1,0 +1,20 @@
+location:
+  title: "Location Structure"
+  type: "struct"
+  description: "Returns location elements."
+  fields:
+    name: 
+      description: "Place name"
+      type: "String"
+    country: 
+      description: "Country name"
+      type: "String"
+    state: 
+      description: "State name"
+      type: "String"
+    city: 
+      description: "City name"
+      type: "String"
+    county: 
+      description: "County name"
+      type: "String"

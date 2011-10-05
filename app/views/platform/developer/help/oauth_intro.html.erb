@@ -77,7 +77,7 @@
 					<%=tr("This flow is not enabled by default.") %> <%=tr("If you want to use this flow, please email us and after we review your application we will make a decision on granting you the flow access.")%>
         </td>
       </tr>
-      <!-- tr>
+      <tr>
         <td>
         	<%=link_to("App Login Flow", :action => :oauth_app_login)%>
         </td>
@@ -85,9 +85,11 @@
           <a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.4">Client Credentials</a>
         </td>
         <td>
-          Use this flow if your application needs to take various administrative actions, such as retrieving statistics data. The calls will not be made on behalf of the user, but on behalf of the app itself. 
+          <%=tr("Use this flow if your application needs to retrieve public data or take adminstrative actions. ") %>
+					<%=tr("The calls will not be made on behalf of the user, but on behalf of the app itself. ") %> 
+					<%=tr("Unlike public api calls without a token, this flow has a higher rate limit.")%>
         </td>
-      </tr -->
+      </tr>
   	</table>
   </p>
 

@@ -1,0 +1,21 @@
+date:
+  title: "Date Structure"
+  type: "struct"
+  description: "Returns date elements."
+  fields:
+    day: 
+      description: "Date's day"
+      type: "Number"
+      public: true
+    month: 
+      description: "Date's month"
+      type: "Number"
+      public: true
+    year: 
+      description: "Date's year"
+      type: "Number"
+      public: true
+    circa:  
+      description: "Indicates wether the date is an approximation"
+      type: "Boolean"
+      public: true

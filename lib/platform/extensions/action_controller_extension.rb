@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2010-2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -21,22 +21,14 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::Oauth::OauthTokenFilter <  Wf::Filter
+module Platform
+  module ActionControllerExtension
+    def self.included(base)
+      base.send(:include, InstanceMethods) 
+    end
 
-  def default_filters
-    [
-      ["Created today", "created_today"]
-    ]
-  end
+    module InstanceMethods
 
-  def default_filter_conditions(key)
-    if (key=="created_today")
-      return [:created_at, :is_on, Date.today]
     end
   end
-
-  def default_filter_if_empty
-    "created_today"
-  end
-
 end

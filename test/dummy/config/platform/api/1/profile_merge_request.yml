@@ -1,0 +1,5 @@
+profile_merge_request:
+  title: "Profile Merge Request Structure"
+  type: "struct"
+  description: "Returns profile merge request elements."
+  fields:

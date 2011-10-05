@@ -41,13 +41,13 @@
 .platform_right_horiz_list                          {float:right;overflow:hidden;text-align:left;list-style-type:none;font-family:arial;font-size:12px;margin-top:0px;}
 .platform_right_horiz_list li                       {margin-right:-11px;border-right:solid 1px #ccc;padding:0px 10px;margin-left:10px;float:left;}
 
-.translator_btn                                 {position:relative;border:0;padding:0;margin:0 2px 0 -2px;cursor:pointer;overflow:visible;background:transparent url('/platform/images/site_sprite.gif') no-repeat right -100px;font-size:11px;font-weight:bold;text-align:center;font-family:Arial;vertical-align:middle;}
-.translator_btn span                            {position:relative;display:block;white-space:nowrap;background:transparent url('/platform/images/site_sprite.gif') no-repeat left top;}
+.platform_btn                                 {position:relative;border:0;padding:0;margin:0 2px 0 -2px;cursor:pointer;overflow:visible;background:transparent url('/assets/platform/site_sprite.gif') no-repeat right -100px;font-size:11px;font-weight:bold;text-align:center;font-family:Arial;vertical-align:middle;}
+.platform_btn span                            {position:relative;display:block;white-space:nowrap;background:transparent url('/assets/platform/site_sprite.gif') no-repeat left top;}
 button::-moz-focus-inner                        {border:none;}
-.translator_submit_btn                          {padding:0 10px 0 0;background-position:right -35px;}
-.translator_submit_btn span                     {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:14px;}
-.translator_small_btn                           {padding:0 10px 0 0;background-position:right -35px;}
-.translator_small_btn span                      {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:12px;}
+.platform_submit_btn                          {padding:0 10px 0 0;background-position:right -35px;}
+.platform_submit_btn span                     {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:14px;}
+.platform_small_btn                           {padding:0 10px 0 0;background-position:right -35px;}
+.platform_small_btn span                      {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:12px;}
 
 .language_selector_trigger                      {cursor: pointer; font-family:arial; font-size:12px; vertical-algin:middle}
 .language_selector                              {position: absolute;top: 0;left: 0;font-family: verdana;width: 14em;background: #f9f8f7;padding: 0;}
@@ -59,25 +59,25 @@ button::-moz-focus-inner                        {border:none;}
 /*** Classes for the feature tabs
 /****************************************/
    
-.translations_navigation                  {height:70px; position:relative; padding:15px 15px 0px; background-color:#f1f4f9; border:1px solid #ccc; margin:0px; margin-bottom:10px;}
+.platform_navigation                  {height:70px; position:relative; padding:15px 15px 0px; background-color:#f1f4f9; border:1px solid #ccc; margin:0px; margin-bottom:10px;}
 
-.translations_tab_nav                     {list-style-type:none;bottom:-1px !important;position:absolute;margin:0px;padding:0px;font-family:arial;}
-.translations_tab_nav li                  {float:left;margin-right:2px;cursor:pointer;text-align:bottom;}
-.translations_tab_nav li a                {display:block;padding:6px 0px 6px 10px; outline:none;}
+.platform_tab_nav                     {list-style-type:none;bottom:-1px !important;position:absolute;margin:0px;padding:0px;font-family:arial;}
+.platform_tab_nav li                  {float:left;margin-right:2px;cursor:pointer;text-align:bottom;}
+.platform_tab_nav li a                {display:block;padding:6px 0px 6px 10px; outline:none;}
 
-.translations_tabs                        {margin-left:5px;zoom:1}
-.translations_tabs li                     {background: url('/platform/images/site_sprite.gif') no-repeat right -255px;font-size:12px;font-weight:bold;margin:0;position:relative;z-index:1}
-.translations_tabs li a                   {padding:13px 30px 6px 6px;color:#1166bb;cursor:pointer;text-decoration:none;line-height:14px;}
-.translations_tabs li a:hover             {text-decoration:none}
-.translations_tabs li.current             {margin-left: -30px;background-position:right -360px;z-index:2}
-.translations_tabs li.current a           {padding-left:30px;background: url('/platform/images/site_sprite.gif') no-repeat left -325px;color: #333;font-size:13px;}
-.translations_tabs li.last                {background-position:right -290px;}
-.translations_tabs li.last a              {padding-right:30px;}
-.translations_tabs li.last_current        {margin-left: -25px;background-position:right -430px;}
-.translations_tabs li.last_current a      {padding-left:30px;color: #000;}
-.translations_tabs li.first a             {padding-left:30px;background:url('/platform/images/site_sprite.gif') no-repeat 0 -220px;}
-.translations_tabs li.first_current       {margin:0}
-.translations_tabs li.first_current a     {background-position:0 -395px;color: #000;}
+.platform_tabs                        {margin-left:5px;zoom:1}
+.platform_tabs li                     {background: url('/assets/platform/site_sprite.gif') no-repeat right -255px;font-size:12px;font-weight:bold;margin:0;position:relative;z-index:1}
+.platform_tabs li a                   {padding:13px 30px 6px 6px;color:#1166bb;cursor:pointer;text-decoration:none;line-height:14px;}
+.platform_tabs li a:hover             {text-decoration:none}
+.platform_tabs li.current             {margin-left: -30px;background-position:right -360px;z-index:2}
+.platform_tabs li.current a           {padding-left:30px;background: url('/assets/platform/site_sprite.gif') no-repeat left -325px;color: #333;font-size:13px;}
+.platform_tabs li.last                {background-position:right -290px;}
+.platform_tabs li.last a              {padding-right:30px;}
+.platform_tabs li.last_current        {margin-left: -25px;background-position:right -430px;}
+.platform_tabs li.last_current a      {padding-left:30px;color: #000;}
+.platform_tabs li.first a             {padding-left:30px;background:url('/assets/platform/site_sprite.gif') no-repeat 0 -220px;}
+.platform_tabs li.first_current       {margin:0}
+.platform_tabs li.first_current a     {background-position:0 -395px;color: #000;}
 
 /****************************************/
 /*** Classes for the admin user page
@@ -99,7 +99,7 @@ button::-moz-focus-inner                        {border:none;}
 /***  Licensed under GPL and MIT.
 /****************************************/
 
-.platform_pcb, .platform_pcb span                   {background: url('/platform/images/buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
+.platform_pcb, .platform_pcb span                   {background: url('/assets/platform/buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
 .platform_pcb, a.platform_pcb:link, a.platform_pcb:visited  {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
 
 /* ie 6 hack */

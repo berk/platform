@@ -1,0 +1,65 @@
+project:
+  title: "Project API"
+  type: "api"
+  path: "project"
+  sample: "https://www.geni.com/api/project-6"
+  description: "Returns information about a project."
+  params:
+    ids: 
+      type: "Array"
+      array_type: "String"
+      description: "You can select a group of profiles on specific urls. For example: https://www.geni.com/api/profile?ids=101,31534,145 returns profile data for all three ids."
+      required: false
+    fields:
+      type: "Array"
+      array_type: "String"
+      description: "You can pass a list of fields you want returned in your call. For example, to get just the name of a project: https://www.geni.com/api/project-6?fields=name."
+      required: false
+  fields:
+    id: 
+      description: "The project's id"
+      type: "String"
+    name: 
+      description: "The project's name"
+      type: "String"
+    description: 
+      description: "The project's description"
+      type: "String"
+    url: 
+      description: "The api url of the project"
+      type: "String"
+      
+  actions:
+    collaborators: 
+      path: "project/collaborators"
+      method: GET
+      description: "Returns a list of users collaborating on a project."
+      sample: "http://www.geni.com/api/project-6/collaborators"
+      fields: 
+        results:
+          description: "The list of collaborators"
+          type: "Array"
+          array_type: "Profile"
+          public: true
+    profiles: 
+      path: "project/profiles"
+      method: GET
+      description: "Returns a list of profiles tagged in a project."
+      sample: "http://www.geni.com/api/project-6/profiles"
+      fields: 
+        results:
+          description: "The list of profiles tagged in a project"
+          type: "Array"
+          array_type: "Profile"
+          public: true
+    followers: 
+      path: "project/followers"
+      method: GET
+      description: "Returns a list of users following a project."
+      sample: "http://www.geni.com/api/project-6/followers"
+      fields: 
+        results:
+          description: "The list of profiles tagged in a project"
+          type: "Array"
+          array_type: "Profile"
+          public: true

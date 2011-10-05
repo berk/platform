@@ -1,0 +1,17 @@
+phone_number:
+  title: "Phone Number Structure"
+  type: "struct"
+  description: "Returns phone number elements."
+  fields:
+    name: 
+      description: "Phone number label name"
+      type: "String"
+    country_code: 
+      description: "Phone number country code"
+      type: "String"
+    area_code: 
+      description: "Phone number area code"
+      type: "String"
+    main: 
+      description: "Phone number"
+      type: "String"

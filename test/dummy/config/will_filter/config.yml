@@ -43,6 +43,7 @@ defaults: &defaults
   data_types:             # mapping between data types and containers   
     bigint:               [nil, numeric, numeric_range, numeric_delimited]
     numeric:              [nil, numeric, numeric_range, numeric_delimited]
+    float:                [nil, numeric, numeric_range, numeric_delimited]
     smallint:             [nil, numeric, numeric_range, numeric_delimited]
     integer:              [nil, numeric, numeric_range, numeric_delimited]
     int:                  [nil, numeric, numeric_range, numeric_delimited]
@@ -53,6 +54,7 @@ defaults: &defaults
     character:            [nil, text, text_delimited]
     varchar:              [nil, text, text_delimited]
     text:                 [nil, text, text_delimited]
+    blob:                 [nil, text, text_delimited]
     text[]:               [nil, text, text_delimited]
     bytea:                [nil, text, text_delimited]
     boolean:              [nil, boolean]
