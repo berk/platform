@@ -23,6 +23,8 @@
 
 class Platform::Developer::ApiExplorerController < Platform::Developer::BaseController
   
+  skip_filter filter_chain
+
   before_filter :prepare_api_version
   
   def index
