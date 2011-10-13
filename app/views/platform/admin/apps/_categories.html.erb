@@ -1,7 +1,7 @@
 <% if app.application_categories.any? %>
 	<% app.application_categories.each do |ac| %>
 	   <div style="padding-bottom:1px;">
-	   	  	<%=ac.category.full_name.html_safe%> <%= ac.featured? ? "<strong>(featured)</strong>" : "" %> - 
+	   	  	<%=ac.category.full_name.html_safe%> <%= ac.featured? ? raw("<strong>(featured)</strong>") : "" %> - 
 					<%
 					  html = []
 	          if ac.featured? 

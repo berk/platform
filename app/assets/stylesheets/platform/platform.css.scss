@@ -136,6 +136,20 @@
   .cat_item_selected a {
     color:white;
   }	
+  .sub_cat_item {
+    padding-left:20px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+  }
+  .sub_cat_item_selected {
+    background:#5C96D2;
+    color:white;
+  }
+  .sub_cat_item_selected a {
+    color:white;
+  }	
 }
 
 /****************************************/

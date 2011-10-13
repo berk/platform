@@ -1,3 +1,7 @@
+<%= stylesheet_link_tag "platform/platform" %>
+<%= stylesheet_link_tag "platform/oauth" %>
+<%= javascript_include_tag "platform/platform" %>
+
 <center>
   <div style="width:700px; border:1px dotted #ccc; margin-bottom:30px; background-color:white; border-radius:10px">
     <div style="background:url('/assets/platform/oauth/perm_tile.gif'); height:15px;">&nbsp;</div>
@@ -8,7 +12,7 @@
 			</div>
 			
 			<div style="margin-top:10px;margin-bottom:10px;">
-		    <%=tr("{application} is requesting permission to access your Geni account.", "API permission", {:application => link_to(@client_application.name, {:controller => '/platform/apps', :action => :view, :id => @client_application.id}, {:target => "_top"})}) %>
+		    <%=tr("{application} is requesting permission to access your {site}'s account.", "API permission", {:site=>Platform::Config.site_title, :application => link_to(@client_application.name, {:controller => '/platform/apps', :action => :view, :id => @client_application.id}, {:target => "_top"})}) %>
       </div>
 			
       <div style="padding:10px;">

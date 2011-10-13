@@ -41,8 +41,8 @@ class Platform::AppsController < Platform::BaseController
       @apps = Platform::Application.regular_for_category(@category, page, Platform::Config.suggested_apps_per_page)
     else
       @category = nil
-      conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
-      @search_apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => Platform::Config.searched_apps_per_page, :order => "name asc")
+      conditions = []
+      @search_apps = Platform::Application.where("name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%").page(page).per(Platform::Config.searched_apps_per_page).order("name asc")
     end
   end
   
@@ -79,7 +79,7 @@ class Platform::AppsController < Platform::BaseController
       render(:partial => 'apps_module', :locals => {:apps => apps, :per_row => Platform::Config.suggested_apps_per_row})
     else
       conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
-      apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => Platform::Config.searched_apps_per_page, :order => "name asc")
+      apps = Platform::Application.where(conditions).page(page).per(Platform::Config.searched_apps_per_page).order("name asc")
       render(:partial => 'search_apps_module', :locals => {:apps => apps})      
     end
   end

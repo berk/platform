@@ -1,18 +1,18 @@
 <%= render :partial => "header" %>
 
 <div class="documentation_section_title">
-  <%= tr("Authentication with {site_title}", "", :site_title => Tr8n::Config.site_title) %>
+  <%= tr("Authentication with {site_title}", "", :site_title => Platform::Config.site_title) %>
 </div>
 
 <div class="documentation_section">
 	<p>
-		<%=tr("{site_title} Platform uses the [link: OAuth 2.0 protocol] for authentication and authorization.", "", :site_title => Tr8n::Config.site_title, :link => ["http://tools.ietf.org/html/draft-ietf-oauth-v2-20"]) %>
+		<%=tr("{site_title} Platform uses the [link: OAuth 2.0 protocol] for authentication and authorization.", "", :site_title => Platform::Config.site_title, :link => ["http://tools.ietf.org/html/draft-ietf-oauth-v2-20"]) %>
 		<%=tr("The Platform supports a number of different flows that you can use within your website, desktop and mobile applications.")%>  
   </p>
 
   <h2><%=tr("Authenticaton/Authorization Flows")%></h2>
   <p>
-    <%=tr("The following table outlines the various mechanisms {site_title} Platform uses to support each of those flows.", "", :site_title => Tr8n::Config.site_title)%> 
+    <%=tr("The following table outlines the various mechanisms {site_title} Platform uses to support each of those flows.", "", :site_title => Platform::Config.site_title)%> 
   </p>    
   <p>
   	<table class="documentation_table">
@@ -29,7 +29,7 @@
 					<a href="http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.1"><%=tr("Authentication Code")%></a>
 				</td>
 				<td>
-					<%=tr("Use this flow if your application needs to call Geni's API from the server side")%>
+					<%=tr("Use this flow if your application needs to call {app}'s API from the server side", "", :app => Platform::Config.site_title)%>
 				</td>
 			</tr>
       <tr>

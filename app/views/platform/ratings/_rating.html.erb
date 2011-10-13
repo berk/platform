@@ -13,5 +13,5 @@
     </div>
   </td>
   <td style="padding:5px; width:700px;">
-    <%=platform_rating_tag(rating, :width => "12px;") %> - <%=rating.comment ? rating.toHTML : "<span style='color:#ccc'>#{tr('no comment')}</span>" %>
+    <%=platform_rating_tag(rating, :width => "12px;") %> - <%=rating.comment ? rating.toHTML : raw("<span style='color:#ccc'>#{tr('no comment')}</span>") %>
   </td>

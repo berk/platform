@@ -29,7 +29,7 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
     @app = Platform::Application.find_by_id(params[:id]) if params[:id]
     @app = nil unless @app and @app.developed_by?(Platform::Config.current_developer)
 
-    @apps = Platform::Application.find(:all, :conditions => ["developer_id=? and parent_id is null", Platform::Config.current_developer.id], :order => "updated_at desc")
+    @apps = Platform::Application.where("developer_id=? and parent_id is null", Platform::Config.current_developer.id).order("updated_at desc")
     unless @app
       @app = @apps.first if @apps.any?
     end  

@@ -4,6 +4,8 @@
 	</div>
 	
   <div style="color:#666; font-size:11px;">
-    All Applications	
+    <% @app.categories.each do |cat| %>
+			<div><%=cat.name%></div>
+		<% end %>
   </div>
 </div>

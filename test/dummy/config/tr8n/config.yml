@@ -93,7 +93,7 @@ defaults: &defaults
   # Site Integration Settings
   #############################################################################
   site_info:  
-    title:                    "Tr8n"                            # site title - provide your site title here
+    title:                    "Sample Application"                            # site title - provide your site title here
     contact_email:            "support@tr8n.net"                # contact email for questions about translations
     current_locale_method:    "current_locale"                  # application controller method that sets and returns current locale
     default_url:              "/tr8n/home"                      # default site url where to redirect the user if Tr8n is disabled            

@@ -24,7 +24,7 @@
 class Platform::Oauth::OauthTokenFilter < Platform::BaseFilter
   
   def inner_joins
-    [["Platform::Application", :application_id]]
+    [:application]
   end
 
   def default_filter_if_empty
