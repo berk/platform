@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Platform::VERSION
   s.authors     = ["Michael Berkovich"]
   s.email       = ["theiceberk@gmail.com"]
-  s.homepage    = "http://www.railsplatform.com"
+  s.homepage    = "https://github.com/berk/platform"
   s.summary     = "Application Developer platform for extanding Rails applications by 3rd party developers."
   s.description = "This gem provides all necessary tools to make a Rails application into a platform with third party applications."
 
