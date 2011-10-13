@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -44,10 +44,6 @@ class Platform::AppsController < Platform::BaseController
       conditions = ["name like ? or description like ?", "%#{params[:search]}%", "%#{params[:search]}%"]
       @search_apps = Platform::Application.paginate(:conditions => conditions, :page => page, :per_page => Platform::Config.searched_apps_per_page, :order => "name asc")
     end
-  end
-  
-  def apps_page
-    params[:section]
   end
   
   def view
@@ -97,8 +93,8 @@ class Platform::AppsController < Platform::BaseController
     render :layout => false
   end
   
-  def xmethod_missing(method, *args)
-    @app = Platform::Application.find_by_canvas_name(method)
+  def run
+    @app = Platform::Application.find_by_canvas_name(params[:canvas_name])
     return render(:action => :canvas_app) unless @app
     
     @page_title = @app.name

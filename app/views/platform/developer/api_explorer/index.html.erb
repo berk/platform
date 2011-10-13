@@ -11,7 +11,7 @@
 
 <div class="section">
 	<% if Platform::Config.api_explorer_app? %>
-	  <div class="section" style="margin-top:5px;margin-bottom:0px;">
+	  <div class="section grey" style="margin-top:5px;margin-bottom:0px;">
 			<table style="width:100%">
 				<tr>
 					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
@@ -73,7 +73,7 @@
   	</table>
   </div>	
 
-  <div style="font-size:12px; background-color:#eee;padding:3px;border:1px dotted #ccc;">
+  <div class="section grey" style="margin-bottom:0px;background-color:#EEEEEE">
 	  <div style="float:right;"> 
 	    <%=link_to_function('<<', "makePreviousCall()", :class=>"button super gray small", :id => "history_previous") %>
 	    <%=link_to_function('>>', "makeNextCall()", :class=>"button super gray small", :id => "history_next") %>
@@ -86,7 +86,7 @@
     <%=link_to_function(image_tag("platform/plus_node.png", :style=>"height:14px;"), "expandAllResultObjects(true)", :class=>"button super gray small", :id => "") %>
   </div>	
 
-  <div class="section grey response_data" id="response_data" style="margin-top:5px;">
+  <div class="section grey response_data" id="response_data" style="margin-top:5px;background-color:#F2F2F2">
     
   </div>
 	

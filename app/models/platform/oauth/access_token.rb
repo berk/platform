@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -23,7 +23,6 @@
 
 class Platform::Oauth::AccessToken < Platform::Oauth::OauthToken
   validates_presence_of :user_id 
-  validates_presence_of :secret
   
   before_create :set_authorized_at
   
@@ -52,7 +51,7 @@ protected
   end
 
   def lifetime
-    @lifetime ||= eval Registry.api.token_lifetime
+    @lifetime ||= Platform::Config.api_token_lifetime.to_i
   end
 
 end

@@ -1,9 +1,11 @@
 <h2 class="underscore content_hd">
-  <%=tr('Register for Tr8n Examples Application Translator Account') %>
+  <%=tr('Register for Platform Developer Account') %>
 </h2>
 <div class="content_bd">
   <div class="page_form">
   <%= form_tag({}, :method => :post) do %>
+		<%=hidden_field_tag(:display, params[:display])%>
+		<%=hidden_field_tag(:client_id, params[:client_id])%>
     <div class="field">
       <div class="strong field_hd txt_r h4"><%=tr('Email:') %></div>
       <div class="field_bd">
@@ -36,24 +38,12 @@
         &nbsp; <%=radio_button_tag(:gender, "unknown", params[:gender] == 'unknown')%> <%=tr('Unknown', 'Gender') %>
       </div>
     </div>
-    <div class="field">
-      <div class="strong field_hd txt_r h4"><%=tr('Photo Url:') %></div>
-      <div class="field_bd">
-        <%=text_field_tag :mugshot, params[:mugshot], :class => "xlong_input h4" %>
-      </div>
-    </div>
-    <div class="field">
-      <div class="strong field_hd txt_r h4"><%=tr('Link Url:') %></div>
-      <div class="field_bd">
-        <%=text_field_tag :link, params[:link], :class => "xlong_input h4" %>
-      </div>
-    </div>
     <br>
     <div class="field">
       <div class="field_bd">
         <button class="button super blue xlarge"><span><%= tr('Register') %></span></button>
         <%= tr("or") %>
-        <%=link_to(tr("Login"), "/login/index")%>
+        <%=link_to(tr("Login"), :controller => "/login", :action =>:index, :display => params[:display], :client_id => params[:client_id])%>
       </div>
     </div>
   <% end %>

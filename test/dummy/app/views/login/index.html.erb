@@ -1,10 +1,12 @@
 <h2 class="underscore content_hd">
-  <%=tr('Login to Tr8n Translation Engine Examples Application') %>
+  <%=tr('Login to Platform Engine Sample Application') %>
 </h2>
 <div class="content_bd">
 
   <div class="page_form">
     <%= form_tag(:controller=>:login, :action=>:index) do %>
+			<%=hidden_field_tag(:display, params[:display])%>
+			<%=hidden_field_tag(:client_id, params[:client_id])%>
       <div class="field">
         <div class="strong field_hd txt_r h4"><%=tr('Email:') %></div>
         <div class="field_bd">
@@ -22,7 +24,7 @@
         <div class="field_bd">
           <button class="button super blue xlarge"><span><%=tr('Login') %></span></button>
 					<%= tr("or") %>
-					<%=link_to(tr("Register"), "/login/register")%>
+					<%=link_to(tr("Register"), :controller => "/login", :action =>:register, :display => params[:display], :client_id => params[:client_id])%>
         </div>
       </div>
     <% end %>

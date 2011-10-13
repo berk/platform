@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -24,7 +24,7 @@
 class Platform::Oauth::OauthTokenFilter < Platform::BaseFilter
   
   def inner_joins
-    [:application]
+    [["Platform::Application", :application_id]]
   end
 
   def default_filter_if_empty

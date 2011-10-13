@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
-			<title><%=trl("Tr8n Translation Memory Server", "Application title")%></title>
+			<title><%=trl("Platform Sample Application", "Application title")%></title>
 			<%= stylesheet_link_tag    "admin" %>
 			<%= javascript_include_tag "application" %>
 			<%= csrf_meta_tag %>
@@ -46,10 +46,11 @@
 		
     <%
 		    admin_links = [
-			    ["Site Users", "/admin/users", "users"],
-			    ["Site Admins", "/admin/admins", "admins"],
-			    ["Tr8n Administration", "/tr8n/admin/language", "language"],
-			    ["Platform Administration", "/platform/admin/apps", "apps"],
+			    ["Users", "/admin/users", "users"],
+			    ["Admins", "/admin/admins", "admins"],
+			    ["Bookmarks", "/admin/bookmarks", "bookmarks"],
+			    ["Tr8n", "/tr8n/admin/language", "language"],
+			    ["Platform", "/platform/admin/apps", "apps"],
         ] 
     %>
 		

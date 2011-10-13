@@ -1,12 +1,15 @@
 class LoginController < ApplicationController
 
+  layout :login_layout
+  
   def index
     if request.post?
       user = User.find_by_email_and_password(params[:email], params[:password])
       
       if user
         login!(user)
-        return redirect_to("/tr8n/dashboard")
+        return if platform_redirect_to_oauth
+        return redirect_to("/platform/apps")
       end
       
       trfe('Incorrect email or password')
@@ -20,24 +23,28 @@ class LoginController < ApplicationController
                   :password => params[:password], 
                   :first_name => params[:first_name], 
                   :last_name => params[:last_name], 
-                  :gender => params[:gender], 
-                  :mugshot => params[:mugshot], 
-                  :link => params[:link])
+                  :gender => params[:gender])
         login!(user)
         
+        return if platform_redirect_to_oauth
         trfn('Thank you for registering.')
-        return redirect_to("/tr8n/dashboard")
+        return redirect_to("/platform/apps")
       end
     end
   end
 
   def out
     logout!
-    redirect_to("/tr8n/home") 
+    redirect_to(params.merge(:action => :index)) 
   end
 
 private
-
+  
+  def login_layout
+    return 'minimal' if ['mobile', 'popup'].include?(params[:display])
+    'application'
+  end
+  
   def validate_registration
     params[:email].strip!
      

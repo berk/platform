@@ -144,12 +144,24 @@ module Platform
         img_tag.html_safe
       end  
 
+      def platform_login_url_tag(label)
+        link_to(label, platform_stringify_url(Platform::Config.login_url, :display => params[:display], :client_id => params[:client_id]))
+      end
+      
+      def platform_logout_url_tag(label)
+        link_to(label, platform_stringify_url(Platform::Config.logout_url, :display => params[:display], :client_id => params[:client_id]))
+      end
+
       def platform_paginator_tag(collection, options = {})  
         render :partial => "/platform/common/paginator", :locals => {:collection => collection, :options => options}
       end
 
       def platform_help_icon_tag(path = "index", opts = {})
         link_to(image_tag("platform/help.png", :style => "border:0px; vertical-align:middle;", :title => trl("Help")), opts.merge({:controller => "/platform/developer/help", :action => path}), :target => "_new")
+      end
+
+      def platform_stringify_url(path, params)
+        "#{path}#{path.index('?') ? '&' : '?'}#{params.collect{|n,v| "#{n}=#{CGI.escape(v.to_s)}"}.join("&")}"
       end
     end
   end

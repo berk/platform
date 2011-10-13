@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -23,11 +23,6 @@
 
 class Platform::Oauth::OauthToken < ActiveRecord::Base
   set_table_name :platform_oauth_tokens
-  
-#  record_cache :by => :id
-#  record_cache :id, :by => :user_id
-# can't do this because oauth-plugin/../ApplicationControllerMethods#verify_oauth_signture barfs
-#  record_cache :id, :by => :token
 
   belongs_to :application, :class_name => "Platform::Application"
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
@@ -57,7 +52,6 @@ protected
 
   def generate_keys
     self.token = Platform::Helper.generate_key(40)[0,40]
-    self.secret = Platform::Helper.generate_key(40)[0,40]
   end
 
 end

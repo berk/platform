@@ -1,0 +1,43 @@
+<div style="text-align:center; padding:20px;">
+   <%=image_tag("platform/platform5.png", :style => "height:100px;")%>
+</div>
+
+<h2 class="underscore content_hd">
+  <%=tr('Welcome to the Rails Platform Engine') %>
+</h2>
+
+<div class="content_bd">
+	<%=tr("Rails Platform Engine is a collection of tools, scripts and configurations that make any Rails application into an international development platform.")%>
+	<%=tr("It comes with Application Directory, Developer Tools, Administration tools, Test tools and Help files that make the process of creating API and OAuth 2.0 authentication a piece of cake.")%>
+</div>
+
+<div class="content_bd">
+  <h3><%=tr("If you are trying out Platform functionality, here are some helpful links to get started:")%></h3>
+  <ul style="list-style-type:decimal; margin-left:30px; font-size:14px;">
+    <li><%= link_to(tr("Register for a developer account"), "/login/register")%></li>
+    <li><%= link_to(tr("Create a new application"), "/platform/developer/apps")%></li>
+    <li><%= link_to(tr("Explore existing applications"), "/platform/apps")%></li>
+    <li><%= link_to(tr("View your application dashboard"), "/platform/developer/dashboard")%></li>
+    <li><%= link_to(tr("Create an application extension"), "/platform/developer/apps")%></li>
+    <li><%= link_to(tr("View help"), "/platform/developer/help")%></li>
+  </ul>
+</div>
+
+<div class="content_bd">
+	<h3><%=tr("URL Bookmarklet")%></h3>
+	<p>
+		<%=tr("This sample application uses Bookmark object for API examples.")%> 
+		<%=tr("It uses a simple bookmarklet script to allow you to create a bookmark from any url you are looking at.")%>
+		<%=tr("Drag the link below to your browser's toolbar or add it to your bookmark list:") %>
+	</p>
+	<p>
+	<a href="javascript:(function(){location.href='http://localhost:3000/api/bookmark/create?bookmarklet=1&title=' + escape(document.title) + '&url='+escape(location.href);})()">Post to Sample Application</a>
+	</p>
+	<p>
+	<%=tr("When you're surfing the web and find a page that you want to bookmark, just click the \"Post to Sample Application\" button on your toolbar or choose it in your bookmark list.") %>
+	</p>
+</div>	
+
+
+
+

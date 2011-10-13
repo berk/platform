@@ -14,10 +14,11 @@ defaults: &defaults
   enable_app_directory:         true
   enable_embedded_applications: true
   enable_mobile_applications:   true
-  enable_developer_agreement:   true
-  enable_app_statistics:        true
-  enable_api_log:               true
-  
+  enable_developer_agreement:   false
+  enable_app_statistics:        false
+  enable_api_verification:      false
+  api_explorer_app_id:          -1  
+
   #############################################################################
   # Platform best run with caching enabled
   # You can configure cache adapter and store parameters by providing the
@@ -35,7 +36,7 @@ defaults: &defaults
   #############################################################################
   caching:
     enabled:                  false
-    adapter:                  "Tr8n::GeniCacheAdapter"
+    adapter:                  "Platform::CacheAdapter"
     version:                  1 # you can change the version to invalidate the cache
       
   #############################################################################
@@ -44,58 +45,75 @@ defaults: &defaults
   #############################################################################
   logger:
     enabled:                  true
-    log_path:                 "log/platform.log"      # location of the log file
+    log_path:                 log/platform.log      # location of the log file
       
   #############################################################################
   # Site Integration Settings
   #############################################################################
   site_info:
-    title:                    "Platform"
-    contact_email:            "support@railsplatform.com"
-    default_url:              "/platform/home"
+    title:                    "Sample"
+    base_url:                 "localhost:3000"
+    contact_email:            platform@geni.com
+    default_url:              "/home"
     login_url:                "/login"
-    platform_layout:          "platform"
-    admin_layout:             "platform_admin"
+    platform_layout:          application
+    admin_layout:             admin
+    oauth_layout:             minimal
+    system_user_id:           10
+    media_directory:          "/media/p1"
     user_info:
-      enabled:                false
-      current_user_method:    "current_user"
+      enabled:                true
+      current_user_method:    current_user
       logout_method:          "logout!"
-      class_name:             "Platform::PlatformUser"
+      class_name:             User
       methods:
-        id:                   "id"
-        name:                 "name"
+        id:                   id
+        name:                 name
         email:                "email"
-        link:                 "path"
-        mugshot:              "mugshot"
-        admin:                "admin?"
-        guest:                "guest?"
-    
+        link:                 path
+        mugshot:              square_mugshot_url
+        admin:                admin?
+        guest:                guest?
+        locale:               language
+    media_info:              
+      enabled:                true
+      class_name:             "Platform::Media::Image"
+      write_method:           "write"
+      logo_url_method:        "media_url(:logo)"
+      icon_url_method:        "media_url(:icon)"
+  
   #############################################################################
   # API Settings
   #############################################################################
   API:
     enabled:                  true
-    base_url:                 "localhost:3000/api/"
+    base_url:                 "localhost:3000/api"
+    config_path:              "config/platform/api"
     logging_enabled:          true          
-    admin_email:              "api@geni.com"
+    admin_email:              scott.steadman@geni.com
     allow_public:             true
     cookies_enabled:          true
     max_models:               50
     request_limit:            3
     request_window:           1
     token_lifetime:           86400
-    versions:                 ['1.0.0', '2.0.0']
+    supported_versions:       ['1', '0']
+    default_version:          '1'    
+    explorer_groups:
+      '0':                    [['document', 'photo'], ['project', 'video', 'union'], ['profile']]
+      '1':                    [['user', 'project', 'photo_album', 'union', 'surname'], ['document', 'photo', 'video', 'revision'], ['profile']]
     user:
       create_enabled:         true
-      
-          
+  
 #############################################################################
 # Environment Settings
 # You can overload any feature defined in the defaults for any environment
 #############################################################################
 development:
   <<: *defaults
-  
+  enable_api_verification:      true
+  api_explorer_app_id:          "TBUDuxvLLqY7ndxjzS5hnPykVMl1hIN29RwfKjh1"  
+        
 test:
   <<: *defaults
       
@@ -104,6 +122,12 @@ qa:
 
 stage:
   <<: *defaults
+  api_explorer_app_id:          "ci9EG77hmXg53AEsKlRuDe9TL2beeGupq6slAHMX"  
 
 production:
   <<: *defaults
+  api_explorer_app_id:          "ci9EG77hmXg53AEsKlRuDe9TL2beeGupq6slAHMX"  
+
+sandbox:
+  <<: *defaults
+  api_explorer_app_id:          "tAGjqNSsCYfbDP3At9Qaf3UDrcZfIHbJH7Jp29Nn"  

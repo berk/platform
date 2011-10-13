@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+			<title><%=trl("Platform Sample Application", "Application title")%></title>
+			<%= stylesheet_link_tag    "application" %>
+			<%= javascript_include_tag "application" %>
+			<%= csrf_meta_tag %>
+			<%= tr8n_scripts_tag %>
+			<style>
+				.page_fixed {
+					width:100%;
+				}
+				.page_head {
+					margin-bottom:0px;
+				}
+			</style>
+		</head>
+    <body>
+        <div class="document">
+						<div class="page_head">
+							  <div class="page_fixed">
+							    <div class="mrgn_h">
+										<div style="float:right; padding-top:12px; font-size:12px; font-weight:bold;">
+											<% if current_user and not current_user.guest? %>
+												<%=platform_logout_url_tag(tr("Not {user}?", "", :user => current_user))%>
+											<% end %>
+										</div>	
+							      <h1 class="logo">
+											<%=tr("Sample Application")%>
+										</h1>
+							    </div>
+							  </div>
+							</div>
+							<div style="background:url('/assets/platform/oauth/perm_tile.gif'); height:15px;">&nbsp;</div>
+							
+							<div class="page_fixed">
+                <div class="page_body">
+                   <%= yield %>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,303 +1,36 @@
 user:
   type: "api"
   path: "user"
-  sample: "https://www.geni.com/api/user"
+  sample: "https://localhost:3000/api/user"
   description: "Returns information about yourself."
-  status: added
+  status: updated
 
   fields:
     name: 
       description: "The user's name"
       type: "String"
-      public: true
+    first_name: 
+      description: "The user's first name"
+      type: "String"
+      status: added
+    last_name: 
+      description: "The user's last name"
+      type: "String"
+      status: added
+    created_at: 
+      description: "The user's creation timestamp"
+      type: "Number"
+      status: updated
 
-  param_groups:
-    pagination_params:
-      count: 
-        type: "Boolean"
-        description: "Only return the count: true or false (default false)"
-        required: false
-      page: 
-        type: "Number"
-        description: "Page number of results to return. Default 1."
-        required: false
-      per_page: 
-        type: "Number"
-        description: "Number of results per page. Max 50 (default 50)"
-        required: false
-      fields:
-        type: "Array"
-        array_type: "String"
-        description: "You can pass a list of fields you want returned in your call."
-        required: false
-    
-  field_groups:
-    document_fields:
-      results:
-        description: "List of documents"
-        type: "Array"
-        array_type: "Document"
-      prev_page:
-        description: "Link to the previous page of results (if any)"
-        type: "String"
-      next_page:
-        description: "Link to the next page of results (if any)"
-        type: "String"
-      page:
-        description: "Page number"
-        type: "Number"
-    photo_fields:
-      results:
-        description: "List of photos"
-        type: "Array"
-        array_type: "Photo"
-      prev_page:
-        description: "Link to the previous page of results (if any)"
-        type: "String"
-      next_page:
-        description: "Link to the next page of results (if any)"
-        type: "String"
-      page:
-        description: "Page number"
-        type: "Number"
-    video_fields:
-      results:
-        description: "List of videos"
-        type: "Array"
-        array_type: "Video"
-      prev_page:
-        description: "Link to the previous page of results (if any)"
-        type: "String"
-      next_page:
-        description: "Link to the next page of results (if any)"
-        type: "String"
-      page:
-        description: "Page number"
-        type: "Number"
-    
-      
   actions:
-    add:
-      path: "user/add" 
-      method: POST
-      status: added
-      description: "Create an account and return the created user. The OAuth Access token is returned in the X-API-OAuth-access_token header."
-      sample: "https://www.geni.com/api/user/add?first_name=John&last_name=Smith&gender=m&email=john@smith.com"
-      params:
-        first_name: 
-          description: "The user's first name"
-          type: "String"
-          required: true
-        last_name: 
-          description: "The user's last name"
-          type: "String"
-          required: true
-        gender: 
-          description: "The user's gender: m, f, or u"
-          type: "String"
-          required: true
-        email: 
-          description: "The user's email"
-          type: "String"
-          required: true
-      fields: "*"
-
-    followed-documents: 
-      path: "user/followed-documents" 
+    bookmarks:
+      path: "user/bookmarks" 
       method: GET
       status: added
-      description: "Returns a list of documents you are following."
-      sample: "https://www.geni.com/api/user/followed-documents"
-      params: pagination_params
-      fields: document_fields
-
-    followed-projects: 
-      path: "user/followed-projects" 
-      method: GET
-      status: added
-      description: "Returns a list of projects you are following."
-      sample: "https://www.geni.com/api/user/followed-projects"
-      params: pagination_params
+      description: "Gets a list of user's bookmark."
+      sample: "http://localhost:3000/user/bookmarks"
       fields: 
-        results:
-          description: "List of projects"
+        results: 
+          description: "List of user's bookmarks"
           type: "Array"
-          array_type: "Project"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"          
-          
-    followed-surnames: 
-      path: "user/followed-surnames" 
-      method: GET
-      status: added
-      description: "Returns a list of surnames you are following."
-      sample: "https://www.geni.com/api/user/followed-surnames"
-      params: pagination_params
-      fields:
-        results:
-          description: "List of surnames"
-          type: "Array"
-          array_type: "Surname"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"                    
-          
-    uploaded-documents: 
-      path: "user/uploaded-documents" 
-      method: GET
-      status: added
-      description: "Returns a list of documents you have uploaded."
-      sample: "https://www.geni.com/api/user/uploaded-documents"
-      params: pagination_params
-      fields: document_fields
-
-    uploaded-photos: 
-      path: "user/uploaded-photos" 
-      method: GET
-      status: added
-      description: "Returns a list of photos you have uploaded."
-      sample: "https://www.geni.com/api/user/uploaded-photos"
-      params: pagination_params
-      fields: photo_fields
-          
-    uploaded-videos: 
-      path: "user/uploaded-videos" 
-      method: GET
-      status: added
-      description: "Returns a list of videos you have uploaded."
-      sample: "https://www.geni.com/api/user/uploaded-videos"
-      params: pagination_params
-      fields: video_fields          
-      
-    max-family: 
-      path: "user/max-family" 
-      method: GET
-      status: added
-      description: "Returns a list of profiles in the max family."
-      sample: "https://www.geni.com/api/user/max-family"
-      params: pagination_params
-      fields:
-        results:
-          description: "List of profiles"
-          type: "Array"
-          array_type: "Profile"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"                    
-
-    my-albums: 
-      path: "user/my-albums" 
-      method: GET
-      status: added
-      description: "Returns a list of the user’s photo albums."
-      sample: "https://www.geni.com/api/user/my-albums"
-      params: pagination_params
-      fields:
-        results:
-          description: "List of photo albums"
-          type: "Array"
-          array_type: "PhotoAlbum"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"                    
-
-    my-labels: 
-      path: "user/my-labels" 
-      method: GET
-      status: added
-      description: "Returns a list of user defined labels. Labels are currently used only for the documents."
-      sample: "https://www.geni.com/api/user/my-labels"
-      params: pagination_params
-      fields:
-        results:
-          description: "List of labels"
-          type: "Array"
-          array_type: "String"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"                    
-          
-    followed-profiles: 
-      path: "user/followed-profiles" 
-      method: GET
-      status: added
-      description: "Returns a list of profile you are following."
-      sample: "https://www.geni.com/api/user/followed-profiles"
-      params: pagination_params
-      fields: 
-        results:
-          description: "List of profile"
-          type: "Array"
-          array_type: "Project"
-        prev_page:
-          description: "Link to the previous page of results (if any)"
-          type: "String"
-        next_page:
-          description: "Link to the next page of results (if any)"
-          type: "String"
-        page:
-          description: "Page number"
-          type: "Number"          
-
-    metadata: 
-      path: "user/metadata" 
-      method: GET
-      status: added
-      description: "Returns a hash of application user data for a single user of for all users passed in the ids parameter."
-      sample: "https://www.geni.com/api/user/metadata"
-      params: 
-        ids:
-          description: "Comma separated list of ids of users you would like to get metadata for."
-          type: "String"
-          required: false
-      fields: 
-        data:
-          description: "Custom metadata in JSON format stored by your application."
-          type: "Hash"
-
-    update-metadata: 
-      path: "user/update-metadata" 
-      method: POST
-      status: added
-      description: "Updates user metadata for your application. Limited to 512 bytes."
-      sample: "https://www.geni.com/api/user/update-metadata?data={'lat':'103','lon':'85'}"
-      params: 
-        data:
-          description: "Custom metadata in JSON format to be stored by your application."
-          type: "Hash"
-      fields: 
-        data:
-          description: "Custom metadata in JSON format stored by your application."
-          type: "Hash"
-          
+          array_type: "Bookmark"

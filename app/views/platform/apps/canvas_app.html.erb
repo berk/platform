@@ -1,6 +1,6 @@
 <% if @app %>
   <div style="margin-bottom:10px;">
-    <iframe id="app_content_frame" src="<%=@canvas_url%>" scrolling="<%=@app.auto_resize? ? 'no' : 'auto'%>" style="border:0px;width:100%;height:640px;"></iframe>
+    <iframe id="app_content_frame" src="<%=raw(@canvas_url)%>" scrolling="<%=@app.auto_resize? ? 'no' : 'auto'%>" style="border:0px;width:100%;height:640px;"></iframe>
 	</div>
 <% else %>
 	<div style="font-size:18px; text-align:center; padding-bottom:20px;">

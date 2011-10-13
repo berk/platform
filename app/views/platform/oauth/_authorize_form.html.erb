@@ -1,4 +1,4 @@
-<% form_tag({:controller => '/platform/oauth', :action => :authorize}, :id => 'auth_form') do %>
+<%= form_tag({:controller => '/platform/oauth', :action => :authorize}, :id => 'auth_form') do %>
   <%= hidden_field_tag "response_type", @response_type%>
   <%= hidden_field_tag "client_id", params[:client_id]%>
   <%= hidden_field_tag "redirect_url", @redirect_url %>

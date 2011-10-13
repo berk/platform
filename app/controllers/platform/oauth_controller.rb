@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -21,12 +21,11 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
+# OAuth 2.0 Spec URL: http://tools.ietf.org/html/draft-ietf-oauth-v2-20
 class Platform::OauthController < Platform::BaseController
   # ssl_required :authorize, :request_token, :invalidate_token, :validate_token, :revoke, :invalidate, :auth_success
 
   skip_before_filter :validate_guest_user  
-
-  layout Platform::Config.oauth_layout
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.1
   # supports response_type = code, token 
@@ -39,10 +38,10 @@ class Platform::OauthController < Platform::BaseController
       return redirect_with_response(:error_description => "invalid client application id", :error => :unauthorized_client)
     end
 
-    save_oauth_login_redirect_params
-
-    if Platform::Config.current_user_is_guest?
-      return redirect_to(:controller => Platform::Config.login_url, :client_id => request_param(:client_id), :display => display)
+    platform_store_oauth_redirect_params
+    
+    if platform_current_user_is_guest?
+      return redirect_to(platform_login_url)
     end
 
     if redirect_url_required? and redirect_url.blank?
@@ -58,18 +57,6 @@ class Platform::OauthController < Platform::BaseController
     end
     
     send("oauth2_authorize_#{response_type}")
-  end
-
-  def xd?
-    ['popup', 'hidden'].include?(display)
-  end
-
-  def auth_success
-    render :layout => false  
-  end
-
-  def auth_failed
-    render :layout => false  
   end
 
   # http://tools.ietf.org/html/draft-ietf-oauth-v2-16#section-4.2
@@ -90,7 +77,15 @@ class Platform::OauthController < Platform::BaseController
     send("oauth2_request_token_#{grant_type}")
   end 
   alias :token :request_token
-  
+
+  def auth_success
+    render :layout => false  
+  end
+
+  def auth_failed
+    render :layout => false  
+  end
+
   def validate_token
     token = Platform::Oauth::OauthToken.find_by_token(request_param(:access_token))
     if token && token.authorized?
@@ -128,12 +123,16 @@ class Platform::OauthController < Platform::BaseController
     render_response(:result => "OK")
   end
   
+  def xd?
+    ['popup', 'hidden'].include?(display)
+  end
+  
   def xd
   	render :layout => false
   end
 
   # XD only method - for now
-  def status
+  def xd_status
     if params[:origin].blank?
       return redirect_with_response(:status => "unknown", :error => :invalid_request, :error_description => "origin must be specified")
     end
@@ -163,14 +162,6 @@ class Platform::OauthController < Platform::BaseController
   end 
 
 private
-
-  def save_oauth_login_redirect_params
-    session[:oauth_login_redirect_params] = params
-  end
-
-  def remove_oauth_login_redirect_params
-    session[:oauth_login_redirect_params] = nil
-  end
 
   def request_param(key)
     params[key]
@@ -315,7 +306,7 @@ private
   # authorize with response_type = code
   def oauth2_authorize_code
     if request.post?
-      remove_oauth_login_redirect_params
+      platform_remove_oauth_redirect_params
 
       if params[:authorize] == '1'
         Platform::ApplicationUser.touch(client_application)
@@ -336,7 +327,7 @@ private
   # authorize with response_type = token
   def oauth2_authorize_token
     if request.post?
-      remove_oauth_login_redirect_params
+      platform_remove_oauth_redirect_params
 
       if params[:authorize] == '1'
         Platform::ApplicationUser.touch(client_application)
@@ -365,7 +356,7 @@ private
 
     true
   end
-
+  
   # used by the authorization process
   def redirect_with_response(response_params, opts = {})
     response_params = HashWithIndifferentAccess.new(response_params)
@@ -382,13 +373,7 @@ private
       return render(:action => :xd, :layout => false)
     end   
 
-    response_query = begin
-      prms = []
-      response_params.keys.apply(:to_s).sort.each do |key| 
-        prms << "#{key}=#{CGI.escape(response_params[key.to_sym].to_s)}"
-      end
-      prms.join("&")
-    end
+    response_query = response_params.collect{|n,v| "#{n}=#{CGI.escape(v.to_s)}"}.join("&")
 
     # for desktop apps - redirect to local urls
     if desktop?
@@ -407,6 +392,7 @@ private
     redirect_uri = URI.parse(redirect_url)
     redirect_uri.path = (redirect_uri.path.blank? ? "/" : redirect_uri.path) unless mobile? # mobile apps will not have path
     redirect_uri.query = redirect_uri.query.blank? ? response_query : redirect_uri.query + "&#{response_query}"
+    
     redirect_to(redirect_uri.to_s)
   end
   
@@ -429,11 +415,7 @@ private
   end
   
   def render_action(action)
-    if display == 'web'
-      render(:action => "#{action}_#{display}")
-    else      
-      render(:action => "#{action}_#{display}", :layout => false)
-    end
+    render(:action => "#{action}_#{display}", :layout => Platform::Config.site_info["oauth_#{display}_layout"])
   end    
 
 end

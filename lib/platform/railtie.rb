@@ -26,13 +26,15 @@ require 'pp'
 
 [
  ".",
- "./api"
+ "./api",
+ "./api/proxy"
 ].each do |dir|
     Dir[File.expand_path("#{File.dirname(__FILE__)}/#{dir}/*.rb")].sort.each do |file|
       require(file)
     end
 end
 
+require File.join(File.dirname(__FILE__), 'extensions/object_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_view_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_controller_extension')
 
@@ -44,7 +46,7 @@ module Platform
       end
       ActiveSupport.on_load(:action_controller) do
         include Platform::ActionControllerExtension
-      end      
+      end    
     end
   end
 end

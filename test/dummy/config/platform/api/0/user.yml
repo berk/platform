@@ -1,0 +1,17 @@
+user:
+  type: "api"
+  path: "user"
+  sample: "https://localhost:3000/api/user"
+  description: "Returns information about yourself."
+  status: changed
+
+  fields:
+    name: 
+      description: "The user's name"
+      type: "String"
+    created_at: 
+      description: "The user's creation date as a string"
+      type: "String"
+      status: changed
+
+  actions:

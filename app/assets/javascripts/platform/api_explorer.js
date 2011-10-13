@@ -110,7 +110,7 @@ function toggleApiOptions(trigger) {
   var options = Platform.element("api_options");
   
   if (options.style.display == "none") {
-    Platform.element("api_options_container").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+    Platform.element("api_options_container").innerHTML = "<img src='/assets/platform/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
 		
     var trigger_position = Platform.Utils.cumulativeOffset(trigger);
     var container_position = {
@@ -134,7 +134,7 @@ function switchApiVersion() {
   var options = Platform.element("api_options");
 	
   if (options.style.display != "none") {
-    Platform.element("api_options_container").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+    Platform.element("api_options_container").innerHTML = "<img src='/assets/platform/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
 		
   	Platform.Utils.update("api_options_container", "/platform/developer/api_explorer/options", {
   		parameters: {
@@ -212,7 +212,7 @@ function toggleApiHistory(trigger) {
   Platform.Effects.hide("api_options"); 
   
   var options = Platform.element("api_history");
-  Platform.element("api_history_container").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+  Platform.element("api_history_container").innerHTML = "<img src='/assets/platform/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
   
   if (options.style.display == "none") {
     var trigger_position = Platform.Utils.cumulativeOffset(trigger);
@@ -399,7 +399,7 @@ function submitRequest() {
   hidePopups();
 
   logInfo("Executing request...");
-  Platform.element("response_data").innerHTML = "<img src='/platform/images/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
+  Platform.element("response_data").innerHTML = "<img src='/assets/platform/loading.gif' style='width:16px;vertical-align:middle;'>&nbsp;  Loading...";
   
   var params = generateRequestParams();
   // add access token
@@ -425,7 +425,7 @@ function submitRequest() {
 	}
 	
   var t0 = new Date();
-  Platform.Utils.ajax("http://" + base_api_url + path, {
+  Platform.Utils.ajax("http://" + base_api_url + "/" + path, {
      method: method,
      parameters: params,
      onSuccess: function(response) {
@@ -485,11 +485,11 @@ function showObject(obj_key, flag) {
   if (flag) {
     Platform.Effects.hide("no_object_" + obj_key);
     Platform.Effects.show("object_" + obj_key);
-    Platform.element("expander_" + obj_key).innerHTML = "<img src='/platform/images/minus_node.png'>";
+    Platform.element("expander_" + obj_key).innerHTML = "<img src='/assets/platform//minus_node.png'>";
   } else {
     Platform.Effects.hide("object_" + obj_key);
     Platform.Effects.show("no_object_" + obj_key);
-    Platform.element("expander_" + obj_key).innerHTML = "<img src='/platform/images/plus_node.png'>";
+    Platform.element("expander_" + obj_key).innerHTML = "<img src='/assets/platform/plus_node.png'>";
   } 
 }
 
@@ -531,14 +531,14 @@ function formatObject(obj, level) {
 
   var html = [];
   var obj_key = guid();  
-  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/platform/images/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>{...}</span> <span id='object_" + obj_key + "'>{");
+  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/assets/platform/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>{...}</span> <span id='object_" + obj_key + "'>{");
   api_result_object_keys.push(obj_key);
 
   var keys = Object.keys(obj).sort();
   
   for (var i=0; i<keys.length; i++) {
     key = keys[i];
-    if (isObject(obj[key])) {
+		if (isObject(obj[key])) {
       if (isArray(obj[key])) {
         html.push(createSpacer(level) + "<span class='obj_key'>" + key + ":</span>" + formatArray(obj[key], level + 1) + ",");
       } else {
@@ -556,7 +556,7 @@ function formatArray(arr, level) {
   var html = [];
 
   var obj_key = guid();  
-  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/platform/images/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>[...]</span> <span id='object_" + obj_key + "'>[");
+  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/assets/platform/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>[...]</span> <span id='object_" + obj_key + "'>[");
   api_result_object_keys.push(obj_key);
 
   for (var i=0; i<arr.length; i++) {
@@ -575,14 +575,16 @@ function formatArray(arr, level) {
 }
 
 function createSpacer(level) {
-  return "<img src='/platform/images/pixel.gif' style='height:1px;width:" + (level * 20) + "px;'>";
+  return "<img src='/assets/platform/pixel.gif' style='height:1px;width:" + (level * 20) + "px;'>";
 }
 
 function isArray(obj) {
+	if (obj == null) return false;
   return !(obj.constructor.toString().indexOf("Array") == -1);
 }
 
 function isObject(obj) {
+	if (obj == null) return false;
   return (typeof obj == 'object');
 }
 
@@ -601,6 +603,8 @@ function isApiCall(str) {
 }
 
 function formatProperty(key, value) {
+	if (value == null) return "<span class='obj_key'>" + key + ":</span><span class='obj_value_null'>null</span>";
+	
   var cls = "obj_value_" + (typeof value);
   var value_span = "";
   

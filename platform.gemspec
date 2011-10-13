@@ -9,11 +9,11 @@ Gem::Specification.new do |s|
   s.version     = Platform::VERSION
   s.authors     = ["Michael Berkovich"]
   s.email       = ["theiceberk@gmail.com"]
-  s.homepage    = "www.railsplatform.com"
-  s.summary     = "Authentication and Authorization platform for extanding Rails applications."
-  s.description = "This gem provides all necessary tools to make a Rails application into a platform with third party applications"
+  s.homepage    = "http://www.railsplatform.com"
+  s.summary     = "Application Developer platform for extanding Rails applications by 3rd party developers."
+  s.description = "This gem provides all necessary tools to make a Rails application into a platform with third party applications."
 
-  s.rubyforge_project = 'tr8n'
+  s.rubyforge_project = 'platform'
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,local,spec,features}/*`.split("\n")
@@ -30,6 +30,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'coffee-script', ['>= 0']
   s.add_dependency 'acts_as_tree', ['>= 0']
   s.add_dependency 'acts_as_state_machine', ['>= 0']
+  s.add_dependency 'rmagick', ['>= 0']
+  s.add_development_dependency 'pry', ['>= 0']
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'sqlite3', ['>= 0']
   s.add_development_dependency 'rspec', ['>= 0']
@@ -39,4 +41,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'steak', ['>= 0']
   s.add_development_dependency 'capybara', ['>= 0']
   s.add_development_dependency 'database_cleaner', ['>= 0']
+  s.add_development_dependency 'memcache-client', ['>= 1.8.5']
 end

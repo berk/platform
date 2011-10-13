@@ -2,11 +2,9 @@ module Platform
   module Api
     module Proxy
 
-      @proxies = {}
-
       def self.add(klass, proxy_class)
         proxy_class.ensure_valid_class_name
-        (@proxies[klass] ||= SortedSet.new) << proxy_class
+        (Platform::Config.proxies[klass.name] ||= SortedSet.new) << proxy_class
       end
 
       def self.proxy_class_for(klass, version=nil)
@@ -31,13 +29,14 @@ module Platform
       end
 
       def self.reset
-        @proxies.clear
+        Platform::Config.proxies.clear
       end
 
     private
 
       def self.proxies_for(klass)
-        klass.ancestors.detect {|ii| return @proxies[ii] if @proxies.has_key?(ii)}
+        Platform::Config.load_proxies if Platform::Config.proxies.empty?
+        klass.ancestors.detect {|ii| return Platform::Config.proxies[ii.name] if Platform::Config.proxies.has_key?(ii.name)}
         return nil
       end
 

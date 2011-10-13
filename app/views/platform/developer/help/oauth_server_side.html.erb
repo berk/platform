@@ -108,13 +108,13 @@
 				<%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
     </p>
     <p style="text-align:center">
-        <%=image_tag("/platform/images/help/login_web.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/login_web.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
     <p>
         <%=tr("Once we have successfully authenticated the user, we will prompt the user to authorize your application:") %>
     </p>
     <p style="text-align:center">
-        <%=image_tag("/platform/images/help/auth_web.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/auth_web.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
     <p>
         <%=tr("If the user presses Don't Allow, your app is not authorized.") %>
@@ -543,7 +543,8 @@
     </p>
     <h3><%=tr("Example") %></h3>
     <div class="code_snippet">
-        https://<%=Platform::Config.site_base_url %>/platform/oauth/request_token?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL&client_secret=YOUR_APP_SECRET&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/request_token?client_id=YOUR_APP_ID&redirect_uri=YOUR_URL&client_secret=YOUR_APP_SECRET
+				&grant_type=refresh_token&refresh_token=REFRESH_TOKEN
     </div>
     <h3><%=tr("Returned Fields") %></h3>
     <p>

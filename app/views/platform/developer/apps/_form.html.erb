@@ -58,7 +58,7 @@
       </div>
       <div id="icon_preview"> 
 	    	<span style="float:right; font-size:10px;">
-	    		<%=link_to_function(tr("Change your icon", 'Client application field action'), "$('icon_preview').hide();$('icon_field').show();")%>
+	    		<%=link_to_function(tr("Change your icon", 'Client application field action'), "Platform.Effects.hide('icon_preview');Platform.Effects.show('icon_field');")%>
 	    	</span>
 	      <%=image_tag(@app.icon_url, :style => "width:16px;height:16px;")%>
 			</div>	
@@ -78,7 +78,7 @@
     	</div>
 			<div id="logo_preview">	
 	      <span style="float:right; font-size:10px;">
-	        <%=link_to_function(tr("Change your logo", 'Client application field action'), "$('logo_preview').hide();$('logo_field').show();")%>
+	        <%=link_to_function(tr("Change your logo", 'Client application field action'), "Platform.Effects.hide('logo_preview');Platform.Effects.show('logo_field');")%>
 	      </span>
 	      <%=image_tag(@app.logo_url, :style => "width:75px;height:75px;")%>
 			</div>

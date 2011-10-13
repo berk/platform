@@ -64,7 +64,9 @@
   <div class="section_link <%="selected" if controller.action_name == 'sdk_ios' %>"><%=link_to(tr("iOS SDK"), :action => :sdk_ios, :version => @version)%></div>
 
   <div class="navigation_header" style="white-space:nowrap;"><%=tr("API Reference")%> &nbsp; 
-	 <span style="font-size:8px;">v</span> <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
+		<% if Platform::Config.api_supported_versions.size > 1 %>
+	 	<span style="font-size:8px;">v</span> <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
+		<% end %>
 	</div>
 	
 	<% ref = Platform::Config.api_reference(@version) %>

@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -21,15 +21,20 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::Api::AppsController < Platform::Api::BaseController
-  def index
-    render_response(Platform::Application.all) 
-  end
+module Platform
+  module Api
+    class AppsController < Platform::Api::BaseController
+      
+      def index
+        render_response(Platform::Application.all) 
+      end
 
-private 
+    private 
 
-  def model_class
-    Platform::Application
-  end
+      def model_class
+        Platform::Application
+      end
   
+    end
+  end
 end

@@ -22,7 +22,16 @@
 #++
 
 Platform::Engine.routes.draw do
-  [:apps, :forum, :home, :login, :oauth, :ratings].each do |ctrl|
+  
+  match "apps", :to => "apps#index"
+  match "apps/index", :to => "apps#index"
+  match "apps/view", :to => "apps#view"
+  match "apps/paginate_module", :to => "apps#paginate_module"
+  match "apps/featured_applications_module_content", :to => "apps#featured_applications_module_content"
+  match "apps/xd", :to => "apps#xd"
+  match "apps(/:canvas_name)", :to => "apps#run"
+  
+  [:forum, :oauth, :ratings].each do |ctrl|
     match "#{ctrl}(/:action)", :controller => "#{ctrl}"
   end
 
@@ -38,15 +47,13 @@ Platform::Engine.routes.draw do
     match "developer/#{ctrl}(/:action)", :controller => "developer/#{ctrl}"
   end
   
-  namespace :platform do
-    root :to => "home#index"
-    namespace :admin do
-      root :to => "admin/apps#index"
-    end
-    namespace :developer do
-      root :to => "developer/apps#index"
-    end
+  namespace :admin do
+    root :to => "admin/apps#index"
   end
-  
-  root :to => "home#index"
+
+  namespace :developer do
+    root :to => "developer/apps#index"
+  end
+
+  root :to => "apps#index"
 end

@@ -1,0 +1,18 @@
+bookmark:
+  type: "api"
+  path: "bookmark"
+  sample: "https://localhost:3000/api/bookmark/1"
+  description: "Returns information about bookmark."
+  status: changed
+
+  fields:
+    title: 
+      description: "The bookmark's title"
+      type: "String"
+    url: 
+      description: "The bookmark's url"
+      type: "String"
+    created_at: 
+      description: "The bookmark's creation date as a string"
+      type: "String"
+      status: changed

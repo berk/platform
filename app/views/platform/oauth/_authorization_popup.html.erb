@@ -1,0 +1,38 @@
+<%= stylesheet_link_tag "platform/platform" %>
+<%= stylesheet_link_tag "platform/oauth" %>
+<%= javascript_include_tag "platform/platform" %>
+
+<div style="padding:10px;font-size:14px;">
+		<div class="intro">
+				<strong><%=trl("{application} would like permission to access your {site} account.","", :application => @client_application.name, :site => Platform::Config.site_title)%></strong>
+				<span class="soft">
+			   	<%= trl("Only allow access if you trust this application with your {site} Information.","", :site => Platform::Config.site_title) %>
+				</span>
+		 </div>	
+		
+		 <div class="intro">
+		  	<strong><%= trl("This application will have access to:") %></strong>
+		 </div>
+		 <div class="media profile_thumb">
+			<%=image_tag(Platform::Config.user_mugshot, :class => "img")%>
+			<span class="soft">
+				<%=tr("Your name, profile picture, gender, family, photos and any other information available through my user account.")%>
+			</span>
+		 </div>
+		
+		<div class="buttons">
+      <button class="platform_btn platform_submit_btn" onClick="Platform.element('authorize').value = 1; Platform.element('auth_form').submit()">
+          <span><%=tr("Allow")%></span>
+      </button>
+      <button class="platform_btn platform_submit_btn" onClick="Platform.element('authorize').value = 0; Platform.element('auth_form').submit()">
+          <span><%=tr("Don't Allow")%></span>
+      </button>
+		</div>	
+
+		<div class="soft" style="margin-top:40px;">
+			<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => {:href => @client_application.terms_of_service_url}, :link2 => {:href => @client_application.privacy_policy_url})%>
+		</div>
+	</div>
+</div>	
+
+<%= render :partial => "authorize_form" %>

@@ -11,12 +11,12 @@
         <li><%= tr8n_language_selector_tag(:lightbox=>false) %></li>
       </ul>
       <h1 class="logo">
-				<%=link_to("Platform Sample Application", "/platform/home", :style=>"text-decorations:none;")%>
+				<%=link_to("Sample Application", "/home", :style=>"text-decorations:none;")%>
 			</h1>
     </div>
   </div>
 </div>
 
 <div class="page_fixed">
-	<%=render :partial => "/layouts/flashes" %>
+  <%= tr8n_flashes_tag %>
 </div>	

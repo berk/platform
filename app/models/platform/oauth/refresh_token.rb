@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -23,10 +23,13 @@
 
 class Platform::Oauth::RefreshToken < Platform::Oauth::OauthToken
 
-  validates_presence_of :user
-
   def exchange!(params={})
-    token = Platform::Oauth::AccessToken.create!(:user => user, :application => application)
+    if user
+      token = application.create_access_token(:user => user, :scope => scope)
+    else
+      token = application.create_client_token(:scope => scope)
+    end    
+    
     invalidate!
     token
   end

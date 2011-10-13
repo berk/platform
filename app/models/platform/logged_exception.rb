@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -252,7 +252,7 @@ class Platform::LoggedException < ActiveRecord::Base
       write_attribute(:environment, env.join("\n"))
 
       write_attribute(:request, [
-        "* URL:#{" #{request.method.to_s.upcase}" unless request.get?} #{request.protocol}#{request.env["HTTP_HOST"]}#{request.request_uri}",
+        "* URL:#{" #{request.method.to_s.upcase}" unless request.get?} #{request.protocol}#{request.env["HTTP_HOST"]}#{request.url}",
         "* Format: #{request.format.to_s}",
         "* Parameters: #{request.parameters.reject{|key, value| rejected_parameters.include?(key.to_sym)}.inspect}",
         "* Rails Root: #{Rails.root}"

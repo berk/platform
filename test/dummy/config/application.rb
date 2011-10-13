@@ -9,6 +9,7 @@ require "kaminari"
 require "platform"
 require "acts_as_tree"
 require "acts_as_state_machine"
+require "rmagick"
 
 module Dummy
   class Application < Rails::Application
@@ -17,7 +18,7 @@ module Dummy
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    # config.autoload_paths += %W(#{config.root}/extras)
+    # config.autoload_paths += %W(#{config.root}/lib/api/proxy)
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.

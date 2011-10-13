@@ -16,14 +16,14 @@
        <%=tr("The embedded application is running inside of an iFrame and is served by a server outside of {site_title}.", "", :site_title => Platform::Config.site_title)%> 
     </p>
     <p style="text-align:center">
-        <%=image_tag("/platform/images/help/ext.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/ext.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
     <h2><%=tr("Embedded Application Registration") %></h2>
     <p>
        <%=tr("In order to create an embedded application, you have to provide the following information:")%>
     </p>
     <p style="text-align:center">
-        <%=image_tag("/platform/images/help/app_reg_ext.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/app_reg_ext.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
 		
     <h3><%=tr("Application Fields") %></h3>
@@ -246,7 +246,7 @@
         https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_KEY&redirect_uri=YOUR_URL&response_type=token
     </div>
     <p style="text-align:center">
-       <%=image_tag("/platform/images/help/auth_iframe.png", :style=>"width:600px;", :class => "screenshot") %>
+       <%=image_tag("platform/help/auth_iframe.png", :style=>"width:600px;", :class => "screenshot") %>
     </p>
     <p>
         <%=tr("If the user presses Don't Allow, your app is not authorized.") %><%=tr("The user will be redirected (via HTTP 302) to the URL you passed in the redirect_uri parameter with the following error information:") %>

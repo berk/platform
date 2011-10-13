@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -83,21 +83,11 @@ class Platform::BaseController < ApplicationController
 private
 
   def init_platform
-    site_current_user = nil
-    if Platform::Config.site_user_info_enabled?
-      begin
-        site_current_user = eval(Platform::Config.current_user_method)
-        site_current_user = nil if site_current_user.class.name != Platform::Config.user_class_name
-      rescue Exception => ex
-        raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
-      end
-    else
-      site_current_user = Platform::PlatformUser.find_by_id(session[:platform_user_id]) if session[:platform_user_id]
-      site_current_user = Platform::PlatformUser.new unless site_current_user
-    end
-    
-    # initialize request thread variables
+    site_current_user = eval(Platform::Config.current_user_method)
+    site_current_user = nil if site_current_user.class.name != Platform::Config.user_class_name
     Platform::Config.init(site_current_user)
+  rescue Exception => ex
+    raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
   end
   
   def redirect_to_source

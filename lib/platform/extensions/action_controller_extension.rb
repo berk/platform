@@ -28,6 +28,37 @@ module Platform
     end
 
     module InstanceMethods
+      def platform_redirect_to_oauth
+        if platform_oauth_redirect_params
+          redirect_to(platform_oauth_redirect_params)
+          return true
+        end
+        false
+      end
+
+      def platform_store_oauth_redirect_params
+        session[:platform_oauth_redirect_params] = params
+      end
+
+      def platform_remove_oauth_redirect_params
+        session[:platform_oauth_redirect_params] = nil
+      end
+      
+      def platform_oauth_redirect_params
+        session[:platform_oauth_redirect_params]
+      end
+      
+      def platform_login_url
+        platform_stringify_url(Platform::Config.login_url, :display => params[:display], :client_id => params[:client_id])
+      end
+      
+      def platform_logout_url
+        platform_stringify_url(Platform::Config.logout_url, :display => params[:display], :client_id => params[:client_id])
+      end
+
+      def platform_stringify_url(path, params)
+        "#{path}#{path.index('?') ? '&' : '?'}#{params.collect{|n,v| "#{n}=#{CGI.escape(v.to_s)}"}.join("&")}"
+      end
 
     end
   end

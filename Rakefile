@@ -13,8 +13,10 @@ rescue LoadError
 end
 
 RDoc::Task.new(:rdoc) do |rdoc|
+  require 'platform/version'
+
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title    = 'Platform'
+  rdoc.title    = 'Platform #{Platform::VERSION}'
   rdoc.options << '--line-numbers'
   rdoc.rdoc_files.include('README.rdoc')
   rdoc.rdoc_files.include('lib/**/*.rb')
@@ -26,14 +28,10 @@ load 'rails/tasks/engine.rake'
 
 Bundler::GemHelper.install_tasks
 
-require 'rake/testtask'
-
-Rake::TestTask.new(:test) do |t|
-  t.libs << 'lib'
-  t.libs << 'test'
-  t.pattern = 'test/**/*_test.rb'
-  t.verbose = false
+require 'rspec/core'
+require 'rspec/core/rake_task'
+RSpec::Core::RakeTask.new(:spec) do |spec|
+  spec.pattern = FileList['spec/**/*_spec.rb']
 end
 
-
-task :default => :test
+task :default => :spec

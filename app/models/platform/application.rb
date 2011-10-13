@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -29,7 +29,6 @@ class Platform::Application < ActiveRecord::Base
   acts_as_tree :order => "version"
 
   belongs_to :developer, :class_name => "Platform::Developer"
-  
   has_many :application_developers, :class_name => "Platform::ApplicationDeveloper", :dependent => :destroy
   has_many :application_metrics, :class_name => "Platform::ApplicationMetric", :dependent => :destroy
   has_many :application_users, :class_name => "Platform::ApplicationUser", :dependent => :destroy
@@ -61,6 +60,7 @@ class Platform::Application < ActiveRecord::Base
   attr_accessor :token_callback_url
 
   acts_as_state_machine :initial => :new
+  
   state :new
   state :submitted
   state :approved
@@ -98,7 +98,7 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def self.for(client_id)
-    app = Platform::Application.find_by_id(client_id) if client_id.match(/^[\d]+$/)
+    app = Platform::Application.find_by_id(client_id) if client_id.to_s.match(/^[\d]+$/)
     app || Platform::Application.find_by_key(client_id)
   end
   
@@ -148,6 +148,10 @@ class Platform::Application < ActiveRecord::Base
     has_permission?(:grant_type_password)
   end
 
+  def allow_grant_type_client_credentials?
+    true # for now, all applications have a right to get client_token
+  end
+
   # Ticket 19180
   def allow_unlimited_models(value=true)
     set_permission(:unlimited_models, value)
@@ -186,11 +190,17 @@ class Platform::Application < ActiveRecord::Base
   end
 
   def create_access_token(params={})
-    Platform::Oauth::AccessToken.create(params.merge(:application => self))
+    access_token = Platform::Oauth::AccessToken.create(params.merge(:application => self))
+    Platform::ApplicationUser.touch(self, access_token.user)
+    access_token
   end
 
   def create_refresh_token(params={})
     Platform::Oauth::RefreshToken.create(params.merge(:application => self))
+  end
+
+  def create_client_token(params={})
+    Platform::Oauth::ClientToken.create(params.merge(:application => self))
   end
 
   def admin_link
@@ -246,7 +256,7 @@ class Platform::Application < ActiveRecord::Base
   
   def app_url
     return url if canvas_name.blank?      
-    "http://#{SITE}/platform/apps/#{canvas_name}"
+    "http://#{Platform::Config.site_base_url}/platform/apps/#{canvas_name}"
   end
   
   def short_name
@@ -352,17 +362,11 @@ class Platform::Application < ActiveRecord::Base
   end  
   
   def self.featured_for_category(category, page = 1, per_page = 20)
-    results = self.where("platform_applications.state='approved' and platform_application_categories.category_id = ? and platform_application_categories.featured = ?", category.id, true)
-    results = results.joins(:application_categories)
-    results = results.order("platform_application_categories.position asc").page(page).per(per_page)
-    results
+    self.where("platform_applications.state='approved' and platform_application_categories.category_id = ? and platform_application_categories.featured = ?", category.id, true).joins(:categories).order("platform_application_categories.position asc").page(page).per(per_page)
   end
   
   def self.regular_for_category(category, page = 1, per_page = 20)
-    results = self.where("platform_applications.state='approved' and platform_application_categories.category_id = ? and (platform_application_categories.featured is null or platform_application_categories.featured = ?)", category.id, false)
-    results = results.joins(:application_categories)
-    results = results.order("platform_application_categories.position asc").page(page).per(per_page)
-    results
+    self.where("platform_applications.state='approved' and platform_application_categories.category_id = ? and (platform_application_categories.featured is null or platform_application_categories.featured = ?)", category.id, false).joins(:categories).order("platform_application_categories.position asc").page(page).per(per_page)
   end
   
   def versioned_name

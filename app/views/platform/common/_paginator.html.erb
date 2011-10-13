@@ -17,9 +17,9 @@
 				  else
 				    output = tr("Displaying #{entry_name.pluralize} [bold: {start_num} - {end_num}] of [bold: {total_count}] in total", 
 				       "Paginator message", {
-				          :start_num    => collection.offset_num + 1,
-				          :end_num      => collection.offset_num + collection.length,
-				          :total_count  => collection.total_num
+				          :start_num    => collection.offset_value + 1,
+				          :end_num      => collection.offset_value + collection.length,
+				          :total_count  => collection.total_count
 				       }, options
 				    )
 				  end

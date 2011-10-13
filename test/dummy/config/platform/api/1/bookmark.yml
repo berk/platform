@@ -1,0 +1,58 @@
+bookmark:
+  type: "api"
+  path: "bookmark"
+  sample: "http://localhost:3000/api/bookmark/1"
+  description: "Returns information about bookmark."
+  status: updated
+
+  fields:
+    title: 
+      description: "The bookmark's title"
+      type: "String"
+    url: 
+      description: "The bookmark's url"
+      type: "String"
+    created_at: 
+      description: "The bookmark's creation date as a timestamp"
+      type: "Number"
+      status: updated
+
+  actions:
+    create:
+      path: "bookmark/create" 
+      method: GET
+      status: added
+      description: "Adds a bookmark."
+      sample: "http://localhost:3000/api/bookmark?title=Google&url=www.google.com"
+      params:
+        title: 
+          description: "The bookmark's title"
+          type: "String"
+          required: true
+        url: 
+          description: "The bookmark's url"
+          type: "String"
+          required: true
+      fields: "*"
+    update:
+      path: "bookmark/update" 
+      method: GET
+      status: added
+      description: "Updates a bookmark."
+      sample: "http://localhost:3000/api/bookmark/update/1?title=Google&url=www.google.com"
+      params:
+        title: 
+          description: "The bookmark's title"
+          type: "String"
+          required: true
+        url: 
+          description: "The bookmark's url"
+          type: "String"
+          required: true
+      fields: "*"
+    delete:
+      path: "bookmark/delete" 
+      method: POST
+      status: added
+      description: "Removes a bookmark."
+      sample: "http://localhost:3000/api/bookmark/delete/1"

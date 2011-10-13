@@ -86,13 +86,13 @@
         <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %><%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
     </p>
     <center>
-        <%=image_tag("/platform/images/help/login_desktop.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/login_desktop.png", :style=>"width:600px;", :class => "screenshot") %>
     </center>
     <p>
         <%=tr("Once we have successfully authenticated the user, we will prompt the user to authorize your application:") %>
     </p>
     <center>
-        <%=image_tag("/platform/images/help/auth_desktop.png", :style=>"width:600px;", :class => "screenshot") %>
+        <%=image_tag("platform/help/auth_desktop.png", :style=>"width:600px;", :class => "screenshot") %>
     </center>
     <p>
         <%=tr("If the user presses Don't Allow, your app is not authorized.") %>
@@ -136,6 +136,7 @@
             </tr>
         </table>
     </p>
+
     <h3><%=tr("Example") %></h3>
     <div class="code_snippet">
         https://<%=Platform::Config.site_base_url %>/platform/oauth/auth_failed#status=unauthorized&message=user+canceled
@@ -184,7 +185,7 @@
     </p>
     <h3><%=tr("Example")%></h3>
     <div class="code_snippet">
-        https://<%=Platform::Config.site_base_url %>/platform/oauth/auth_success#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/auth_success#access_token=ACCESS_TOKEN_GENERATED_BY_SERVER &expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
     </div>
 </div>
 <%= render :partial => "footer" %>

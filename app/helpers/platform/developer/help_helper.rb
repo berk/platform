@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -26,8 +26,8 @@ module Platform::Developer::HelpHelper
   def documentation_field_type_tag(field)
     return field[:type] if simple_field?(field[:type])
     if field[:type] == "Array"
-      return "Array of #{field[:array_type].pluralize}" if simple_field?(field[:array_type])
-      return "Array of #{documentation_field_link_tag(field[:array_type].pluralize, field[:array_type])}" 
+      return "Array of #{field[:array_type].pluralize}".html_safe if simple_field?(field[:array_type])
+      return "Array of #{documentation_field_link_tag(field[:array_type].pluralize, field[:array_type])}".html_safe
     end
     documentation_field_link_tag(field[:type], field[:type])
   end
