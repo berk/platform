@@ -1,9 +1,7 @@
-<%= stylesheet_link_tag "platform/platform" %>
-<%= stylesheet_link_tag "platform/oauth" %>
-<%= javascript_include_tag "platform/platform" %>
+<%= render :partial => "/platform/common/header" %>
 
 <center>
-  <div style="width:700px; border:1px dotted #ccc; margin-bottom:30px; background-color:white; border-radius:10px">
+  <div style="width:700px; border:1px dotted #ccc; margin-bottom:30px; background-color:white; border-radius:10px; font-size:12px; font-family:Arial;margin-top:15px">
     <div style="background:url('/assets/platform/oauth/perm_tile.gif'); height:15px;">&nbsp;</div>
     
 		<div style="margin:20px; text-align:left;">
@@ -54,13 +52,13 @@
       </div>
 			  
       <div style="margin-top:10px; color: #888;">
-        <%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => [@client_application.terms_of_service_url], :link2 => [@client_application.privacy_policy_url])%>
+        <%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => {:href => @client_application.terms_of_service_url, :target => "_top"}, :link2 => {:href=>@client_application.privacy_policy_url, :target => "_top"})%>
 			</div>
 		</div>
 		
 		<div style="background:#eee; text-align:right; padding:10px; vertical-align:middle; ">
 			<div style="float:left; padding-top:10px;">
-			  	<%=link_to(tr("Not {user}?", "", :user => Platform::Config.user_name),  Platform::Config.logout_url(:display => params[:display], :client_id => @client_application.id))%>
+			  	<%=link_to(tr("Not {user}?", "", :user => Platform::Config.user_name),  Platform::Config.logout_url(:display => params[:display], :client_id => @client_application.id), :target => "_top")%>
 			</div>	
       <button class="platform_btn platform_submit_btn" onClick="Platform.element('authorize').value = 1; Platform.element('auth_form').submit()">
           <span><%=tr("Allow")%></span>
@@ -73,3 +71,4 @@
 </center>
 
 <%= render :partial => "authorize_form" %>
+<%= render :partial => "/platform/common/footer" %>

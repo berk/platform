@@ -93,6 +93,22 @@ class Platform::AppsController < Platform::BaseController
     render :layout => false
   end
   
+  def settings
+    @app_users = Platform::ApplicationUser.where("user_id = ?", current_user.id).order("updated_at desc")
+  end
+  
+  def remove
+    if request.post?
+      app_user = Platform::ApplicationUser.find_by_id(params[:app_user_id])
+      if app_user
+        app_user.destroy 
+        trfn("{app} has been removed from your account and will no longer have access to your account information.", "", :app => app_user.application.name)
+      end
+    end
+    
+    redirect_to :action => :settings  
+  end
+  
   def run
     @app = Platform::Application.find_by_canvas_name(params[:canvas_name])
     return render(:action => :canvas_app) unless @app

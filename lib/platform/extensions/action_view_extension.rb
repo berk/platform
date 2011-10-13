@@ -163,6 +163,31 @@ module Platform
       def platform_stringify_url(path, params)
         "#{path}#{path.index('?') ? '&' : '?'}#{params.collect{|n,v| "#{n}=#{CGI.escape(v.to_s)}"}.join("&")}"
       end
+      
+      def platform_when_string_tr(key, opts = {})
+        tr(key, 'Time reference', opts)
+      end
+      
+      def platform_display_time(time, format)
+        time.tr(format).gsub('/ ', '/').sub(/^[0:]*/,"")
+      end
+      
+      def platform_when_string_tag(time, opts = {})
+        elapsed_seconds = Time.now - time
+        return platform_when_string_tr("Today") if time.today_in_time_zone? if opts[:days_only]
+        return platform_when_string_tr('In the future, Marty!') if elapsed_seconds < 0
+        return platform_when_string_tr('A moment ago') if elapsed_seconds < 2.minutes
+        return platform_when_string_tr("{minutes||minute} ago", :minutes => (elapsed_seconds / 1.minute).to_i) if elapsed_seconds < 1.hour
+        return platform_when_string_tr("{hours||hour} ago", :hours => 1) if elapsed_seconds < 1.75.hours
+        return platform_when_string_tr("{hours||hour} ago", :hours => 2) if elapsed_seconds < 2.hours
+        return platform_when_string_tr("{hours||hour} ago", :hours => (elapsed_seconds / 1.hour).to_i) if elapsed_seconds < 1.day
+        return platform_when_string_tr("Yesterday") if time.yesterday_in_time_zone?
+        return platform_when_string_tr("{days||day} ago", :days => elapsed_seconds.to_i / 1.day) if elapsed_seconds < 14.days
+        return platform_when_string_tr("{weeks||week} ago", :weeks => (elapsed_seconds / 1.day / 7).to_i) if elapsed_weeks < 4
+        return platform_display_time(time, :monthname_abbr) if Date.today.year == time.year
+        return platform_display_time(time, :monthname_abbr_year)
+      end      
+      
     end
   end
 end

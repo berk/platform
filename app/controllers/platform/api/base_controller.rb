@@ -421,7 +421,7 @@ module Platform
       end
   
       def ensure_logged_in
-        raise LoginError unless logged_in?
+        raise LoginError.new("You must be logged in to use this API") unless logged_in?
       end
 
       # should be overwritten by the implementing class - this is cutsom stuff for some apps

@@ -63,6 +63,7 @@ defaults: &defaults
     admin_layout:             admin
     oauth_web_layout:         minimal
     oauth_popup_layout:       popup
+    oauth_iframe_layout:      blank
     oauth_mobile_layout:      popup
     oauth_desktop_layout:     popup
     system_user_id:           10

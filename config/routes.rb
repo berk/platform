@@ -29,6 +29,8 @@ Platform::Engine.routes.draw do
   match "apps/paginate_module", :to => "apps#paginate_module"
   match "apps/featured_applications_module_content", :to => "apps#featured_applications_module_content"
   match "apps/xd", :to => "apps#xd"
+  match "apps/settings", :to => "apps#settings"
+  match "apps/remove", :to => "apps#remove"
   match "apps(/:canvas_name)", :to => "apps#run"
   
   [:forum, :oauth, :ratings].each do |ctrl|

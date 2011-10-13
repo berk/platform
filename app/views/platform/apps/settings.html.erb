@@ -1,0 +1,77 @@
+<%= render :partial => "/platform/common/header" %>
+
+<style>
+	.recent_apps_table {
+		width:100%;
+	}
+
+	.recent_apps_table tr {
+		padding:5px;
+		border-top:#ccc 1px solid;border-bottom:#ccc 1px solid;
+	}
+	
+	.recent_apps_table th {
+		padding:5px;
+		text-align:left;
+	}
+
+	.recent_apps_table td {
+		padding:5px;
+	}
+	
+	.app_row {
+		background-color:white;
+	}
+
+	.app_row:hover {
+		background-color:#ffe;
+	}
+	
+</style>
+<div class="module page_title lengthy">
+  <div class="inner">
+		<div class="section_title">
+			<%=tr("My Applications") %>
+		</div>	
+		<% if @app_users.any? %>
+			<p><%=tr("You have authorized these apps to interact with your {site} account:", "", :site => Platform::Config.site_title)%></p>
+			<table class="recent_apps_table">
+				<tr style="background-color:#eee;">
+					<th></th>	
+					<th><%=tr("Application Name") %></th>	
+					<th><%=tr("Last Accessed At") %></th>	
+					<th></th>
+				</tr>	
+				<% @app_users.each do |au| %>
+					<tr class="app_row">
+						<td style="text-align:left; padding-left:3px; width:30px;"><%=image_tag(au.application.icon_url)%></td>
+						<td><%=link_to(au.application.name, :action => :view, :id => au.application.id)%></td>
+						<td><%=platform_when_string_tag(au.updated_at)%></td>
+						<td style="text-align:right; padding-right:3px;">
+								<%=link_to_function(image_tag("platform/close.gif"), "removeApplication('#{au.id}')")%></td>
+					</tr>
+				<% end %>
+	 		</table>
+		<% else %>
+			<p style="padding-top:10px;padding-bottom:10px;">
+				<%=tr("You have not authorized any applications.")%>
+				<%=tr("Visit [link: Application Directory] to get started.", "", :link => {:href => "/platform/apps"})%>	
+			</p>
+		<% end %>
+	</div>
+</div>
+
+<%=form_tag({:action => :remove}, {:id => :app_form}) do %>
+	<%=hidden_field_tag(:app_user_id, '')%>
+<% end %>
+
+<script>
+	function removeApplication(app_user_id) {
+		if (!confirm("<%=trl("If you remove this application, it will no longer have access to your data and be removed from your Applications Page.")%>"))
+			return;
+		
+		Platform.element('app_user_id').value = app_user_id;
+		Platform.element('app_form').submit();	
+	}
+</script>
+<%= render :partial => "/platform/common/footer" %>

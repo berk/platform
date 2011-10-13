@@ -1,5 +1,145 @@
-= Platform
+= Welcome to Rails Platform Engine
 
-This project rocks and uses MIT-LICENSE.
+Platform is a Rails Engine Plugin/Gem that provides a framework for extending any Rails application with 3rd party applications. 
 
-Instructions are coming soon... Stay tuned.
+As web applications become more and more social, and new devices, such as iPhone and Android, become the new web interface standard, 
+it is crucial to ensure that 3rd party developers can access your API and extend your application functionality as well as provide 
+new access points to your application. This engine comes loaded with features that make it easy to provide 3rd party developers with tools, 
+SDKs and documentation to extend your application.
+
+Here are some of the main features:
+
+* Full support for OAuth 2.0 spec, which allows 3rd party applications to authorize your users on their behalf.
+* API core classes that support OAuth and Cookie based authentication and authorization.
+* API documentation tools that allow you to easily generated API docs for you API classes.
+* API versioning mechanism that allows you to version your API and support multiple versions of API and documentation at the same time.
+* Platform developer tools that allow your 3rd party developers to register multiple applications with your web site, monitor their users activity, participate in discussions and explore your API.
+* Application directory, where your developers can submit their applications and your users can discover apps, rate them, discuss them and launch them.
+* Administrative tools that allow you to closely monitor developers activities, API calls, manage Application Directory and much more.
+* The platform comes with Tr8n engine, which makes it international out of the box - with hundreds of languages. (Actual translations will be available in the near future.)
+
+= Installation Instructions
+
+Add the following gems to your Gemfile: 
+
+  gem 'kaminari'
+  gem 'will_filter', "~> 3.1.2" 
+  gem 'tr8n', "~> 3.1.1" 
+  gem 'platform', "~> 3.1.1" 
+  gem 'sass'
+  gem 'coffee-script'
+  gem 'acts_as_tree'
+  gem 'acts_as_state_machine'
+	gem 'rmagick'
+	
+And run:
+
+  $ bundle
+
+At the top of your routes.rb file, add the following lines:
+
+  mount WillFilter::Engine => "/will_filter"
+  mount Tr8n::Engine => "/tr8n"
+  mount Platform::Engine => "/platform"
+
+To configure and initialize Platform engine, run the following commands: 
+
+  $ rails generate will_filter
+  $ rails generate tr8n
+  $ rails generate platform
+  $ rake db:migrate
+  $ rake tr8n:init
+  $ rake platform:init
+  $ rails s
+
+Open your browser and point to:
+
+  http://localhost:3000
+
+
+= Integration Instructions
+
+The best way to get going with Platform is to run the gem as a stand-alone application and follow the instructions and documentation in the app:
+
+  $ git clone git://github.com/berk/platform.git
+  $ cd platform/test/dummy
+  $ rake db:migrate
+  $ rake tr8n:init
+  $ rake platform:init
+  $ rails s
+
+Open your browser and point to:
+
+  http://localhost:3000
+
+
+= Platform Screenshots
+
+Below are a few screenshots of what the Platform looks like inside a sample test application:
+
+= Sample Application 
+
+http://wiki.tr8n.org/images/0/0c/Platform_Welcome.png
+
+= Developer Tools
+
+== Developer Applications
+
+http://wiki.tr8n.org/images/8/8a/Developer_Applications.png
+
+== Developer Dashboard
+
+http://wiki.tr8n.org/images/e/eb/Developer_Dashboard.png
+
+== API Explorer
+
+http://wiki.tr8n.org/images/b/b3/API_Explorer_Results.png
+
+== API Explorer with OAuth Authorization Window
+
+http://wiki.tr8n.org/images/3/34/Oauth_Authorization_Popup.png
+
+== API Explorer Method Hints
+
+http://wiki.tr8n.org/images/b/bf/API_Explorer_Methods.png
+
+== OAuth Help
+
+http://wiki.tr8n.org/images/4/42/Oauth_Help.png
+
+== API Generated Help
+
+http://wiki.tr8n.org/images/6/67/API_Help.png
+
+= Application Directory
+
+== Applications by Category with Featured Applications
+
+http://wiki.tr8n.org/images/0/01/Application_Directory.png
+
+== Application Search Results
+
+http://wiki.tr8n.org/images/6/61/Application_Search.png
+
+== Application Details
+
+http://wiki.tr8n.org/images/4/40/Application_Details2.png
+
+== Application Authorization Screen for Web or Embedded Applications
+
+http://wiki.tr8n.org/images/a/af/Oauth_Authorization_Request.png
+
+== Embedded Application Launched in an iFrame
+
+http://wiki.tr8n.org/images/a/a1/Embedded_App.png
+
+== User Authorized Applications 
+
+http://wiki.tr8n.org/images/0/06/My_Applications.png
+
+= Administrative Tools
+
+http://wiki.tr8n.org/images/2/28/Admin_Tools.png
+
+
+

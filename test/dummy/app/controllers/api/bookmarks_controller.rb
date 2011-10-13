@@ -6,6 +6,7 @@ class Api::BookmarksController < Api::BaseController
   end
 
   def create
+    ensure_logged_in
     raise BadRequestError.new("Title and url must be provided") if params[:title].blank? or params[:url].blank?
     bookmark = Bookmark.create(:user => current_user, :title => params[:title], :url => params[:url])
     return redirect_to(params[:url]) if params[:bookmarklet]
@@ -13,6 +14,7 @@ class Api::BookmarksController < Api::BaseController
   end
   
   def update
+    ensure_logged_in
     ensure_ownership
     raise BadRequestError.new("Title and url must be provided") if params[:title].blank? or params[:url].blank?
     page_model.update_attributes(params.slice(:title, :url))
@@ -20,6 +22,7 @@ class Api::BookmarksController < Api::BaseController
   end
   
   def delete
+    ensure_logged_in
     ensure_post    
     ensure_ownership
     page_model.destroy

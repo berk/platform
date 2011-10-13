@@ -6,6 +6,7 @@ class Api::UsersController < Api::BaseController
   end
   
   def bookmarks
+    ensure_logged_in
     ensure_get
     render_response current_user.bookmarks
   end

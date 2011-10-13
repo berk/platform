@@ -28,7 +28,7 @@ user:
       method: GET
       status: added
       description: "Gets a list of user's bookmark."
-      sample: "http://localhost:3000/user/bookmarks"
+      sample: "http://localhost:3000/api/user/bookmarks"
       fields: 
         results: 
           description: "List of user's bookmarks"

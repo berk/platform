@@ -23,7 +23,7 @@ bookmark:
       method: GET
       status: added
       description: "Adds a bookmark."
-      sample: "http://localhost:3000/api/bookmark?title=Google&url=www.google.com"
+      sample: "http://localhost:3000/api/bookmark/create?title=Google&url=www.google.com"
       params:
         title: 
           description: "The bookmark's title"
