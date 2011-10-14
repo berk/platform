@@ -1,21 +1,22 @@
-= Welcome to Rails Platform Engine
+= Welcome to the Rails Platform Engine
 
 Platform is a Rails Engine Plugin/Gem that provides a framework for extending any Rails application with 3rd party applications. 
 
-As web applications become more and more social, and new devices, such as iPhone and Android, become the new web interface standard, 
+As web applications become more and more social, and new devices, such as iPhone and Android, become the new web interface standard for consuming web services data, 
 it is crucial to ensure that 3rd party developers can access your API and extend your application functionality as well as provide 
-new access points to your application. This engine comes loaded with features that make it easy to provide 3rd party developers with tools, 
-SDKs and documentation to extend your application.
+new access points to your application through "Connect with" functionality. This engine comes loaded with features that make it easy to provide 3rd party developers with tools, 
+SDKs and documentation to extend your application and consume/contribute to your service data. And for you, the platform makes it easy to develop, deploy, test and document your APIs.
+You can use the platform for your internal applications or you can expose it to the 3rd party developers. It is your call.
 
 Here are some of the main features:
 
-* Full support for OAuth 2.0 spec, which allows 3rd party applications to authorize your users on their behalf.
+* Full support for OAuth 2.0 spec, which allows 3rd party applications to be authorized by your users or allows your own applications to authorize themselves and get access tokens.
 * API core classes that support OAuth and Cookie based authentication and authorization.
-* API documentation tools that allow you to easily generated API docs for you API classes.
-* API versioning mechanism that allows you to version your API and support multiple versions of API and documentation at the same time.
-* Platform developer tools that allow your 3rd party developers to register multiple applications with your web site, monitor their users activity, participate in discussions and explore your API.
-* Application directory, where your developers can submit their applications and your users can discover apps, rate them, discuss them and launch them.
-* Administrative tools that allow you to closely monitor developers activities, API calls, manage Application Directory and much more.
+* API documentation tools that allow you to easily generated API docs for your API.
+* API versioning mechanism that allows you to version your API and support multiple versions of the API and documentation at the same time.
+* Platform developer tools that allow your 3rd party developers to register multiple applications with your web site, monitor their activity, participate in discussions and explore your API.
+* Application directory, where your developers submit their applications and your users discover apps, rate them, discuss them and launch them.
+* Administrative tools that allow you to closely monitor developers activity, API calls, manage Application Directory and much more.
 * The platform comes with Tr8n engine, which makes it international out of the box - with hundreds of languages. (Actual translations will be available in the near future.)
 
 = Installation Instructions
@@ -30,11 +31,11 @@ Add the following gems to your Gemfile:
   gem 'coffee-script'
   gem 'acts_as_tree'
   gem 'acts_as_state_machine'
-	gem 'rmagick'
-	
+  gem 'rmagick'
+
 And run:
 
-  $ bundle
+  $ bundle install
 
 At the top of your routes.rb file, add the following lines:
 
@@ -77,13 +78,9 @@ Open your browser and point to:
 
 Below are a few screenshots of what the Platform looks like inside a sample test application:
 
-= Sample Application 
-
 http://wiki.tr8n.org/images/0/0c/Platform_Welcome.png
 
 = Developer Tools
-
-== Developer Applications
 
 http://wiki.tr8n.org/images/8/8a/Developer_Applications.png
 
