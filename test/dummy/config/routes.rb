@@ -13,6 +13,11 @@ Rails.application.routes.draw do
   match "/api/bookmark/delete/:id", :to => "api/bookmarks#delete"
   match "/api/bookmark/update/:id", :to => "api/bookmarks#update"
   match "/api/bookmark(/:id)", :to => "api/bookmarks#index"
+  
+  # Enable Platform API
+  [:applications, :platform].each do |ctrl|
+    match "api/#{ctrl}(/:action)", :controller => "platform/api/#{ctrl}"
+  end
   ##################################################
 
   root :to => "home#index"
