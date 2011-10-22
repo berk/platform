@@ -5,8 +5,13 @@
 <div class="documentation_section">
     <p>
         <%=tr("Mobile authentication/authorization flow is very similar to the client-side flow, but it has a slightly different mechanism for handling the response data.") %>
-        <%=tr("This document provides details no how to integrate Geni into an iPhone application.") %>
+        <%=tr("This document provides details no how to integrate Platform into an iPhone application.") %>
         <%=tr("Android and other mobile devices will work in a similar fashion.") %>
+    </p>
+    <h2><%=tr("Platform iOS Client SDK")%></h2>
+    <p>
+    	<%=tr("{site_title} comes with a [link: full featured iOS library] that allows you to build dynamic iOS applications using the site data.", "", :site_title => Platform::Config.site_title, :link => {:href => "/platform/developer/help/ios_sdk"})%>
+      <%=tr("It supports authentication, autherization and API calls to get the site data.")%>
     </p>
     <h2><%=tr("Authentication & Authorization") %></h2>
     <p>
@@ -118,7 +123,7 @@
       &lt;string>&lt;/string>
       &lt;key>CFBundleURLSchemes&lt;/key>
       &lt;array>
-        &lt;string>YOUR_APP_ID&lt;/string>
+        &lt;string>app[YOUR_APP_ID]&lt;/string>
       &lt;/array>
     &lt;/dict>
   &lt;/array>
@@ -131,14 +136,14 @@
     </p>
     <h3><%=tr("Example")%></h3>
     <pre class="code_snippet">
-NSString *geniOauthBaseURL = @"https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize";
+NSString *platformOauthBaseURL = @"https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize";
 
 NSString *yourAppURL = [NSString stringWithFormat: @"%@/authorize", YOUR_APP_ID];
 
-NSString *geniOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@&response_type=token&display=mobile", 
-                                                    geniOauthBaseURL, YOUR_APP_ID, yourAppURL];
+NSString *platformOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@&response_type=token&display=mobile", 
+                                                    platformOauthBaseURL, YOUR_APP_ID, yourAppURL];
                          
-[[UIApplication sharedApplication] openURL:[NSURL URLWithString:geniOauthURL]];
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:platformOauthURL]];
 </pre>
     <p>
         <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %><%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
@@ -160,7 +165,7 @@ NSString *geniOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_u
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *) url {
 	NSLog(@"Did come back from other application");
 	
-	// If the URL's structure doesn't match the structure used for Geni authorization, abort.
+	// If the URL's structure doesn't match the structure used for Platform authorization, abort.
 	if (![[url absoluteString] hasPrefix:[NSString stringWithFormat:@"%@://authorize", YOUR_APP_ID]]) {
 	    return NO;
 	}
@@ -283,10 +288,5 @@ NSString *geniOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_u
     <div class="code_snippet">
         YOUR_APP_ID://authorize?access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
     </div>
-    <h3><%=tr("Geni iOS Client SDK")%></h3>
-    <p>
-    	<%=tr("{site_title} comes with a [link: full featured iOS library] that allows you to build dynamic iOS applications using the site data.", "", :site_title => Platform::Config.site_title, :link => ["/platform/developer/help/ios_sdk"])%>
-      <%=tr("It supports authentication, autherization and API calls to get the site data.")%>
-    </p>
 </div>
 <%= render :partial => "footer" %>

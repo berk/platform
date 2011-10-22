@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich, Geni Inc
+# Copyright (c) 2011 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -606,12 +606,12 @@ module Platform
       !api_explorer_app_id.blank?
     end
     
-    def self.proxies_path
+    def self.api_proxies_path
       api[:proxies_path]
     end
     
     def self.load_proxies
-      Dir["#{root}/#{proxies_path}/*_proxy_*.rb"].each do |file|
+      Dir["#{root}/#{api_proxies_path}/*_proxy_*.rb"].each do |file|
         require_or_load file
       end
     end  
@@ -638,6 +638,23 @@ module Platform
         ref.freeze
       end
       @api_reference[api_version]
+    end
+
+    def self.api_reference_by_path(api_version,  path)
+      @api_reference_by_path ||= {}
+      @api_reference_by_path[api_version] ||= begin
+        api = api_reference(api_version)
+        by_path = {}
+        api.each do |key, defs|
+          by_path[defs["path"]] = api[key]
+          (defs[:actions] || []).each do |act_key, acts|
+            path = acts["path"] || "#{defs["path"]}/#{act_key}"
+            by_path[path] = defs[:actions][act_key]
+          end
+        end
+        by_path
+      end
+      @api_reference_by_path[api_version][path]
     end
 
     def self.api_explorer_groups(api_version = api_default_version)

@@ -130,7 +130,7 @@ defaults: &defaults
     decoration_token_classes: ["Tr8n::Tokens::DecorationToken"]
     allow_nil_token_values:   true
     numeric_rule:             
-      token_suffixes:         [count, num, age, hours, minutes, years, seconds]
+      token_suffixes:         [count, num, age, hours, minutes, years, seconds, days, months]
       object_method:          to_i
     gender_rule:  
       token_suffixes:         [user, profile, actor, target]

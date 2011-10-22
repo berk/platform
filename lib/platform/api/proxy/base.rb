@@ -1,5 +1,3 @@
-require 'platform/api/proxy'
-
 module Platform
   module Api
     module Proxy
@@ -53,6 +51,11 @@ module Platform
 
         def to_api_path(opts = {})
           "#{Platform::Config.api_scheme}://#{Platform::Config.api_base_url}/#{instance.class.name.underscore}/#{instance.id}"
+        end
+
+        def full_url(url)
+          return url if url.index('http')
+          "http://#{Platform::Config.site_base_url}#{url}"
         end
 
       end # class Base

@@ -2,11 +2,11 @@
 <%= render :partial => "tabs" %>
 
 <%=javascript_include_tag("https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js")%>
-<%=javascript_include_tag("/public/javascripts/geni_connect.js")%>
+<%=javascript_include_tag("https://raw.github.com/berk/platform_js_clientsdk/master/jsdk.js")%>
 
 <ul id="debug" style="font-family:arial;font-size:11px;position:absolute;right:0;top:0;background:lightyellow;padding:10px;margin:0;list-style-type:none;white-space:nowrap"></ul>
 
-<h1>Geni Connect</h1>
+<h1>Platform Connect</h1>
 <p>Authorization not working right now :(</p>
 
 <button id="connect_btn">Connect</button>
@@ -18,16 +18,16 @@
 <pre style="font-size:11px;background:#f5f5f5;padding:10px;width:500px">
 
 // Authorize App
-Geni.Auth.connect();
+Platform.Auth.connect();
 
 // Revoke Application Authorization
-Geni.Auth.disconnect();
+Platform.Auth.disconnect();
 
-// Logout of Geni
-Geni.Auth.logout();
+// Logout of Platform
+Platform.Auth.logout();
 
 // Make API Call
-Geni.api('/profile',function(r) {
+Platform.api('/profile',function(r) {
   var html = '&lt;table&gt;';
   for (var key in r) {
     html += (
@@ -49,20 +49,20 @@ Geni.api('/profile',function(r) {
 
 
 $('#connect_btn').click(function(){
-  Geni.Auth.connect();
+  Platform.Auth.connect();
 })
 
 $('#disconnect_btn').click(function(){
-  Geni.Auth.disconnect();
+  Platform.Auth.disconnect();
 })
 
 $('#logout_btn').click(function(){
-  Geni.Auth.logout();
+  Platform.Auth.logout();
 })
 
 $('#user_btn').click(function(){
   var div = document.getElementById('profile_data');
-  Geni.api('/profile',function(r) {
+  Platform.api('/profile',function(r) {
     var html = '<table>';
     for (var key in r) {
       html += (
@@ -78,7 +78,7 @@ $('#user_btn').click(function(){
 
 
 
-Geni.Event.bind('log',function(args) {
+Platform.Event.bind('log',function(args) {
   $('#debug')[0].innerHTML += "<li>" + args + "</li>";
   
   

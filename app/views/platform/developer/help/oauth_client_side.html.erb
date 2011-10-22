@@ -7,6 +7,13 @@
         <%=tr("Client side authentication and authorization flow is very similar to the server side flow.") %>
 				<%=tr("The difference is in the parameters passed to the server and in the response fields that you get back.") %>
     </p>
+
+    <h2><%=tr("{site_title} JavaScript Client SDK", "", :site_title => Platform::Config.site_title)%></h2>
+    <p>
+    	<%=tr("{site_title} Platform comes with a [link: full featured JavaScript library] that allows you to build dynamic web applications in the browser with {site_title}'s data.", "", :site_title => Platform::Config.site_title, :link => {:href => "/platform/developer/help/sdk_js"})%>
+			<%=tr("It supports authentication, autherization and API calls to get the site data.")%>
+    </p>
+
     <h2><%=tr("Authentication & Authorization") %></h2>
     <p>
         <%=tr("To enter the authentication/authorization client-side flow, you must pass the following parameters to the authorization URL:")%>
@@ -197,19 +204,19 @@
     <h2><%=tr("Cross Domain API Calls")%></h2>
     <p>
     	 <%=tr("{site_title} Platform supports cross-domain API calls using [link: JSONP] framework.", "", :site_title => Platform::Config.site_title, :link => ["http://en.wikipedia.org/wiki/JSONP"]) %> 
-       <%=tr("Below is a simple example for Geni JSONP API call.")%> 
+       <%=tr("Below is a simple example for Platform JSONP API call.")%> 
 			 <%=tr("You must provide a valid access token in order to make an JSONP API call.")%> 
     </p>
     <h3><%=tr("Example")%></h3>
     <pre class="code_snippet">
-var Geni = {callbacks:{}, client_id:"YOUR_APP_KEY", access_token:""};
+var Platform = {callbacks:{}, client_id:"YOUR_APP_KEY", access_token:""};
 
 function jsonp(url, params, callback) {
   var script  = document.createElement('script');
   var g_uuid = 'g' + (((1+Math.random())*0x10000)|0).toString(16).substring(1);
   
   params = params || {};  
-  params['callback'] = 'Geni.callbacks.' + g_uuid;
+  params['callback'] = 'Platform.callbacks.' + g_uuid;
 	
   var query = [];
   for(var p in params) str.push(encodeURIComponent(p) + "=" + encodeURIComponent(params[p]));
@@ -217,9 +224,9 @@ function jsonp(url, params, callback) {
 	
   url = url + (url.indexOf('?')>-1 ? '&' : '?') + query;
 
-  Geni.callbacks[g_uuid] = function(data) {
+  Platform.callbacks[g_uuid] = function(data) {
     if(callback) callback(data);
-    delete Geni.callbacks[g_uuid];
+    delete Platform.callbacks[g_uuid];
   }
   script.src = url;
   document.getElementsByTagName('head')[0].appendChild(script);
@@ -227,7 +234,7 @@ function jsonp(url, params, callback) {
 
 
 // Parse access token from the URL if it is available
-if (Geni.access_token == "") {
+if (Platform.access_token == "") {
   var params = {};
 
   var anchor = window.location.href.split("#");
@@ -241,24 +248,19 @@ if (Geni.access_token == "") {
 
   // Add code to store/retrieve access token from a cookie
 	
-	Geni.access_token = params["access_token"];
+	Platform.access_token = params["access_token"];
 }
 	
-if (Geni.access_token == "") {
-  window.location = "https://www.geni.com/oauth/authorize?client_id" + Geni.client_id + "&redirect_uri=" 
+if (Platform.access_token == "") {
+  window.location = "https://localhost:3000/oauth/authorize?client_id" + Platform.client_id + "&redirect_uri=" 
 	                  + window.location.href + "&response_type=token";
 } else {	
   // Get profile data
-	jsonp("/profile", {access_token:Geni.access_token}, function(data) {
+	jsonp("/profile", {access_token:Platform.access_token}, function(data) {
 	  alert("Hello " + data["name"]);
 	})
 }
 
 </pre>
-    <h3><%=tr("{site_title} JavaScript Client SDK", "", :site_title => Platform::Config.site_title)%></h3>
-    <p>
-    	<%=tr("{site_title} Platform comes with a [link: full featured JavaScript library] that allows you to build dynamic web applications in the browser with {site_title}'s data.", "", :site_title => Platform::Config.site_title, :link => ["/platform/developer/help/sdk_js"])%>
-			<%=tr("It supports authentication, autherization and API calls to get the site data.")%>
-    </p>
 </div>
 <%= render :partial => "footer" %>

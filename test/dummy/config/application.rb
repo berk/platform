@@ -9,7 +9,7 @@ require "kaminari"
 require "platform"
 require "acts_as_tree"
 require "acts_as_state_machine"
-require "rmagick"
+# require "rmagick"
 
 module Dummy
   class Application < Rails::Application

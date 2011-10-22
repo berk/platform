@@ -182,13 +182,17 @@ module Platform
       ############################################################################
       def render_response(obj, opts={})
         to_opts = params.merge(:max_models => limit, :viewer => current_user, :api_version => api_version)
-
+          
         if obj.is_a?(Array)
-          hash = {'results' => obj.collect{|o| o.to_api_hash(to_opts)}}
-          hash['page']          = page if page > 1 || limit == obj.size
-          hash['previous_page'] = prev_page if page > 1
-          hash['next_page']     = next_page if limit == obj.size
-          obj = hash
+          if obj.size == 1 and not only_list?
+            obj = obj.first
+          else
+            hash = {'results' => obj.collect{|o| o.to_api_hash(to_opts)}}
+            hash['page']          = page if page > 1 || limit == obj.size
+            hash['previous_page'] = prev_page if page > 1
+            hash['next_page']     = next_page if limit == obj.size
+            obj = hash
+          end
         end
     
         respond_to do |format|
@@ -258,7 +262,7 @@ module Platform
       end
   
       def page_models
-        @page_models ||= model_class.where(page_model_conditions).limit(limit).offset(offset).order('id ASC')
+        @page_models ||= model_class.where(page_model_conditions).limit(limit).offset(offset).order('id ASC').all
       end
 
       def page_model
@@ -267,7 +271,9 @@ module Platform
   
       def page_model_conditions(id_fields=nil)
         id_fields ||= self.class.id_fields
-        {:id => ids(id_fields)}
+        page_ids = ids(id_fields)
+        return nil if page_ids.empty?
+        {:id => page_ids}
       end
   
       # default id fields
@@ -288,11 +294,7 @@ module Platform
       end
   
       def default_model_ids
-        default_models.ids
-      end
-
-      def default_models
-        raise Exception.new("must be implemented in the extanding class")
+        []
       end
     
       def success_message
@@ -365,6 +367,10 @@ module Platform
         end
       end
 
+      def only_list?
+        params[:only_list] || false
+      end
+      
       def request_limit
         @request_limit ||= Platform::Config.api_request_limit
       end
@@ -424,6 +430,10 @@ module Platform
         raise LoginError.new("You must be logged in to use this API") unless logged_in?
       end
 
+      def ensure_ids_provided
+        raise ApiError.new("Provide an id or ids for the object") if ids.empty?
+      end
+      
       # should be overwritten by the implementing class - this is cutsom stuff for some apps
       def ensure_ownership(user=current_user, models=page_models)
         raise ForbiddenError.new('Permission denied') unless models.all? { |ii| ii.user == current_user }

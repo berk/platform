@@ -1,0 +1,22 @@
+platform_developer:
+  type: "struct"
+  title: "Platform Developer"
+  path: "platform/developer"
+  description: "Returns information about a developer."
+
+  fields:
+    id: 
+      description: "The developer's id"
+      type: "Number"
+    name: 
+      description: "The developer's name"
+      type: "String"
+    about: 
+      description: "The developer's description"
+      type: "String"
+    url: 
+      description: "The developer's url"
+      type: "String"
+    created_at: 
+      description: "The developer's creation timestamp"
+      type: "Number"

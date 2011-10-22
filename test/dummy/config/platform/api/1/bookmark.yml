@@ -33,7 +33,17 @@ bookmark:
           description: "The bookmark's url"
           type: "String"
           required: true
-      fields: "*"
+      fields:
+        title: 
+          description: "The bookmark's title"
+          type: "String"
+        url: 
+          description: "The bookmark's url"
+          type: "String"
+        created_at: 
+          description: "The bookmark's creation date as a timestamp"
+          type: "Number"
+          status: updated
     update:
       path: "bookmark/update" 
       method: GET
@@ -49,7 +59,17 @@ bookmark:
           description: "The bookmark's url"
           type: "String"
           required: true
-      fields: "*"
+      fields:
+        title: 
+          description: "The bookmark's title"
+          type: "String"
+        url: 
+          description: "The bookmark's url"
+          type: "String"
+        created_at: 
+          description: "The bookmark's creation date as a timestamp"
+          type: "Number"
+          status: updated
     delete:
       path: "bookmark/delete" 
       method: POST

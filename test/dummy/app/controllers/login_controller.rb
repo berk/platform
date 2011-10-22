@@ -41,7 +41,8 @@ class LoginController < ApplicationController
 private
   
   def login_layout
-    return 'minimal' if ['mobile', 'popup'].include?(params[:display])
+    return 'mobile' if params[:display] == 'mobile'
+    return 'minimal' if params[:display] == 'popup'
     'application'
   end
   

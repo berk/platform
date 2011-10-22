@@ -24,6 +24,8 @@
 class Platform::Developer < ActiveRecord::Base
   set_table_name :platform_developers
 
+  has_platform_api_proxy
+
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
   
   has_many :applications, :class_name => "Platform::Application"

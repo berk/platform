@@ -2,7 +2,9 @@ class Api::BookmarksController < Api::BaseController
 
   def index
     ensure_get
-    render_response page_model
+    ensure_ids_provided
+    ensure_ownership
+    render_response page_models
   end
 
   def create

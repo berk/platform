@@ -55,7 +55,7 @@ defaults: &defaults
     title:                    "Sample Application"
     logo_url:                 "/assets/platform/platform5.png"
     base_url:                 "localhost:3000"
-    contact_email:            platform@geni.com
+    contact_email:            feedback@oauthx.com
     default_url:              "/home"
     login_url:                "/login"
     logout_url:               "/login/out"
@@ -64,7 +64,7 @@ defaults: &defaults
     oauth_web_layout:         minimal
     oauth_popup_layout:       popup
     oauth_iframe_layout:      blank
-    oauth_mobile_layout:      popup
+    oauth_mobile_layout:      mobile
     oauth_desktop_layout:     popup
     system_user_id:           10
     media_directory:          "/media/p1"
@@ -98,7 +98,7 @@ defaults: &defaults
     config_path:              "config/platform/api"
     proxies_path:             "lib/platform/api"
     logging_enabled:          true          
-    admin_email:              scott.steadman@geni.com
+    admin_email:              feedback@oauthx.com
     allow_public:             true
     cookies_enabled:          true
     max_models:               50
@@ -109,7 +109,7 @@ defaults: &defaults
     default_version:          '1'    
     explorer_groups:
       '0':                    [['user'], ['bookmark']]
-      '1':                    [['user'], ['bookmark']]
+      '1':                    [['platform', 'user'], ['bookmark']]
     user:
       create_enabled:         true
   

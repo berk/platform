@@ -1,0 +1,37 @@
+platform_application:
+  type: "struct"
+  title: "Platform Application"
+  path: "platform/application"
+  description: "Returns information about an application."
+      
+  fields:
+    name: 
+      description: "The application's name"
+      type: "String"
+    description: 
+      description: "The application's description"
+      type: "String"
+    url: 
+      description: "The application's url"
+      type: "String"
+    icon_url: 
+      description: "The application's icon url"
+      type: "String"
+    logo_url: 
+      description: "The application's logo url"
+      type: "String"
+    locale: 
+      description: "The application's locale"
+      type: "String"
+    privacy_policy_url: 
+      description: "The application's privacy policy"
+      type: "String"
+    terms_of_service_url: 
+      description: "The application's terms of service"
+      type: "String"
+    created_at: 
+      description: "The application's creation timestamp"
+      type: "Number"
+    developer: 
+      description: "The application's developer"
+      type: "PlatformDeveloper"

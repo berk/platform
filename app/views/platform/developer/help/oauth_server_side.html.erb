@@ -438,21 +438,21 @@
    if (empty($access_code)) {
      $_SESSION['state'] = md5(uniqid(rand(), TRUE)); // CSRF protection
 		 
-     $geni_oauth_url = "http://www.facebook.com/dialog/oauth?client_id=" . $app_id 
+     $platform_oauth_url = "http://localhost:3000/dialog/oauth?client_id=" . $app_id 
 		                   . "&redirect_uri=" . urlencode($my_url) . "&state=" . $_SESSION['state'];
 											 
-     echo("&lt;script> top.location.href='" . $geni_oauth_url . "'&lt;/script>");
+     echo("&lt;script> top.location.href='" . $platform_oauth_url . "'&lt;/script>");
    }
 
    if ($_REQUEST['state'] == $_SESSION['state']) {
-     $token_url = "https://www.geni.com/oauth/request_token?client_id=" . $app_id . "&client_secret=" . $app_secret
+     $token_url = "https://localhost:3000/oauth/request_token?client_id=" . $app_id . "&client_secret=" . $app_secret
            			 . "&redirect_uri=" . urlencode($my_url) . "&code=" . $access_code;
 
      $params = json_decode(file_get_contents($token_url), true);
 
-     $geni_api_url = "https://www.geni.com/api/profile?access_token=" . $params['access_token'];
+     $platform_api_url = "https://localhost:3000/api/profile?access_token=" . $params['access_token'];
 
-     $profile = json_decode(file_get_contents($geni_api_url));
+     $profile = json_decode(file_get_contents($platform_api_url));
 		 
      echo("Hello " . $profile->name);
    } else {
@@ -568,7 +568,7 @@
                     String
                 </td>
                 <td>
-                    <%=tr("Access token to be used with every request to Geni API") %>
+                    <%=tr("Access token to be used with every request to Platform API") %>
                 </td>
             </tr>
             <tr>

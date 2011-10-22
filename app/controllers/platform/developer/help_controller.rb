@@ -84,24 +84,11 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
       trfe("API path must be provided")
       return redirect_to(:action => :index, :version => @version)
     end
-    
-    parts = params[:path].split("/")
-    parts.delete(parts.first) if [''].include?(parts.first)
-    
-    @api = ref[parts.first]
+
+    @api = Platform::Config.api_reference_by_path(@version, params[:path])
     unless @api
       trfe("Unsupported API path")
       return redirect_to(:action => :index, :version => @version)
-    end
-    
-    if parts.size > 1 
-      if @api[:actions] and @api[:actions][parts.last]
-        action_api = @api[:actions][parts.last]
-        action_api[:parent] = @api
-        @api = action_api
-      else  
-        trfe("Unsupported API path")
-      end
     end
   end
 

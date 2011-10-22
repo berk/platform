@@ -21,20 +21,24 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-module Platform
-  module Api
-    class AppsController < Platform::Api::BaseController
-      
-      def index
-        render_response(Platform::Application.all) 
-      end
-
-    private 
-
-      def model_class
-        Platform::Application
-      end
+class Api::PlatformController < Api::BaseController
   
-    end
+  def index
+    render_response(:status => "ok")
   end
+  
+  def apps
+    render_response(page_models) 
+  end
+
+  def services
+    render_response Platform::Config.api_reference(api_version)
+  end
+
+private 
+
+  def model_class
+    Platform::Application
+  end
+
 end

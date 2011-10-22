@@ -41,10 +41,6 @@ Platform::Engine.routes.draw do
     match "admin/#{ctrl}(/:action)", :controller => "admin/#{ctrl}"
   end
   
-  [:apps].each do |ctrl|
-    match "api/#{ctrl}(/:action)", :controller => "api/#{ctrl}"
-  end
-  
   [:api_explorer, :apps, :blog, :dashboard, :forum, :help, :info, :registration, :resources].each do |ctrl|
     match "developer/#{ctrl}(/:action)", :controller => "developer/#{ctrl}"
   end

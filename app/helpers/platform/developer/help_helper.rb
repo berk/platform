@@ -33,7 +33,8 @@ module Platform::Developer::HelpHelper
   end
   
   def documentation_field_link_tag(name, type)
-    link_to(name, :controller => "/platform/developer/help", :action => :api, :path => type.underscore)
+    path = Platform::Config.api_reference(params[:version] || Platform::Config.api_default_version)[type.underscore]["path"]
+    link_to(name, :controller => "/platform/developer/help", :action => :api, :path => path)
   end
   
 private

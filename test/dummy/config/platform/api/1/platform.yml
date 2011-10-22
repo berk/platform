@@ -1,0 +1,55 @@
+platform:
+  type: "api"
+  path: "platform"
+  sample: "http://localhost:3000/api/platform"
+  description: "Returns status of the platform."
+
+  fields:
+    status: 
+      description: "The platform status"
+      type: "String"
+      
+  actions:
+    apps:
+      path: "platform/apps" 
+      method: GET
+      description: "Returns list of all registered applications."
+      sample: "http://localhost:3000/api/platform/apps"
+      params:
+        limit:
+          description: "How many applications to display per page"
+          type: "Number"
+          required: false
+        page:
+          description: "Which page to display"
+          type: "Number"
+          required: false
+      fields:
+        results: 
+          description: "List of platform applications"
+          type: "Array"
+          array_type: "PlatformApplication"
+        page: 
+          description: "Current page"
+          type: "Number"
+        next_page: 
+          description: "Url for the next page"
+          type: "String"
+        previous_page: 
+          description: "Url for the previous page"
+          type: "String"
+
+    services:
+      path: "platform/services" 
+      method: GET
+      description: "Returns a list of all available APIs on this platform."
+      sample: "http://localhost:3000/api/platform/services"
+      params:
+        version:
+          description: "Version of the API services."
+          type: "String"
+          required: false
+      fields:
+        results: 
+          description: "Hash representation of available platform API services."
+          type: "Hash"

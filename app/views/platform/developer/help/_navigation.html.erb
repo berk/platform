@@ -79,7 +79,7 @@
     <div class="section_link <%="selected" if @api[:path]==api[:path] %>" style="vertical-align:middle;">
     	 <% expanded = (path_parts.first == api[:path]) %>	
     	<%=raw(platform_toggler_tag("#{api_key}_api_actions", "", expanded, {:style => "text-align:center; vertical-align:top; width:10px;"}))%>
-			<%=link_to(api_key.titleize, {:action => :api, :path => api[:path], :version => @version})%>
+			<%=link_to(api[:label] || api_key.titleize, {:action => :api, :path => api[:path], :version => @version})%>
 			<%=raw(platform_documentation_api_decorators_tag(api)) %>
 		</div>
 		<% if api[:actions] %>

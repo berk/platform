@@ -278,7 +278,7 @@ class Platform::LoggedException < ActiveRecord::Base
       message = []
 
       message << "Subject: #{log.exception_class}: #{log.message}\n"
-      message << "Exception URL: http://stage.geni.com/admin/exceptions/show/#{log.id}"
+      message << "Exception URL: #{Platform.site_url}/admin/exceptions/show/#{log.id}"
       message << "Backtrace:\n#{log.backtrace.join("\n")}" if log.backtrace
 
       Net::SMTP.start(LOCAL_SMTP_SETTINGS[:address], LOCAL_SMTP_SETTINGS[:port]) do |smtp|

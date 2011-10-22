@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" <%= "dir='rtl'" if Tr8n::Config.current_language.right_to_left? %>>
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" name="viewport">
+	<%= csrf_meta_tag %>
+	
+	<style>
+		body {font-family: helvetica, sans-serif;-webkit-text-size-adjust: none;width:100%;min-width:320px;font-size:16px;margin:0px;padding:0px;}
+		h1,.h1   {font:bold normal 28px Helvetica, sans-serif;}
+		h2,.h2   {font:normal normal 20px Helvetica, sans-serif;}
+		h3,.h3   {font:normal normal 20px Helvetica, sans-serif;}
+		h4,.h4   {font:normal bold 17px Helvetica, sans-serif}
+		h5,.h5   {font:normal bold 15px Helvetica, sans-serif;}
+		h6,.h6   {font:normal bold 15px Helvetica, sans-serif;}
+
+		.super   {font-size:64px;}
+		.xlarge  {font-size:18px;}
+		.large   {font-size:17px;}
+		.normal  {font-size:16px;}
+		.small   {font-size:15px;letter-spacing:normal;}
+		.xsmall  {font-size:14px;}
+
+		/* Forms */
+
+		.field  {margin:0 0 0.5em 0;}
+		.field_hd {}
+		.field_bd {}
+
+		input[type='text'],
+		input[type='password'],
+		input[type='email'],
+		textarea {width:95%;font-size:16px;font-family:Helvetica, sans-serif;padding:4px;margin:0px;border-color:#aaa #999 #999 #aaa;}
+	
+		.module {
+			margin:10px;
+		}
+		.field_bd {
+			text-align:left;
+		}
+		.content_hd {
+			font-weight:bold;
+		}
+		.content_bd {
+			text-align:left;
+		}
+		.buttons {
+			text-align:center;
+		}
+		a {
+			text-decoration:none;
+		}
+	</style>
+</head>
+<body style="background-color: white;">
+	<div style="background-color:#eee;padding:10px;font-size:24px;font-weight:bold;border-bottom:1px solid #DDDDDD;border-top:4px solid #6699CC;">
+		<%=Platform::Config.site_title%>
+	</div>	
+	<div class="module">
+		 <div style="text-align:center"> 
+			  <%= tr8n_flashes_tag %>
+		 </div>
+
+	  <%= yield %>
+	</div>
+</body>
+</html>
