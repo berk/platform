@@ -63,12 +63,6 @@
   <div class="section_link <%="selected" if @controller.action_name == 'sdk_js' %>"><%=link_to(tr("JavaScript SDK"), :action => :sdk_js, :version => @version)%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'sdk_ios' %>"><%=link_to(tr("iOS SDK"), :action => :sdk_ios, :version => @version)%></div>
 
-  <div class="navigation_header"><%=tr("Widgets")%></div>
-  <div class="section_link <%="selected" if @controller.action_name == 'widget_doc' %>"><%=link_to(tr("Documents Bookmarklet"), :action => :widget_doc, :version => @version)%></div>
-  <div class="section_link <%="selected" if @controller.action_name == 'widget_tree' %>"><%=link_to(tr("Family Tree Widget"), :action => :widget_tree, :version => @version)%></div>
-
-
-
   <div class="navigation_header" style="white-space:nowrap;"><%=tr("API Reference")%> &nbsp; 
 	 <span style="font-size:8px;">v</span> <%=select_tag("version", options_for_select(Platform::Config.api_supported_versions, @version), :style=>"height:15px;padding:0px;font-size:10px;", :onChange=>"Platform.element('version_form').submit();")%>
 	</div>
