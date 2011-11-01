@@ -23,8 +23,6 @@
 
 class Platform::Developer::HelpController < Platform::Developer::BaseController
   
-  skip_filter filter_chain
-  
   before_filter :set_version
   
   def index
