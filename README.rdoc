@@ -31,7 +31,6 @@ Add the following gems to your Gemfile:
   gem 'coffee-script'
   gem 'acts_as_tree'
   gem 'acts_as_state_machine'
-  gem 'rmagick'
 
 And run:
 
