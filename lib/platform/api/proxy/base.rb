@@ -48,6 +48,10 @@ module Platform
         def to_api_hash(opts = {})
           raise NotImplementedError, 'Must be implemented in descendant class'
         end
+        
+        def sanitize_api_hash(hash)
+          hash.select{|key, value| !value.blank?}
+        end
 
         def to_api_path(opts = {})
           "#{Platform::Config.api_scheme}://#{Platform::Config.api_base_url}/#{instance.class.name.underscore}/#{instance.id}"

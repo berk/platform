@@ -261,12 +261,20 @@ module Platform
         raise Exception.new("must be implemented in the extanding class")
       end
   
+      def page_results
+        model_class.where(page_model_conditions)
+      end
+
+      def order
+        'id ASC'
+      end
+  
       def page_models
-        @page_models ||= model_class.where(page_model_conditions).limit(limit).offset(offset).order('id ASC').all
+        @page_models ||= page_results.limit(limit).offset(offset).order(order).all
       end
 
       def page_model
-        @page_model ||= model_class.where(page_model_conditions).first || raise(ActiveRecord::RecordNotFound)
+        @page_model ||= page_results.first || raise(ActiveRecord::RecordNotFound)
       end
   
       def page_model_conditions(id_fields=nil)

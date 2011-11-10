@@ -31,8 +31,7 @@ module Platform
 
       desc "Creates an API proxy file for your model"
       def create_proxy_file
-        create_file "#{Platform::Config.api_proxies_path}/#{file_name}_proxy_#{version}.rb", %Q{
-module Api
+        create_file "#{Platform::Config.api_proxies_path}/#{file_name}_proxy_#{version}.rb", %Q{module Api
   module Proxy
     class #{class_name}Proxy_#{version} < Platform::Api::Proxy::Base
       proxy_for(#{proxy_class})

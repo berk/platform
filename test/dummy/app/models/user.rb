@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
   has_one :admin
   has_many :bookmarks
   
-  has_platform_api_proxy
-  
   def guest?
     id.blank?
   end

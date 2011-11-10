@@ -59,7 +59,7 @@ defaults: &defaults
   # Site Integration Settings
   #############################################################################
   site_info:
-    title:                    "Sample Application"
+    title:                    "Bookmarklet"
     logo_url:                 "/assets/platform/platform5.png"
     base_url:                 "localhost:3000"
     contact_email:            feedback@oauthx.com

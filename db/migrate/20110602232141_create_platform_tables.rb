@@ -64,7 +64,7 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.string      :ip
       t.timestamps
     end
-    add_index :platform_application_logs, [:application_id, :created_at]    
+    add_index :platform_application_logs, [:application_id, :created_at], :name => 'palac'    
     
     create_table :platform_application_metrics do |t|
       t.string    :type

@@ -21,36 +21,54 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-require 'rails/generators'
-require 'rails/generators/migration'
+module Platform
+  module Generators
+    class ApiGenerator < Rails::Generators::NamedBase
+      source_root File.expand_path("../templates", __FILE__)
 
-class PlatformGenerator < Rails::Generators::Base
-  include Rails::Generators::Migration
-
-  def self.source_root
-    @source_root ||= File.expand_path('../templates', __FILE__)
+      desc "Creates an API proxy file for your model"
+      def create_proxy_file
+        create_file "#{Rails.root}/app/controllers/api/#{file_name}_controller.rb", %Q{class Api::#{class_name}Controller < Api::BaseController
+  def index
+    ensure_get
+    ensure_ids_provided
+    ensure_ownership
+    render_response page_models
   end
 
-  # Implement the required interface for Rails::Generators::Migration.
-  def self.next_migration_number(dirname)
-    if ActiveRecord::Base.timestamped_migrations
-      Time.now.utc.strftime("%Y%m%d%H%M%S")
-    else
-      "%.3d" % (current_migration_number(dirname) + 1)
+  def create
+    ensure_logged_in
+    # TODO: create object
+    render_response object
+  end
+  
+  def update
+    ensure_logged_in
+    ensure_ownership
+    # TODO: update object
+    render_response object
+  end
+  
+  def delete
+    ensure_logged_in
+    ensure_post    
+    ensure_ownership
+    # TODO: delete object
+    render_response success_message
+  end
+  
+private
+
+  def model_class
+    #{class_name}
+  end
+  
+end
+      }        
+      end
+      
+    private
+    
     end
-  end
-
-  def create_migration_file
-    migration_template 'db/create_platform_tables.rb', 'db/migrate/create_platform_tables.rb'
-  end
-  
-  def copy_configuration
-    config_source = File.expand_path("#{self.class.source_root}/config", __FILE__)
-    system "rsync -ruv #{config_source} #{Rails.root}/config"
-  end
-  
-  def copy_layouts
-    layouts_source = File.expand_path("#{self.class.source_root}/layouts", __FILE__)
-    system "rsync -ruv #{layouts_source} #{Rails.root}/app/views"
   end
 end

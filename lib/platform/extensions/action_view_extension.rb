@@ -195,7 +195,7 @@ module Platform
         return platform_when_string_tr("{hours||hour} ago", :hours => (elapsed_seconds / 1.hour).to_i) if elapsed_seconds < 1.day
         return platform_when_string_tr("Yesterday") if elapsed_seconds < 48.hours
         return platform_when_string_tr("{days||day} ago", :days => elapsed_seconds.to_i / 1.day) if elapsed_seconds < 14.days
-        return platform_when_string_tr("{weeks||week} ago", :weeks => (elapsed_seconds / 1.day / 7).to_i) if elapsed_weeks < 4
+        return platform_when_string_tr("{weeks||week} ago", :weeks => (elapsed_seconds / 1.day / 7).to_i) if elapsed_seconds < 4.weeks
         return platform_display_time(time, :monthname_abbr) if Date.today.year == time.year
         return platform_display_time(time, :monthname_abbr_year)
       end      
