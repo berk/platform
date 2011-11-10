@@ -1,21 +1,7 @@
 defaults: &defaults
-  google:
-    name: "Google"
-    description: "Google Search Engine"
-    url: "http://www.google.com"
-    contact_email: "apps@railsplatform.org"
-    category_keywords: ["all"]
-    icon_path: "/public/platform/images/apps/app_icon.gif"  
-    logo_path: "/public/platform/images/apps/app_logo.gif"  
-  
-  yahoo:
-    name: "Yahoo"
-    description: "Yahoo Search Engine"
-    url: "http://www.yahoo.com"
-    contact_email: "apps@railsplatform.org"
-    category_keywords: ["all"]
-    icon_path: "/public/platform/images/apps/app_icon.gif"  
-    logo_path: "/public/platform/images/apps/app_logo.gif"  
+  api_explorer:
+    name: "API Explorer"
+    description: "Allows developers to test API without having to create any applications"
 
 #############################################################################
 # Environment Settings

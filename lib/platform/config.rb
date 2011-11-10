@@ -89,17 +89,11 @@ module Platform
       end
 
       init_default_categories
-      # init_default_applications
 
       puts "Done."
     end
   
     def self.system_user
-      if user_class_name == "Platform::PlatformUser"
-        @system_user ||= Platform::PlatformUser.first || Platform::PlatformUser.create(:name => "System User")
-        return @system_user
-      end
-    
       return nil unless site_info[:system_user_id]
       @system_user ||= user_class_name.constantize.find_by_id(site_info[:system_user_id])
     end
@@ -116,16 +110,8 @@ module Platform
       end
   
       default_applications.each do |keyword, description|
-        category_keywords = description.delete("category_keywords")
-        icon_path = description.delete("icon_path")
-        logo_path = description.delete("logo_path")
-
         app = Platform::Application.create(description.merge(:developer => system_developer))
-        app.store_icon(File.new("#{root}/#{icon_path}", "r")) if icon_path 
-        app.store_logo(File.new("#{root}/#{logo_path}", "r")) if logo_path 
-      
         puts "Initialized #{app.name}."
-        app.approve!
       end    
     end
 
@@ -606,6 +592,11 @@ module Platform
       config[:api_explorer_app_id]
     end
   
+    def self.api_explorer_app
+      return if api_explorer_app_id.blank?
+      @api_explorer_app ||= Platform::Application.find_by_id(api_explorer_app_id)
+    end
+      
     def self.api_explorer_app?
       !api_explorer_app_id.blank?
     end

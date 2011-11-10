@@ -10,7 +10,7 @@
 </div>
 
 <div class="section">
-	<% if Platform::Config.api_explorer_app? %>
+ 	 <% if (platform_current_developer and platform_current_developer.app_options.any?) or Platform::Config.api_explorer_app %>
 	  <div class="section grey" style="margin-top:5px;margin-bottom:0px;">
 			<table style="width:100%">
 				<tr>
