@@ -97,7 +97,8 @@
     </p>
     <h3><%=tr("Example")%></h3>
     <div class="code_snippet">
-        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_ID&redirect_uri=YOUR_APP_URL&response_type=token&display=mobile
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_ID&
+redirect_uri=YOUR_APP_URL&response_type=token&display=mobile
     </div>
     <p>
     	<%=tr("By setting the display parameter to \"mobile\", you ensure that the login and the authorization screens will use a mobile layout.")%>
@@ -140,8 +141,9 @@ NSString *platformOauthBaseURL = @"https://<%=Platform::Config.site_base_url %>/
 
 NSString *yourAppURL = [NSString stringWithFormat: @"%@/authorize", YOUR_APP_ID];
 
-NSString *platformOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@&response_type=token&display=mobile", 
-                                                    platformOauthBaseURL, YOUR_APP_ID, yourAppURL];
+NSString *platformOauthURL = [NSString stringWithFormat:
+           @"%@?client_id=%@&redirect_uri=%@&response_type=token&display=mobile", 
+           platformOauthBaseURL, YOUR_APP_ID, yourAppURL];
                          
 [[UIApplication sharedApplication] openURL:[NSURL URLWithString:platformOauthURL]];
 </pre>

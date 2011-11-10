@@ -85,7 +85,8 @@
           <% @apps.each do |app| %>
             <% if app == @menu_app %>
                 <div class="<%= (@app != @menu_app) ? 'app_item' : 'app_selected' %>">
-                  <%=image_tag(app.icon_url, :style => "vertical-align:middle;")%> &nbsp;
+									<%=platform_app_icon_tag(app, :style => "vertical-align:middle;") %>
+									&nbsp;
                   <%=link_to(app.name, {:id=>app.id}) %>
                 </div>  
 		            <% app.children.each do |app| %>
@@ -96,7 +97,8 @@
 		            <% end %>
             <% else %>
                 <div class="app_item">    
-			            <%=image_tag(app.icon_url, :style => "vertical-align:middle;")%> &nbsp;
+									<%=platform_app_icon_tag(app, :style => "vertical-align:middle;") %>
+									&nbsp;
 			            <%=link_to(app.name, {:id=>app.id}) %>
 								</div>	
             <% end %>
@@ -108,7 +110,7 @@
             <table>
               <tr>
                 <td style="align-vertical:top; width:90px;" rowspan="2">
-                   <%=image_tag(@app.logo_url)%> 
+ 									<%=platform_app_logo_tag(@app) %>
                 </td>
                 <td style="align-vertical:top;">
 			            <div style="float:right;">

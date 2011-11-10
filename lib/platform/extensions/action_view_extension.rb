@@ -126,6 +126,18 @@ module Platform
         end
       end
 
+      def platform_app_icon_tag(app, options = {})
+        options[:style] ||= ""
+        options[:style] << "width:16px;height:16px;"
+        image_tag(app.icon_url, :style => options[:style])
+      end
+
+      def platform_app_logo_tag(app, options = {})
+        options[:style] ||= ""
+        options[:style] << "width:75px;height:75px;"
+        image_tag(app.logo_url, :style => options[:style])
+      end
+
       def platform_user_mugshot_tag(user, options = {})
         if user and !Platform::Config.user_mugshot(user).blank?
           img_url = Platform::Config.user_mugshot(user)

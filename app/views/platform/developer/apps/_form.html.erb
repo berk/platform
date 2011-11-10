@@ -60,7 +60,8 @@
 	    	<span style="float:right; font-size:10px;">
 	    		<%=link_to_function(tr("Change your icon", 'Client application field action'), "Platform.Effects.hide('icon_preview');Platform.Effects.show('icon_field');")%>
 	    	</span>
-	      <%=image_tag(@app.icon_url, :style => "width:16px;height:16px;")%>
+
+				<%=platform_app_icon_tag(@app) %>
 			</div>	
     </td> 
     <td class="comments">
@@ -80,7 +81,8 @@
 	      <span style="float:right; font-size:10px;">
 	        <%=link_to_function(tr("Change your logo", 'Client application field action'), "Platform.Effects.hide('logo_preview');Platform.Effects.show('logo_field');")%>
 	      </span>
-	      <%=image_tag(@app.logo_url, :style => "width:75px;height:75px;")%>
+
+				<%=platform_app_logo_tag(@app) %>
 			</div>
     </td> 
     <td class="comments">

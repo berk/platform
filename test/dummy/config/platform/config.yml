@@ -14,10 +14,17 @@ defaults: &defaults
   enable_app_directory:         true
   enable_embedded_applications: true
   enable_mobile_applications:   true
-  enable_developer_agreement:   false
   enable_app_statistics:        false
   enable_api_verification:      false
   api_explorer_app_id:          1  # make sure to create an application for the test tool 
+
+  #############################################################################
+  # You can enforce users to accept the developers agreement before they
+  # become developers. To do so, enable the line below and provide path
+  # to your dev agreement.
+  #############################################################################
+  enable_developer_agreement:   true
+  developer_agreement_path:     /developer_agreement.html
 
   #############################################################################
   # Platform best run with caching enabled

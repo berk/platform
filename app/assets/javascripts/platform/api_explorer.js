@@ -33,7 +33,9 @@ function getAccessToken() {
 	if (land_url.indexOf("http") == -1) {
 		land_url = "http://" + land_url;
 	}
-	var oauth_url = '/platform/oauth/authorize?client_id=' + api_explorer_app_id + '&response_type=token&display=mobile&redirect_url=' + escape(land_url)
+	var app_id = Platform.element("app_id").value;
+	
+	var oauth_url = '/platform/oauth/authorize?client_id=' + app_id + '&response_type=token&display=mobile&redirect_url=' + escape(land_url)
   var win = window.open(oauth_url, 'oauthx_auth', 'width=' + width +',height=' + height + ',top=' + top  + ',left=' + left);
 } 
 

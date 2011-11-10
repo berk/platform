@@ -89,7 +89,7 @@ module Platform
       end
 
       init_default_categories
-      init_default_applications
+      # init_default_applications
 
       puts "Done."
     end
@@ -189,6 +189,10 @@ module Platform
 
     def self.enable_developer_agreement?
       config[:enable_developer_agreement]
+    end
+
+    def self.developer_agreement_path
+      config[:developer_agreement_path]
     end
 
     def self.enable_app_statistics?

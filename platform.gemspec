@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'coffee-script', ['>= 0']
   s.add_dependency 'acts_as_tree', ['>= 0']
   s.add_dependency 'acts_as_state_machine', ['>= 0']
-  # s.add_dependency 'rmagick', ['>= 0']
   s.add_development_dependency 'pry', ['>= 0']
   s.add_development_dependency 'bundler', ['>= 1.0.0']
   s.add_development_dependency 'sqlite3', ['>= 0']

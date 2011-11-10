@@ -43,9 +43,12 @@ class Platform::Media::Media < ActiveRecord::Base
     
     FileUtils.mkdir_p(local_dir) unless File.exist?(local_dir)
 
-    image = Magick::ImageList.new(file.path)
-    image = image.resize(opts[:size], opts[:size]) if opts[:size]
-    image.write(local_path)
+    # you could force resize the image, but not the job of this plugin
+    # image = Magick::ImageList.new(file.path)
+    # image = image.resize(opts[:size], opts[:size]) if opts[:size]
+    # image.write(local_path)
+    
+    FileUtils.cp(file.path, local_path)
     FileUtils.chmod(0644, local_path)
 
     save
