@@ -144,8 +144,9 @@ module Platform
     end
 
     def self.load_yml(file_path, for_env = env)
-      yml = YAML.load_file("#{root}#{file_path}")
-      yml = yml[for_env] unless for_env.nil?
+      yml_path = "#{root}#{file_path}"
+      yml = YAML.load_file(yml_path)
+      yml = yml['defaults'].rmerge(yml[for_env] || {}) unless for_env.nil?
       HashWithIndifferentAccess.new(yml)
     end
 

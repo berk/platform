@@ -70,8 +70,8 @@ bookmark:
           description: "The bookmark's creation date as a timestamp"
           type: "Number"
           status: updated
-    delete:
-      path: "bookmark/delete" 
+    destroy:
+      path: "bookmark/destroy" 
       method: POST
       status: added
       description: "Removes a bookmark."

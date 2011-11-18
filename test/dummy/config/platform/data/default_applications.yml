@@ -1,4 +1,4 @@
-defaults: &defaults
+defaults:
   api_explorer:
     name: "API Explorer"
     description: "Allows developers to test API without having to create any applications"
@@ -8,18 +8,13 @@ defaults: &defaults
 # You can overload any feature defined in the defaults for any environment
 #############################################################################
 development:
-  <<: *defaults
   
 test:
-  <<: *defaults
       
 qa:
-  <<: *defaults
 
 stage:
-  <<: *defaults
 
 production:
-  <<: *defaults
 
     

@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   match "/api/user", :to => "api/users#index"
   match "/api/user/bookmarks", :to => "api/users#bookmarks"
   match "/api/bookmark/create", :to => "api/bookmarks#create"
-  match "/api/bookmark/delete/:id", :to => "api/bookmarks#delete"
+  match "/api/bookmark/destroy/:id", :to => "api/bookmarks#destroy"
   match "/api/bookmark/update/:id", :to => "api/bookmarks#update"
   match "/api/bookmark(/:id)", :to => "api/bookmarks#index"
 

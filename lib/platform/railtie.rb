@@ -35,6 +35,7 @@ require 'pp'
 end
 
 require File.join(File.dirname(__FILE__), 'extensions/object_extension')
+require File.join(File.dirname(__FILE__), 'extensions/hash_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_view_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_controller_extension')
 

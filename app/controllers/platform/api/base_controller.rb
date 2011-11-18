@@ -88,10 +88,6 @@ module Platform
         Platform::Config.api_allow_public?
       end
 
-      def ensure_api_enabled
-        raise ServiceUnavailableError.new('API Disabled') unless enabled?
-      end
-
       def client_app
         @client_app ||= access_token.try(:application)
       end
@@ -182,18 +178,7 @@ module Platform
       ############################################################################
       def render_response(obj, opts={})
         to_opts = params.merge(:max_models => limit, :viewer => current_user, :api_version => api_version)
-          
-        if obj.is_a?(Array)
-          if obj.size == 1 and not only_list?
-            obj = obj.first
-          else
-            hash = {'results' => obj.collect{|o| o.to_api_hash(to_opts)}}
-            hash['page']          = page if page > 1 || limit == obj.size
-            hash['previous_page'] = prev_page if page > 1
-            hash['next_page']     = next_page if limit == obj.size
-            obj = hash
-          end
-        end
+        obj = sanitize_results(obj, to_opts) if obj.is_a?(Array)
     
         respond_to do |format|
           format.json   do
@@ -221,6 +206,19 @@ module Platform
 
         true
       end  
+  
+      def sanitize_results(results, opts = {})
+        if results.size == 1 and not only_list?
+          results = results.first
+        else
+          hash = {'results' => results.collect{|o| o.to_api_hash(opts)}}
+          hash['page']          = page if page > 1 || limit == results.size
+          hash['previous_page'] = prev_page if page > 1
+          hash['next_page']     = next_page if limit == results.size
+          results = hash
+        end
+        results
+      end
   
       def add_response_headers
         return unless enabled?
@@ -278,12 +276,17 @@ module Platform
       end
   
       def page_model_conditions(id_fields=nil)
-        id_fields ||= self.class.id_fields
-        page_ids = ids(id_fields)
         return nil if page_ids.empty?
         {:id => page_ids}
       end
   
+      def page_ids
+        @page_ids ||= begin
+          id_fields ||= self.class.id_fields
+          ids(id_fields)
+        end
+      end
+      
       # default id fields
       def self.id_fields
         [:id, :ids]
@@ -418,6 +421,10 @@ module Platform
       ############################################################################
       #### Ensurance
       ############################################################################
+      def ensure_api_enabled
+        raise ServiceUnavailableError.new('API Disabled') unless enabled?
+      end
+
       def ensure_post
         raise MethodNotAllowedError.new('POST required') unless request.post?
       end
@@ -432,6 +439,10 @@ module Platform
 
       def ensure_delete
         raise MethodNotAllowedError.new('DELETE required') unless request.delete?
+      end
+
+      def ensure_application
+        raise LoginError.new("This API can only be called through an application") unless client_app
       end
   
       def ensure_logged_in

@@ -23,7 +23,7 @@ class Api::BookmarksController < Api::BaseController
     render_response page_model
   end
   
-  def delete
+  def destroy
     ensure_logged_in
     ensure_post    
     ensure_ownership

@@ -7,7 +7,7 @@
 # environment settings at the bottom of the file
 #############################################################################
 
-defaults: &defaults
+defaults:
   enabled_features: [dashboard, apps, forum, api_explorer, help]
   
   dashboard:
@@ -51,16 +51,11 @@ defaults: &defaults
 # You can overload any feature defined in the defaults for any environment
 #############################################################################
 development:
-  <<: *defaults
 
 test:
-  <<: *defaults
       
 qa:
-  <<: *defaults
 
 stage:
-  <<: *defaults
 
 production:
-  <<: *defaults

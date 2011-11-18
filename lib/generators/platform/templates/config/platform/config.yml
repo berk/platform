@@ -9,7 +9,7 @@
 # Alternatively, you can overload any of the methods of Platform::Config
 #############################################################################
 
-defaults: &defaults
+defaults: 
   enable_platform:              true     
   enable_app_directory:         true
   enable_embedded_applications: true
@@ -125,19 +125,13 @@ defaults: &defaults
 # You can overload any feature defined in the defaults for any environment
 #############################################################################
 development:
-  <<: *defaults
         
 test:
-  <<: *defaults
       
 qa:
-  <<: *defaults
 
 stage:
-  <<: *defaults
 
 production:
-  <<: *defaults
 
 sandbox:
-  <<: *defaults
