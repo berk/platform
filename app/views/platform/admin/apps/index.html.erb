@@ -21,10 +21,11 @@
   [:actions, lambda{|app|
       html = [] 
       html << link_to("view", :action => :view, :app_id => app.id)
+   	  html << link_to_function("edit", "tr8nLightbox.show('/platform/admin/apps/lb_edit?app_id=#{app.id}', {height:600})")
       html << link_to("access tokens", {:action => :tokens, :wf_model=>"Platform::Oauth::OauthToken",:wf_c0=>:application_id, :wf_o0=>:is, :wf_v0_0=>app.id} )
       html << link_to_function("categorize", "assignCategories(#{app.id})")
       html.join(" | ").html_safe
-  }]
+  }, 'padding:5px;text-align:right;white-space:nowrap;']
 ]) %>
 
 <%= render :partial => "categories_scripts" %>

@@ -100,9 +100,10 @@ private
     Platform::Config.init(site_current_user)
   end
   
-  def redirect_to_source
+  def redirect_to_source(default_url = nil)
     return redirect_to(params[:source_url]) unless params[:source_url].blank?
     return redirect_to(request.env['HTTP_REFERER']) unless request.env['HTTP_REFERER'].blank?
+    return redirect_to(default_url) if default_url
     redirect_to_site_default_url
   end
 

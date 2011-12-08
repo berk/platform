@@ -1,0 +1,58 @@
+<div class="inner">
+    <div class="hd">
+        <div style="float:right;">
+            <%=link_to_function(image_tag("/tr8n/images/close.gif"), "tr8nLightbox.hide();") %>
+        </div>
+        	Update Developer
+    </div>
+    <div class="bd">
+        <% form_for(:dev, @dev, :url => {:action => :update, :dev_id => @dev.id}, :html => {:id => 'tr8n_form', :method => :post, :class => "tr8n"}) do |f| %>
+				<%=hidden_field_tag(:source_url, request.env['HTTP_REFERER'])%>
+        <table class="admin_table">
+          <tr>
+              <th>
+                  Name:
+              </th>
+              <td>
+                	<%= f.text_field :name, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  About:
+              </th>
+              <td>
+                	<%= f.text_area :about, :style=>"width:99%;height:100px;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  URL:
+              </th>
+              <td>
+                	<%= f.text_field :url, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Email:
+              </th>
+              <td>
+                	<%= f.text_field :email, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Phone:
+              </th>
+              <td>
+                	<%= f.text_field :phone, :style=>"width:99%;" %>
+              </td>
+          </tr>
+        </table>
+        <% end %>
+    </div>
+    <div class="ft">
+        <%= render :partial => "/tr8n/admin/common/lightbox_buttons" %>
+    </div>
+</div>

@@ -1,0 +1,56 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs", :locals => {:current_tab => 'Developer Info'} %>
+
+<table class="admin_table">
+    <tr>
+        <th width="160">
+            Developer Id
+        </th>
+        <td>
+            <%=@dev.id %>
+        </td>
+    </tr>
+    <tr>
+        <th>User Id</th>
+        <td><%=@dev.user_id %></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td><%=@dev.name %></td>
+    </tr>
+    <tr>
+        <th>About</th>
+        <td><%=@dev.about %></td>
+    </tr>
+    <tr>
+        <th>URL</th>
+        <td><%=@dev.url %></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td><%=@dev.email %></td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td><%=@dev.phone %></td>
+    </tr>
+    <tr>
+        <th>Created At</th>
+        <td><%=@dev.created_at %></td>
+    </tr>
+    <tr>
+        <th>Updated At</th>
+        <td><%=@dev.updated_at %></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>
+        	 <% html = [] 
+           	  html << link_to_function("Edit Details", "tr8nLightbox.show('/platform/admin/developers/lb_edit?dev_id=#{@dev.id}', {height:400})")
+           %>
+					 <%= html.join(" | ") %>
+        </td>
+    </tr>
+</table>
+
+<%= render :partial => "/platform/admin/common/footer" %>

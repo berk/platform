@@ -2,6 +2,15 @@
 <%= render :partial => "tabs" %>
 
 <%= will_filter(@developers) %>
-<%= will_filter_table_tag(@developers) %>
+<%= will_filter_table_tag(@developers, :columns => [
+  [:id, lambda{|dev| link_to(dev.id, :action => :view, :dev_id => dev.id)}],
+	:user_id, :name, :email, :created_at, :updated_at,
+	[:actions, lambda{|dev|
+      html = [] 
+      html << link_to("view", :action => :view, :dev_id => dev.id)
+   	  html << link_to_function("edit", "tr8nLightbox.show('/platform/admin/developers/lb_edit?dev_id=#{dev.id}', {height:400})")
+      html.join(" | ").html_safe
+  }, 'padding:5px;text-align:right;white-space:nowrap;']	
+]) %>
 
 <%= render :partial => "/platform/admin/common/footer" %>

@@ -75,7 +75,9 @@
         <td><%=@app.state %>
 <%
               html = []
-              if @app.submitted?
+              if @app.new?
+                 html << link_to("Approve", {:action => :approve, :app_id => @app.id}, :confirm => "Are you sure you want to approve this application?")
+              elsif @app.submitted?
                  html << link_to("Approve", {:action => :approve, :app_id => @app.id}, :confirm => "Are you sure you want to approve this application?")
                  html << link_to("Reject", {:action => :reject, :app_id => @app.id}, :confirm => "Are you sure you want to reject this application?")
               end
@@ -149,7 +151,10 @@
         <th></th>
         <td>
         	 <% html = [] 
+           	  html << link_to_function("Edit Details", "tr8nLightbox.show('/platform/admin/apps/lb_edit?app_id=#{@app.id}', {height:600})")
+
               html << link_to_function("Manage Categories", "assignCategories(#{@app.id})")
+
               html << link_to("View Access Tokens", {:action => :tokens, :wf_model=>"Oauth2Token",:wf_c0=>:client_application_id, :wf_o0=>:is, :wf_v0_0=>@app.id})
 
               Platform::Application.permissions.each do |perm|

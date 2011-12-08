@@ -96,4 +96,22 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
     redirect_to(:action => :view, :app_id => app.id)
   end
   
+  def lb_edit
+    @app = Platform::Application.find_by_id(params[:app_id])
+    render :layout => false
+  end
+  
+  def update
+    if request.post?
+      app = Platform::Application.find_by_id(params[:app_id]) if params[:app_id]
+      if app
+        app.update_attributes(params[:app]) 
+        app.store_icon(params[:new_icon]) unless params[:new_icon].blank?
+        app.store_logo(params[:new_logo]) unless params[:new_logo].blank?
+      end
+    end
+    
+    redirect_to_source(:action => :index)    
+  end
+  
 end
