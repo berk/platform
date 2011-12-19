@@ -1,0 +1,95 @@
+<%= render :partial => "header" %>
+
+<style>
+  table.documentation_table img { max-width:150px; }
+  td  { padding:10px; }
+</style>
+
+<div class="documentation_section_title">
+  <%= tr("Branding Guidelines") %>
+</div>
+
+<div class="documentation_section">
+  <p>
+  	
+  </p>
+  <h2><%=tr("Overview")%></h2>
+  <p><%= tr("To avoid confusion between Geni and your own site, service, product, or application, please follow these guidelines:") %></p>
+  <ul class="standard_list">
+    <li><%= tr("You may not use the word [bold: Geni] in the name of your product.") %></li>
+    <li><%= tr("Please include a disclaimer that indicates that you are a separate entity from Geni. E.g., This application uses the Geni API but is not endorsed, operated, or sponsored by Geni, Inc.") %></li>
+    <li><%= tr("Your own product's logo should be sufficiently different from Geni's logo as to avoid confusion.") %></li>
+  </ul>
+
+<h2><%= tr("Logos and Branding") %></h2>
+
+<h3 class="mtl"><%= tr("When to include a Geni logo") %></h3>
+<ul class="standard_list">
+  <li>
+    <%= tr("When displaying Geni content, display a Geni logo as the source of the content.") %>
+    <%= tr("Where possible, link back to the content on [link: geni.com]", nil, :link => ["http://geni.com"]) %>.
+    <%= tr("A Geni logo is [bold: not] required when displaying private user content to authenticated Geni users.") %>
+  </li>
+  <li>
+    <%= tr("When requiring users to authenticate with Geni, include a Geni logo on the login screen, adjacent to the login form.") %>
+    <%= tr("The submit button should read either [bold: Log in with Geni] or [bold: Connect with Geni].") %>
+  </li>
+  <li><%= tr("Optionally, you may also include a Geni logo on the start screen or home page of your product.") %></li>
+</ul>
+
+<h3 class="mtl"><%= tr("How to use the Geni logo") %></h3>
+<ul class="standard_list">
+  <li><%= tr("The logo should be an active link to [link: geni.com].", nil, :link => ["http://geni.com"]) %></li>
+  <li><%= tr("The Geni logo should be less prominent than the logo of your own product.") %></li>
+  <li><%= tr("You may not modify the provided logos other than to adjust their size. Do not edit, alter, truncate, filter, obstruct, distort or add content to the logo.") %></li>
+  <li><%= tr("The logo should be displayed at a minimum size of 100 pixels wide and 40 pixels tall.") %></li>
+  <li>
+    <%= tr("The logo should be surrounded by sufficient whitespace to distinguish it from surrounding content.") %>
+    <%= tr("The width of this whitespace should be at a minimum equal to the size of the dot on the letter i in the Geni name.") %>
+    <div class="mtm mll"><%=image_tag("/platform/images/whitespace.png")%></div>
+  </li>
+</ul>
+
+<h3 class="mtl"><%= tr("Geni logos") %></h3>
+<p><%= tr("You may select the logo of your choice from the following:") %></p>
+<table class="documentation_table">
+  <tr>
+    <th colspan="2"><%= tr("For Dark Backgrounds") %></th>
+    <th colspan="2"><%= tr("For Light Backgrounds") %></th>
+  </tr>
+  <tr>
+    <td><%=image_tag("/platform/images/enabled_dark_bluebox.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_dark_bluebox.png")%></td>
+    <td><%=image_tag("/platform/images/enabled_light_bluebox.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_light_bluebox.png")%></td>
+  </tr>
+  <tr>
+    <td><%=image_tag("/platform/images/enabled_dark_button.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_dark_button.png")%></td>
+    <td><%=image_tag("/platform/images/enabled_light_button.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_light_button.png")%></td>
+  </tr>
+  <tr>
+    <td><%=image_tag("/platform/images/enabled_darkbg_plainblue.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_darkbg_plainblue.png")%></td>
+    <td><%=image_tag("/platform/images/enabled_lightbg_plainblue.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_lightbg_plainblue.png")%></td>
+  </tr>
+  <tr>
+    <td><%=image_tag("/platform/images/enabled_darkbg_plaingray.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_darkbg_plaingray.png")%></td>
+    <td><%=image_tag("/platform/images/enabled_lightbg_plaingray.png")%></td>
+    <td><%=image_tag("/platform/images/poweredby_lightbg_plaingray.png")%></td>
+  </tr>
+</table>
+
+
+
+
+	<p>
+		
+	</p>
+	
+</div>
+
+<%= render :partial => "footer" %>

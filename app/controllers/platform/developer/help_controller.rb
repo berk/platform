@@ -33,6 +33,10 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
     
   end
   
+  def branding
+  
+  end
+  
   def oauth_intro
     
   end

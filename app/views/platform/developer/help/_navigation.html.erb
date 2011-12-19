@@ -1,4 +1,4 @@
-<% @page_title = controller.action_name.titleize.gsub("_"," ") %>
+lo<% @page_title = controller.action_name.titleize.gsub("_"," ") %>
 
 <style>
 .documentation_sidebar {
@@ -47,6 +47,7 @@
 	<div class="navigation_header"><%=tr("Introduction")%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'index' %>"><%=link_to(tr("Welcome"), :action => :index, :version => @version)%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'reference' %>"><%=link_to(tr("Using the API Reference"), :action => :reference, :version => @version)%></div>
+  <div class="section_link <%="selected" if @controller.action_name == 'branding' %>"><%=link_to(tr("Branding Guidelines"), :action => :branding, :version => @version)%></div>
 
   <div class="navigation_header"><%=tr("Authentication")%></div>
   <div class="section_link <%="selected" if @controller.action_name == 'oauth_intro' %>"><%=link_to(tr("Introduction"), :action => :oauth_intro, :version => @version)%></div>
