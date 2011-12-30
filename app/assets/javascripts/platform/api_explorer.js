@@ -306,6 +306,7 @@ function addPostField(name, value) {
   var field = document.createElement("div");
   field.id="field" + field_count;
   field.className="field";
+  field.style.padding="0px";
   
   var field_name_container = document.createElement("span");
   field_name_container.className="field_name_container";

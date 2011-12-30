@@ -40,8 +40,8 @@ class Platform::LoggedException < ActiveRecord::Base
       :backtrace       => exception.backtrace,
       :session         => controller.request.session,
       :request         => controller.request,
-      :user_id         => Platform::Config.current_user.try(:id),
-      :cause           => exception.try(:cause)
+      :user_id         => Platform::Config.current_user.try(:id)
+      # :cause           => exception.try(:cause)
     )
   rescue StandardError => ex
     pp ex

@@ -113,7 +113,7 @@ class CreatePlatformTables < ActiveRecord::Migration
     add_index :platform_application_developers, :developer_id    
     
     create_table :platform_oauth_tokens do |t|
-      t.string    :type,            :limit => 20
+      t.string    :type
       t.integer   :user_id,         :limit=>8
       t.integer   :application_id
       t.string    :token,           :limit => 50

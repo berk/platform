@@ -310,11 +310,11 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def last_monthly_metric
-    @last_monthly_metric ||= Platform::MonthlyApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "interval desc")
+    @last_monthly_metric ||= Platform::MonthlyApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "'interval' desc")
   end
 
   def last_total_metric
-    @last_total_metric ||= Platform::TotalApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "interval desc")
+    @last_total_metric ||= Platform::TotalApplicationMetric.find(:first, :conditions => ["application_id = ?", id], :order => "'interval' desc")
   end
   
   def recently_updated_reviews

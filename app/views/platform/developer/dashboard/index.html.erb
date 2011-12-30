@@ -67,7 +67,7 @@
 
     <%=platform_toggler_tag("app_content_#{app.id}")%>
     
-    <%=image_tag(app.icon_url, :title=>app.name) %>&nbsp;
+    <%=image_tag(app.icon_url, :title=>app.name, :style=>"width:16px;height:16px;") %>&nbsp;
     <a name="app_<%=app.id%>" style="text-decoration:none;color:black;"><%=app.versioned_name%></a>
   </div>
   

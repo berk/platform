@@ -18,7 +18,7 @@
   new_users_data = []
   active_users_data = []
   while start_date <= end_date do
-    metric = Platform::DailyApplicationMetric.find(:first, :conditions => ["application_id = ? and interval = ?", app.id, start_date])
+    metric = Platform::DailyApplicationMetric.where("application_id = ? and 'interval' = ?", app.id, start_date).first
     new_user_count = metric ? metric.new_user_count : 0
     active_user_count = metric ? metric.active_user_count : 0
     new_users_data << [start_date.strftime("%m/%d"), new_user_count]   
