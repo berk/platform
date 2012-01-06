@@ -3,7 +3,7 @@
 
 <%= will_filter_tag(@apps) %>
 <%= will_filter_table_tag(@apps, :columns => [
-  [:icon, lambda{|app| link_to(image_tag(app.icon_url, :style=>"width:75px; height:75px;"), :action => :view, :app_id => app.id)}, "width:18px;"],  
+  [:icon, lambda{|app| link_to(image_tag(app.icon_url, :style=>"width:15px; height:15px;"), :action => :view, :app_id => app.id)}, "width:18px;"],  
   [:id, lambda{|app| link_to(app.id, :action => :view, :app_id => app.id)}],
   [:developer_id, lambda{|app| link_to(app.developer.name, "") if app.developer}],
   :name,
