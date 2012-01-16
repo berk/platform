@@ -31,6 +31,14 @@ class Platform::HomeController < Platform::BaseController
     
   end
 
+  def branding
+    
+  end
+
+  def rate_limits
+    
+  end
+
   def tokens
         
   end

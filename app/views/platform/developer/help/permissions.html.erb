@@ -1,0 +1,73 @@
+<%= render :partial => "header" %>
+
+<style>
+  table.documentation_table img { max-width:150px; }
+  td  { padding:10px; }
+</style>
+
+<div class="documentation_section_title">
+  <%= tr("Permissions") %>
+</div>
+
+<div class="documentation_section">
+  <p>
+		<%= tr("This section discusses the various permissions that your app can request from the user.") %>
+		<%= tr("These permissions allow your application to read and/or write certain information on the user's behalf.") %>
+  </p>
+
+  <h2><%=tr("Access Tokens")%></h2>
+
+  <p>
+  	<table class="documentation_table">
+  		<tr>
+  			<th style="width:200px;"><%=tr("Category")%></th>
+				<th style="width:350px;"><%=tr("Description")%></th>
+				<th><%=tr("Limits")%></th>
+  		</tr>
+			<tr>
+				<td>
+					<%=tr("Public or Cookie-based Calls")%>
+				</td>
+				<td>
+					<%=tr("Applications that use public API without providing an access token or cookie-based authentication.")%>
+				</td>
+				<td>
+					<%=tr("{num||request} per {count||second}", "Application rate limit", :num => 5, :count => 10)%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<%=tr("Calls with Application Tokens")%>
+				</td>
+				<td>
+					<%=tr("Applications that make calls to Geni API using application token, which were authorized on behalf of the applications using app key and secret.")%>
+				</td>
+				<td>
+					<%=tr("{num||request} per {count||second}", "Application rate limit", :num => 40, :count => 10)%>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<%=tr("Calls with User Access Tokens")%>
+				</td>
+				<td>
+					<%=tr("Applications that make calls to Geni API by providing application token, which was authorized on behalf of the applications using app key and secret.")%>
+				</td>
+				<td>
+					<%=tr("{num||request} per {count||second}", "Application rate limit", :num => 40, :count => 10)%>
+				</td>
+			</tr>
+  	</table>
+  </p>	
+
+  <p>
+		<%= tr("Rate limits are subject to change without notice.") %>
+  </p>
+
+	<p>
+		
+	</p>
+	
+</div>
+
+<%= render :partial => "footer" %>

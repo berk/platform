@@ -51,6 +51,8 @@ private
   helper_method :platform_admin_tabs
 
   def validate_admin
+    return if Rails.env.development?
+    
     unless platform_current_user_is_admin?
       trfe("You must be an admin in order to view this section of the site")
       redirect_to_site_default_url

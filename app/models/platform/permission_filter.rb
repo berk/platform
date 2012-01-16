@@ -21,19 +21,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Platform::Developer::RegistrationController < Platform::Developer::BaseController
+class Platform::PermissionFilter < Platform::BaseFilter
 
-  skip_filter :validate_developer
-
-  def index
-        
-  end
-
-  def proceed
-    unless Platform::Config.current_user_is_developer?
-      Platform::Developer.find_or_create(Platform::Config.current_user)
-    end  
-    redirect_to(:controller => "/platform/developer/apps/new")
-  end
-  
 end

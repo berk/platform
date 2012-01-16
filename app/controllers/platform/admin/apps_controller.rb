@@ -39,8 +39,12 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
     @users = Platform::ApplicationUser.filter(:params => params, :filter => Platform::ApplicationUserFilter)
   end
 
+  # def authorizations
+  #   @permissions = Platform::ApplicationPermission.filter(:params => params, :filter => Platform::ApplicationPermissionFilter)
+  # end
+
   def permissions
-    @permissions = Platform::ApplicationPermission.filter(:params => params, :filter => Platform::ApplicationPermissionFilter)
+    @permissions = Platform::Permission.filter(:params => params, :filter => Platform::PermissionFilter)
   end
 
   def ratings
