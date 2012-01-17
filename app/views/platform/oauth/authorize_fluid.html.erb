@@ -15,7 +15,10 @@
 <body>
  
  
- 	<div class="page_hd hd ">
+ 	<div class="page_hd hd">
+ 	  <div style="float:right;padding-top:15px;font-weight:bold;padding-right:10px;">
+		  <%=link_to(tr("Not {user}?", "", :user => [Platform::Config.current_user, :name]), :controller => "/login", :action => :out, :display => params[:display], :client_id => @client_application.id)%>
+		</div>
     <div href="/" class="i logo module"></div>
   </div>
   <div class="page_bd bd ">

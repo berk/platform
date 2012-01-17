@@ -42,4 +42,8 @@ class Platform::Developer < ActiveRecord::Base
     dev
   end
   
+  def app_options
+    @app_options ||= applications.collect{|app| [app.name, app.id]}
+  end
+  
 end

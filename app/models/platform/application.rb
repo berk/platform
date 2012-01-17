@@ -51,8 +51,6 @@ class Platform::Application < ActiveRecord::Base
   URL_REGEX = /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
   validates_format_of :url,                   :with => URL_REGEX, :allow_blank=>true
   validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
-  validates_format_of :callback_url,          :with => URL_REGEX, :allow_blank=>true
-  validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
   validates_format_of :privacy_policy_url,    :with => URL_REGEX, :allow_blank=>true
   validates_format_of :terms_of_service_url,  :with => URL_REGEX, :allow_blank=>true
   validates_format_of :canvas_url,            :with => URL_REGEX, :allow_blank=>true
@@ -376,6 +374,11 @@ class Platform::Application < ActiveRecord::Base
     @versioned_name ||= begin
       "#{name} #{version}"
     end
+  end
+  
+  def oauth_url
+    protocol = Platform::Config.env == "development" ? 'http' : 'https'
+  	"#{protocol}://#{Platform::Config.site_base_url}/platform/oauth/authorize?client_id=#{key}&response_type=token&display=web&redirect_url=#{CGI.escape(callback_url || '')}"
   end
   
 protected

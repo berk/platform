@@ -14,8 +14,13 @@
 	  <div class="section_box" style="margin-top:5px;margin-bottom:0px;">
 			<table style="width:100%">
 				<tr>
-					<td style="width:100px; vertical-align:middle"><%=tr("Access Token:")%></td>
-					<td><%=text_field_tag(:access_token, "", :style=>"width:630px;")%> &nbsp;
+					
+					<% if platform_current_developer and platform_current_developer.app_options.any? %>
+						<td style="width:200px; vertical-align:middle"><%=select_tag("app_id", options_for_select(platform_current_developer.app_options, params[:app_id]), :style=>"width:95%")%></td>
+					<% else %>
+						<td style="width:1px;"><%=hidden_field_tag("app_id", Platform::Config.api_explorer_app_id)%></td>
+					<% end %>
+					<td><%=text_field_tag(:access_token, "", :style=>"width:95%;", :placeholder => "Paste an access token or click on the 'Get Access Token' button to generate one.")%> &nbsp;
 					   <%=link_to_function("X", "Platform.element('access_token').value = '';")%> 
 					</td>
 					<td style="width:150px; text-align:right;">

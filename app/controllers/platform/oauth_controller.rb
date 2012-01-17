@@ -431,6 +431,8 @@ private
   end
   
   def render_action(action)
+    pp display
+    
     if display == 'web'
       render(:action => "#{action}_#{display}")
     else      
