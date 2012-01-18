@@ -58,13 +58,13 @@
 					<div class="unit size_2of5 last_unit">
 						<div class="mll pll" style="border-left:solid 1px #ddd">
 							<div class="mbm">
-								<%= image_tag(@client_application.logo_url) %>
+								<%= link_to(image_tag(@client_application.logo_url), {:controller=> "/platform/apps", :action => :view, :id => @client_application.id}, :target => "_blank") %><br>
 							</div>
 							<div class="mbs">
-							<%= link_to(h(@client_application.name), {:action => :view, :id => @client_application.id}, :target => "_blank") %><br>
+								<%= link_to(h(@client_application.name), {:controller=> "/platform/apps", :action => :view, :id => @client_application.id}, :target => "_blank") %><br>
 							</div>
 							<div>
-							 <%= platform_app_rank_tag(@client_application, 95) %>
+							 	<%= platform_app_rank_tag(@client_application, 95) %>
 							</div>				
 						</div>
 					</div>
@@ -72,7 +72,10 @@
 			</div>
 				
 			<div class="module small quiet prose">
-				<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => [@client_application.terms_of_service_url], :link2 => [@client_application.privacy_policy_url])%>
+				<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", 
+																:application => @client_application.name, 
+																:link1 => lambda{|text| link_to(text, @client_application.terms_of_service_url, :target => "_blank")}, 
+																:link2 => lambda{|text| link_to(text, @client_application.privacy_policy_url, :target => "_blank")})%>
 			</div>
 							
 		</div>
