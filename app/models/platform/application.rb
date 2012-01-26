@@ -41,6 +41,9 @@ class Platform::Application < ActiveRecord::Base
   has_many :application_categories,  :class_name => "Platform::ApplicationCategory", :dependent => :destroy
   has_many :categories,  :class_name => "Platform::Category", :through => :application_categories
 
+  has_many :application_permissions,  :class_name => "Platform::ApplicationPermission", :dependent => :destroy
+  has_many :permissions,  :class_name => "Platform::Permission", :through => :application_permissions
+
   belongs_to :icon, :class_name => Platform::Config.site_media_class, :foreign_key => "icon_id"
   belongs_to :logo, :class_name => Platform::Config.site_media_class, :foreign_key => "logo_id"
 
@@ -106,6 +109,22 @@ class Platform::Application < ActiveRecord::Base
     else
       nil
     end
+  end
+  
+  def permission_keywords
+    @permission_keywords ||= permissions.collect{|p| p.keyword.to_s}
+  end
+  
+  def add_permission(key)
+    key = key.to_s.strip
+    return if permitted_to?(key)
+    perm = Platform::Permission.for(key)
+    return unless perm
+    Platform::ApplicationPermission.create(:application => self, :permission => perm) 
+  end
+
+  def permitted_to?(key)
+    permission_keywords.include?(key.to_s)
   end
 
   def last_token_for_user(user)
@@ -204,6 +223,7 @@ class Platform::Application < ActiveRecord::Base
     "#{DEFAULT_SITE_LINK}/admin/applications/view/#{id}"
   end
 
+  # deprecated
   def self.permissions
     [:no_rate_limit, :grant_type_password, :unlimited_models, :add_without_premium]
   end

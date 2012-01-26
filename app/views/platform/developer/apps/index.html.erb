@@ -252,16 +252,12 @@
 	              <div class="app_key"><%=tr('Support URL:', 'Client application field label')%></div>
 	              <div class="app_value"><%=link_to(@app.support_url, @app.support_url) if @app.support_url %></div>
 	            </div>
+
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Application Type:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.mobile_application_type%></div>
+              </div>
 	
-	            <div class="app_key_value"> 
-	              <div class="app_key"><%=tr('Privacy Policy URL:', 'Client application field label')%></div>
-	              <div class="app_value"><%=link_to(@app.privacy_policy_url, @app.privacy_policy_url) if @app.privacy_policy_url %></div>
-	            </div>
-	
-	            <div class="app_key_value"> 
-	              <div class="app_key"><%=tr('Terms of Service URL:', 'Client application field label')%></div>
-	              <div class="app_value"><%=link_to(@app.terms_of_service_url, @app.terms_of_service_url) if @app.terms_of_service_url %></div>
-	            </div>
             </div>  
             
             <div class="app_fields_section_header">
@@ -269,7 +265,7 @@
                 <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
               </span>
               <%= platform_toggler_tag("website_settings") %> 
-              <%=tr('Website Settings', 'Client application section')%>
+              <%=tr('Website', 'Client application section')%>
             </div>
             <div id="website_settings"> 
               <div class="app_key_value"> 
@@ -281,29 +277,6 @@
                 <div class="app_value"><%=@app.site_domain %></div>
               </div>
 						</div>
-						
-            <div class="app_fields_section_header">
-              <span style='float:right'>
-                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
-              </span>
-              <%= platform_toggler_tag("authentication") %> 
-              <%=tr('Authorization', 'Client application section')%>
-            </div>
-            <div id="authentication"> 
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('Application Type:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.mobile_application_type%></div>
-              </div>
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('Callback URL:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.callback_url%></div>
-              </div>
-
-              <div class="app_key_value"> 
-                <div class="app_key"><%=tr('Deauthorize Callback URL:', 'Client application field label')%></div>
-                <div class="app_value"><%=@app.deauthorize_callback_url%></div>
-              </div>
-            </div>
 												
             <% if Registry.platform.embedded_apps_enabled? %>
 	            <div class="app_fields_section_header">
@@ -311,7 +284,7 @@
 							  	<%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
 							  </span>
 							  <%= platform_toggler_tag("integration_section") %> 
-	              <%=tr('On {site_title}', 'Client application section', :site_title => Platform::Config.site_title)%>
+	              <%=tr('App On {site_title}', 'Client application section', :site_title => Platform::Config.site_title)%>
 	            </div>
 	            
 							<div id="integration_section">
@@ -366,6 +339,40 @@
 						 
 						 <% end %>
 						 
+            <div class="app_fields_section_header">
+              <span style='float:right'>
+                <%=link_to(tr("edit"), :action => :edit, :id => @app.id)%>
+              </span>
+              <%= platform_toggler_tag("authentication") %> 
+              <%=tr('Authorization', 'Client application section')%>
+            </div>
+            <div id="authentication"> 
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Permissions:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.permission_keywords.join(", ")%></div>
+              </div>
+
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Callback URL:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.callback_url%></div>
+              </div>
+
+              <div class="app_key_value"> 
+                <div class="app_key"><%=tr('Deauthorize URL:', 'Client application field label')%></div>
+                <div class="app_value"><%=@app.deauthorize_callback_url%></div>
+              </div>
+
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Privacy Policy URL:', 'Client application field label')%></div>
+	              <div class="app_value"><%=link_to(@app.privacy_policy_url, @app.privacy_policy_url) if @app.privacy_policy_url %></div>
+	            </div>
+
+	            <div class="app_key_value"> 
+	              <div class="app_key"><%=tr('Terms of Service URL:', 'Client application field label')%></div>
+	              <div class="app_value"><%=link_to(@app.terms_of_service_url, @app.terms_of_service_url) if @app.terms_of_service_url %></div>
+	            </div>
+            </div>
+						
           </div>
       </td>
     </tr>   

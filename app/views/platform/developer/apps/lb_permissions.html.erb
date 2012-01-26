@@ -1,0 +1,54 @@
+<style>
+	.perm_row {
+		background-color:white;
+		border-bottom:1px dotted #ccc;
+		cursor: pointer;
+	}
+	
+	.perm_row:hover {
+		background-color:#eee;
+	}
+</style>
+
+<table>
+	<tr style="border-bottom:1px solid #ccc;">
+		<td style="width:20px;">
+		</td>	
+		<td style="font-weight:bold;width:20px;">
+			<%=tr("Icon") %>
+		</td>		
+		<td style="font-weight:bold;width:150px;">
+			<%=tr("Keyword") %>
+		</td>	
+		<td style="font-weight:bold;width:300px;">
+			<%=tr("Description") %>
+		</td>	
+	</tr>	
+</table>
+
+<div style="max-height:250px;overflow:auto;">
+<table>
+	<% @options.each_with_index do |p, index| %>
+		<tr class="perm_row" onClick="Platform.element('perm_<%=index%>').checked = !Platform.element('perm_<%=index%>').checked;">
+			<td style="width:20px;">	
+				<%=check_box_tag("perm_#{index}", p.keyword, @permissions.include?(p))%>
+			</td>	
+			<td style="width:20px;">
+				<%=image_tag(p.icon_url, :style => "widtd:16px;height:16px;")%>
+			</td>		
+			<td style="width:150px;">
+				<%=p.keyword%>
+			</td>	
+			<td style="width:300px;">
+				<%=p.description%>
+			</td>	
+		</tr>	
+	<% end %>
+</table>	
+</div>
+
+<div style="padding-top:30px; padding-bottom:10px; text-align:center;">
+	<%=link_to_function("<span>#{tr("Set")}</span>", "setPermissions(); Platform.Effects.hide('permissions_dialog');", :class => "button super blue large") %>
+	<%=tr("or")%>
+	<%=link_to_function(tr("Cancel"), "Platform.Effects.hide('permissions_dialog');") %>
+</div>	

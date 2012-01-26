@@ -47,6 +47,31 @@ class Platform::Admin::AppsController < Platform::Admin::BaseController
     @permissions = Platform::Permission.filter(:params => params, :filter => Platform::PermissionFilter)
   end
 
+  def lb_permission
+    @permission = Platform::Permission.find_by_id(params[:perm_id]) if params[:perm_id]
+    @permission ||= Platform::Permission.new
+    
+    if request.post?
+      if @permission.id.nil?
+        @permission = Platform::Permission.create(params[:permission])
+      else
+        @permission.update_attributes(params[:permission])
+      end
+
+      @permission.store_icon(params[:new_icon]) unless params[:new_icon].blank?
+
+      return redirect_to_source(:action => :permissions)    
+    end
+    
+    render :layout => false
+  end
+
+  def delete_permission
+    @permission = Platform::Permission.find_by_id(params[:perm_id]) if params[:perm_id]
+    @permission.destroy if @permission
+    redirect_to_source(:action => :permissions)
+  end
+
   def ratings
     @ratings = Platform::Rating.filter(:params => params, :filter => Platform::RatingFilter)
   end

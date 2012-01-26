@@ -104,6 +104,14 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
       application.store_icon(params[:new_icon]) unless params[:new_icon].blank?
       application.store_logo(params[:new_logo]) unless params[:new_logo].blank?
       
+      application.application_permissions.each do |ap|
+        ap.destroy
+      end
+      
+      params[:permissions].split(",").each do |keyword|
+        application.add_permission(keyword)
+      end  
+      
       trfn('{app_name} updated.', 'Client applicaiton controller notice', :app_name => application.name)
       redirect_to(:action => :index, :id => application.id)
     else
@@ -131,6 +139,12 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
     redirect_to :action => :index, :id => application.id 
   end
 
+  def lb_permissions
+    @options = Platform::Permission.developer_options
+    @permissions = application.permissions
+    render :layout => false
+  end
+  
 private
 
   def validate_application_developer

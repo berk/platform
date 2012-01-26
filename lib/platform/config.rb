@@ -88,7 +88,8 @@ class Platform::Config
     end
 
     init_default_categories
-    init_default_applications
+    init_default_permissions
+    # init_default_applications
 
     puts "Done."
   end
@@ -105,6 +106,15 @@ class Platform::Config
 
   def self.system_developer
     @system_developer ||= Platform::Developer.find_or_create(Platform::Config.system_user)
+  end
+
+  def self.init_default_permissions
+    puts "Initializing default permissions..."
+  
+    default_permissions.each do |keyword, data|
+      p = Platform::Permission.find_or_create(keyword)
+      p.update_attributes(data)
+    end    
   end
 
   def self.init_default_applications
@@ -142,6 +152,10 @@ class Platform::Config
 
   def self.default_applications
     @default_applications ||= load_yml("/config/platform/data/default_applications.yml")
+  end
+
+  def self.default_permissions
+    @default_permissions ||= load_yml("/config/platform/data/default_permissions.yml")
   end
 
   def self.default_categories
