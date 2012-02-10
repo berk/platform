@@ -23,12 +23,17 @@
 
 class Platform::Developer::ForumController < Platform::Developer::BaseController
   
+  skip_filter :validate_guest_user
+  skip_filter :validate_developer
+  
   def index
     @topics = Platform::ForumTopic.paginate(:all, :conditions => ["subject_id is null"], :page => page, :per_page => per_page, :order => "created_at desc")
   end
 
   def topic
     if request.post?
+      return validate_guest_user if platform_current_user_is_guest?
+      
       if params[:topic_id]
         topic = Platform::ForumTopic.find_by_id(params[:topic_id])
       else
@@ -52,6 +57,8 @@ class Platform::Developer::ForumController < Platform::Developer::BaseController
   end
 
   def delete_topic
+    return validate_guest_user if platform_current_user_is_guest?
+    
     topic = Platform::ForumTopic.find_by_id(params[:topic_id])
     
     if topic.user != platform_current_user
@@ -65,6 +72,8 @@ class Platform::Developer::ForumController < Platform::Developer::BaseController
   end
 
   def delete_message
+    return validate_guest_user if platform_current_user_is_guest?
+
     message = Platform::ForumMessage.find_by_id(params[:message_id])
     
     unless message

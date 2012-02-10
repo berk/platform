@@ -24,6 +24,8 @@
 class Platform::Developer::ApiExplorerController < Platform::Developer::BaseController
   
   before_filter :prepare_api_version
+  skip_filter :validate_guest_user
+  skip_filter :validate_developer
   
   def index
     @api_history = "[]"

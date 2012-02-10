@@ -23,6 +23,8 @@
 
 class Platform::BaseController < ApplicationController
 
+  skip_filter :redirect_if_not_logged_in
+
   before_filter :init_platform
   before_filter :validate_platform_enabled
   before_filter :validate_guest_user
@@ -79,21 +81,15 @@ class Platform::BaseController < ApplicationController
   end
   helper_method :mobile_device?
   
-  
 private
 
   def init_platform
     site_current_user = nil
-    if Platform::Config.site_user_info_enabled?
-      begin
-        site_current_user = eval(Platform::Config.current_user_method)
-        site_current_user = nil if site_current_user.class.name != Platform::Config.user_class_name
-      rescue Exception => ex
-        raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
-      end
-    else
-      site_current_user = Platform::PlatformUser.find_by_id(session[:platform_user_id]) if session[:platform_user_id]
-      site_current_user = Platform::PlatformUser.new unless site_current_user
+    begin
+      site_current_user = eval(Platform::Config.current_user_method)
+      site_current_user = nil if site_current_user.class.name != Platform::Config.user_class_name
+    rescue Exception => ex
+      raise Platform::Exception.new("Platform cannot be initialized because #{Platform::Config.current_user_method} failed with: #{ex.message}")
     end
     
     # initialize request thread variables

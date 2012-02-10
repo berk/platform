@@ -1,33 +1,35 @@
 <%=platform_scripts_tag %>
 
-<% if platform_developer_tabs.size > 1 %>
-	<div class="translations_navigation" dir="ltr">
-	  <div style="font-size:22px; font-weight: bold;padding-bottom:15px;">
-		  <%=tr("Platform Developer Tools", "Platform developer tools label")%>
-		</div>
+<% if Platform::Config.enable_developer_tabs? %>
+	<% if platform_developer_tabs.size > 1 %>
+		<div class="translations_navigation" dir="ltr">
+		  <div style="font-size:22px; font-weight: bold;padding-bottom:15px;">
+			  <%=tr("Platform Developer Tools", "Platform developer tools label")%>
+			</div>
 	
-	  <ul class="translations_tab_nav translations_tabs">
-	      <% platform_developer_tabs.each do |tab| %>
-	        <%  classes = []
-	            current = (tab["controller"] == controller.controller_name)
+		  <ul class="translations_tab_nav translations_tabs">
+		      <% platform_developer_tabs.each do |tab| %>
+		        <%  classes = []
+		            current = (tab["controller"] == controller.controller_name)
 	
-	            classes << "current" if current
-	            if platform_developer_tabs.first == tab
-	              classes << "first" 
-	              classes << "first_current" if current
-	            elsif platform_developer_tabs.last == tab
-	              classes << "last"
-	              classes << "last_current" if current
-	            end   
-	        %>
+		            classes << "current" if current
+		            if platform_developer_tabs.first == tab
+		              classes << "first" 
+		              classes << "first_current" if current
+		            elsif platform_developer_tabs.last == tab
+		              classes << "last"
+		              classes << "last_current" if current
+		            end   
+		        %>
 	        
-	        <li class="<%=classes.join(' ') %>">
-	          <%=link_to(tr(tab["title"], tab["description"]), "/platform/developer/#{tab["controller"]}")%>
-	        </li>
+		        <li class="<%=classes.join(' ') %>">
+		          <%=link_to(tr(tab["title"], tab["description"]), "/platform/developer/#{tab["controller"]}")%>
+		        </li>
 	
-	      <% end %>
-	  </ul>
-	</div>
+		      <% end %>
+		  </ul>
+		</div>
+	<% end %>
 <% end %>
 <div class="platform" dir="ltr">
   

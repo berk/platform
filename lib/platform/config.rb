@@ -204,6 +204,10 @@ class Platform::Config
     config[:enable_developer_agreement]
   end
 
+  def self.enable_developer_tabs?
+    config[:enable_developer_tabs]
+  end
+
   def self.enable_app_statistics?
     config[:enable_app_statistics]
   end

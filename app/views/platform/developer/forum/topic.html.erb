@@ -20,9 +20,13 @@
 	    </div>
 	  </div>
 	  <%= render :partial => "messages" %>
-	  <%= render :partial => "new_message" %>  
+		<% unless platform_current_user_is_guest? %>
+	  	<%= render :partial => "new_message" %>  
+		<% end %>
 	<% else %>
-	  <%= render :partial => "new_topic", :locals => {:include_cancel_button => true} %>
+		<% unless platform_current_user_is_guest? %>
+	  	<%= render :partial => "new_topic", :locals => {:include_cancel_button => true} %>
+ 		<% end %>
 	<% end %>
 	
 <%= render :partial => "/platform/developer/common/footer" %>

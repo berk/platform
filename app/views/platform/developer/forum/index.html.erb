@@ -91,6 +91,8 @@
 </div>
 <% end %>
 
-<%= render :partial => "new_topic", :locals => {:include_cancel_button => false} %>
+<% unless platform_current_user_is_guest? %>
+	<%= render :partial => "new_topic", :locals => {:include_cancel_button => false} %>
+<% end %>
 
 <%= render :partial => "/platform/developer/common/footer" %>

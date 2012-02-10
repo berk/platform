@@ -15,6 +15,7 @@ defaults: &defaults
   enable_embedded_applications: true
   enable_mobile_applications:   true
   enable_developer_agreement:   true
+  enable_developer_tabs:        true
   enable_app_statistics:        true
   enable_api_log:               true
   
