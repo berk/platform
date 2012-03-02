@@ -346,12 +346,14 @@
               <%= platform_toggler_tag("authentication") %> 
               <%=tr('Authorization', 'Client application section')%>
             </div>
-            <div id="authentication"> 
+            <div id="authentication">
+              <% if Platform::Config.enable_permissions? %>
               <div class="app_key_value"> 
                 <div class="app_key"><%=tr('Permissions:', 'Client application field label')%></div>
                 <div class="app_value"><%=@app.permission_keywords.join(", ")%></div>
               </div>
-
+              <% end %>
+                
               <div class="app_key_value"> 
                 <div class="app_key"><%=tr('Callback URL:', 'Client application field label')%></div>
                 <div class="app_value"><%=@app.callback_url%></div>

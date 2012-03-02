@@ -18,6 +18,7 @@ defaults: &defaults
   enable_developer_tabs:        true
   enable_app_statistics:        true
   enable_api_log:               true
+  enable_permissions:           false
   
   #############################################################################
   # Platform best run with caching enabled

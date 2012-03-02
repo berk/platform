@@ -317,6 +317,7 @@
     </td>
   </tr>
 
+  <% if Platform::Config.enable_permissions? %>
   <tr>
     <th>
       <%=tr('Permissions:','Client application field label')%>
@@ -329,7 +330,8 @@
       <%=tr("Default permissions that will be used unless a scope parameter is passed in the OAuth URL.", 'Client application field comment')%>
     </td> 
   </tr>
-	
+	<% end %>
+  
   <tr>
     <th>
       <%=tr('Callback URL:','Client application field label')%>

@@ -216,6 +216,10 @@ class Platform::Config
     config[:enable_api_verification]
   end
 
+  def self.enable_permissions?
+    config[:enable_permissions]
+  end
+
   def self.default_app_icon
     "/platform/images/default_app_icon.gif"
   end

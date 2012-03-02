@@ -113,7 +113,8 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def permission_keywords
-    @permission_keywords ||= permissions.collect{|p| p.keyword.to_s}
+    []
+    # @permission_keywords ||= permissions.collect{|p| p.keyword.to_s}
   end
   
   def add_permission(key)
