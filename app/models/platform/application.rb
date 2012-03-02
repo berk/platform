@@ -42,7 +42,8 @@ class Platform::Application < ActiveRecord::Base
   has_many :categories,  :class_name => "Platform::Category", :through => :application_categories
 
   has_many :application_permissions,  :class_name => "Platform::ApplicationPermission", :dependent => :destroy
-  has_many :permissions,  :class_name => "Platform::Permission", :through => :application_permissions
+  # disabling permissions until full integration
+  # has_many :permissions,  :class_name => "Platform::Permission", :through => :application_permissions
 
   belongs_to :icon, :class_name => Platform::Config.site_media_class, :foreign_key => "icon_id"
   belongs_to :logo, :class_name => Platform::Config.site_media_class, :foreign_key => "logo_id"
