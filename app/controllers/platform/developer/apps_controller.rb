@@ -108,9 +108,11 @@ class Platform::Developer::AppsController < Platform::Developer::BaseController
         ap.destroy
       end
       
-      params[:permissions].split(",").each do |keyword|
-        application.add_permission(keyword)
-      end  
+      if (params[:permissions])
+        params[:permissions].split(",").each do |keyword|
+          application.add_permission(keyword)
+        end  
+      end
       
       trfn('{app_name} updated.', 'Client applicaiton controller notice', :app_name => application.name)
       redirect_to(:action => :index, :id => application.id)
