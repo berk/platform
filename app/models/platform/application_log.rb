@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,32 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::ApplicationLog Schema Information
+#
+# Table name: platform_application_logs
+#
+#  id                INTEGER         not null, primary key
+#  application_id    integer         
+#  user_id           integer         
+#  event             varchar(255)    
+#  controller        varchar(255)    
+#  action            varchar(255)    
+#  request_method    varchar(255)    
+#  data              text            
+#  user_agent        varchar(255)    
+#  duration          integer         
+#  host              varchar(255)    
+#  country           varchar(255)    
+#  ip                varchar(255)    
+#  created_at        datetime        
+#  updated_at        datetime        
+#
+# Indexes
+#
+#  index_platform_application_logs_on_application_id_and_created_at    (application_id, created_at) 
+#
 #++
 
 class Platform::ApplicationLog < ActiveRecord::Base

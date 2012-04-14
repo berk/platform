@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,53 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::Application Schema Information
+#
+# Table name: platform_applications
+#
+#  id                          INTEGER         not null, primary key
+#  developer_id                integer         
+#  name                        varchar(255)    
+#  description                 text            
+#  state                       varchar(255)    default = new
+#  locale                      varchar(255)    
+#  url                         varchar(255)    
+#  site_domain                 varchar(255)    
+#  support_url                 varchar(255)    
+#  callback_url                varchar(255)    
+#  contact_email               varchar(255)    
+#  privacy_policy_url          varchar(255)    
+#  terms_of_service_url        varchar(255)    
+#  permissions                 varchar(255)    
+#  key                         varchar(255)    
+#  secret                      varchar(255)    
+#  icon_id                     integer         
+#  logo_id                     integer         
+#  canvas_name                 varchar(255)    
+#  canvas_url                  varchar(255)    
+#  auto_resize                 boolean         
+#  auto_login                  boolean         
+#  mobile_application_type     varchar(255)    
+#  ios_bundle_id               varchar(255)    
+#  itunes_app_store_id         varchar(255)    
+#  android_key_hash            varchar(255)    
+#  rank                        integer         
+#  auto_signin                 boolean         
+#  deauthorize_callback_url    varchar(255)    
+#  version                     varchar(255)    
+#  api_version                 varchar(255)    
+#  parent_id                   integer         
+#  created_at                  datetime        
+#  updated_at                  datetime        
+#
+# Indexes
+#
+#  index_platform_applications_on_parent_id       (parent_id) 
+#  index_platform_applications_on_key             (key) UNIQUE
+#  index_platform_applications_on_developer_id    (developer_id) 
+#
 #++
 
 class Platform::Application < ActiveRecord::Base

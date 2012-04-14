@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,24 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::ApplicationUser Schema Information
+#
+# Table name: platform_application_users
+#
+#  id                INTEGER     not null, primary key
+#  application_id    integer     not null
+#  user_id           integer     not null
+#  data              text        
+#  created_at        datetime    
+#  updated_at        datetime    
+#
+# Indexes
+#
+#  index_platform_application_users_on_user_id           (user_id) 
+#  index_platform_application_users_on_application_id    (application_id) 
+#
 #++
 
 class Platform::ApplicationUser < ActiveRecord::Base

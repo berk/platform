@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,26 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::Rating Schema Information
+#
+# Table name: platform_ratings
+#
+#  id             INTEGER         not null, primary key
+#  user_id        integer(8)      not null
+#  object_type    varchar(255)    
+#  object_id      integer         
+#  value          integer         
+#  comment        text            
+#  created_at     datetime        
+#  updated_at     datetime        
+#
+# Indexes
+#
+#  index_platform_ratings_on_object_type_and_object_id    (object_type, object_id) 
+#  index_platform_ratings_on_user_id                      (user_id) 
+#
 #++
 
 class Platform::Rating < ActiveRecord::Base

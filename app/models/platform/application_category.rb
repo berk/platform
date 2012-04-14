@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,25 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::ApplicationCategory Schema Information
+#
+# Table name: platform_application_categories
+#
+#  id                INTEGER     not null, primary key
+#  category_id       integer     not null
+#  application_id    integer     not null
+#  position          integer     
+#  featured          boolean     
+#  created_at        datetime    
+#  updated_at        datetime    
+#
+# Indexes
+#
+#  pacca    (category_id, application_id) 
+#  pacc     (category_id) 
+#
 #++
 
 class Platform::ApplicationCategory < ActiveRecord::Base

@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -19,6 +19,22 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+#++
+#
+#-- Platform::ApplicationPermission Schema Information
+#
+# Table name: platform_application_permissions
+#
+#  id                INTEGER     not null, primary key
+#  application_id    integer     
+#  permission_id     integer     
+#  created_at        datetime    
+#  updated_at        datetime    
+#
+# Indexes
+#
+#  index_platform_application_permissions_on_application_id    (application_id) 
+#
 #++
 
 class Platform::ApplicationPermission < ActiveRecord::Base
