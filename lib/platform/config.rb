@@ -280,6 +280,10 @@ module Platform
       site_info[:oauth_web_layout]
     end
 
+    def self.oauth_fluid_layout
+      site_info[:oauth_fluid_layout]
+    end
+
     def self.oauth_popup_layout
       site_info[:oauth_popup_layout]
     end

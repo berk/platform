@@ -27,7 +27,7 @@ class Platform::ApplicationMetric < ActiveRecord::Base
   belongs_to :application, :class_name => "Platform::Application"
   
   def self.find_or_create(app, interval)
-    metric = self.find(:first, :conditions => ["application_id = ? and interval = ?", app.id, interval])
+    metric = self.find(:first, :conditions => ["application_id = ? and 'interval' = ?", app.id, interval])
     metric || self.create(:application => app, :interval => interval, :type => self.name)
   end
   

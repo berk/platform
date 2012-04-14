@@ -1,2 +1,2 @@
-rvm 1.9.2@platform --create
+rvm use 1.9.2@platform --create
 #rvm gemset import | grep -v -E 'already installed|default\.gems|^$'

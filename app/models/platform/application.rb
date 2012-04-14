@@ -26,6 +26,9 @@ class Platform::Application < ActiveRecord::Base
 
   # useful methods - should be public
   include Platform::SimpleStringPermissions
+  # include ActiveRecord::Acts:Tree
+  include AASM
+
   acts_as_tree :order => "version"
 
   belongs_to :developer, :class_name => "Platform::Developer"
@@ -51,50 +54,47 @@ class Platform::Application < ActiveRecord::Base
   URL_REGEX = /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
   validates_format_of :url,                   :with => URL_REGEX, :allow_blank=>true
   validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
-  validates_format_of :callback_url,          :with => URL_REGEX, :allow_blank=>true
-  validates_format_of :support_url,           :with => URL_REGEX, :allow_blank=>true
   validates_format_of :privacy_policy_url,    :with => URL_REGEX, :allow_blank=>true
   validates_format_of :terms_of_service_url,  :with => URL_REGEX, :allow_blank=>true
-  validates_format_of :canvas_url,            :with => URL_REGEX, :allow_blank=>true
 
   attr_accessor :token_callback_url
 
-  acts_as_state_machine :initial => :new
-  
-  state :new
-  state :submitted
-  state :approved
-  state :rejected 
-  state :blocked 
-  state :deprecated
-  
-  event :submit do
-    transitions :from => :new,        :to => :submitted
-    transitions :from => :rejected,   :to => :submitted
-  end
+  aasm :column => :state do
+    state :new, :initial => true
+    state :submitted
+    state :approved
+    state :rejected 
+    state :blocked 
+    state :deprecated
 
-  event :deprecate do
-    transitions :from => :approved,   :to => :deprecated
-  end
-  
-  event :block do
-    transitions :from => :new,        :to => :blocked
-    transitions :from => :submitted,  :to => :blocked
-    transitions :from => :approved,   :to => :blocked
-    transitions :from => :rejected,   :to => :blocked
-  end
+    event :submit do
+      transitions :from => :new,        :to => :submitted
+      transitions :from => :rejected,   :to => :submitted
+    end
 
-  event :unblock do
-    transitions :from => :blocked,    :to => :new
-  end
+    event :deprecate do
+      transitions :from => :approved,   :to => :deprecated
+    end
+    
+    event :block do
+      transitions :from => :new,        :to => :blocked
+      transitions :from => :submitted,  :to => :blocked
+      transitions :from => :approved,   :to => :blocked
+      transitions :from => :rejected,   :to => :blocked
+    end
 
-  event :approve do
-    transitions :from => :new,        :to => :approved
-    transitions :from => :submitted,  :to => :approved
-  end
+    event :unblock do
+      transitions :from => :blocked,    :to => :new
+    end
 
-  event :reject do
-    transitions :from => :submitted,  :to => :rejected
+    event :approve do
+      transitions :from => :new,        :to => :approved
+      transitions :from => :submitted,  :to => :approved
+    end
+
+    event :reject do
+      transitions :from => :submitted,  :to => :rejected
+    end
   end
   
   def self.for(client_id)
@@ -373,6 +373,11 @@ class Platform::Application < ActiveRecord::Base
     @versioned_name ||= begin
       "#{name} #{version}"
     end
+  end
+  
+  def oauth_url
+    protocol = Platform::Config.env == "development" ? 'http' : 'https'
+  	"#{protocol}://#{Platform::Config.site_base_url}/platform/oauth/authorize?client_id=#{key}&response_type=token&display=web&redirect_url=#{CGI.escape(callback_url || '')}"
   end
   
 protected

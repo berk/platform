@@ -7,8 +7,8 @@ require "will_filter"
 require "tr8n"
 require "kaminari"
 require "platform"
-require "acts_as_tree"
-require "acts_as_state_machine"
+require "acts_as_tree_rails3"
+require "aasm"
 
 module Dummy
   class Application < Rails::Application
