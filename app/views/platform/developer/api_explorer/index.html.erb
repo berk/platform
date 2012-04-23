@@ -10,16 +10,13 @@
 </div>
 
 <div class="section_box">
-	<% if Platform::Config.api_explorer_app? %>
+	<% if platform_current_developer and platform_current_developer.app_options.any?  %>
 	  <div class="section_box" style="margin-top:5px;margin-bottom:0px;">
 			<table style="width:100%">
 				<tr>
-					
-					<% if platform_current_developer and platform_current_developer.app_options.any? %>
-						<td style="width:200px; vertical-align:middle"><%=select_tag("app_id", options_for_select(platform_current_developer.app_options, params[:app_id]), :style=>"width:95%")%></td>
-					<% else %>
-						<td style="width:1px;"><%=hidden_field_tag("app_id", Platform::Config.api_explorer_app_id)%></td>
-					<% end %>
+					<td style="width:200px; vertical-align:middle">
+						<%=select_tag("app_id", options_for_select(platform_current_developer.app_options, params[:app_id]), :style=>"width:95%")%>
+					</td>
 					<td><%=text_field_tag(:access_token, "", :style=>"width:95%;", :placeholder => "Paste an access token or click on the 'Get Access Token' button to generate one.")%> &nbsp;
 					   <%=link_to_function("X", "Platform.element('access_token').value = '';")%> 
 					</td>
@@ -42,7 +39,7 @@
   			</td>
 				<td style="border:1px solid #ccc;padding:0px;margin:0px;font-size:12px;color:#888;vertical-align:middle; background-color:white;">
 				  <span style="float:right;padding-right:5px;"><%=link_to_function(image_tag("/platform/images/arrow_down.gif"), "toggleApiOptions(this)")%></span>
-				  <span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, params[:path], :style=>"width:530px;border:0px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;", :onKeyUp=>"if (event.keyCode == 13) {api_history_index=-1; submitRequest();}")%>			
+				  <span style="padding-left:5px;vertical-align:middle;white-space:nowrap;">http://<%=Platform::Config.api_base_url%></span><%=text_field_tag(:api_path, params[:path], :style=>"width:530px;padding:0px;margin:0px;font-size:12px;vertical-align:middle;border:1px solid #efefef;", :onKeyUp=>"if (event.keyCode == 13) {api_history_index=-1; submitRequest();}")%>			
 				</td>
 				<td style="padding-left:5px;text-align:right;">
           <%= link_to_function(trl('Submit', 'Client application action label'), "api_history_index=-1; submitRequest();", :class=>'button super blue medium') %>
