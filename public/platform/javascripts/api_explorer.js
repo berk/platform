@@ -429,7 +429,7 @@ function submitRequest() {
 	
   var t0 = new Date();
 
-  Platform.Utils.ajax(api_base_url + path, {
+  Platform.Utils.ajax(api_base_url + "/" + path, {
      method: method,
      parameters: params,
      onSuccess: function(response) {
