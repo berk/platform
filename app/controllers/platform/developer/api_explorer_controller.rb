@@ -26,7 +26,10 @@ class Platform::Developer::ApiExplorerController < Platform::Developer::BaseCont
   before_filter :prepare_api_version
   skip_filter :validate_guest_user
   skip_filter :validate_developer
-  
+
+  include SslRequirement
+  ssl_required :index, :history, :options, :oauth_lander
+
   def index
     @api_history = "[]"
     @api_history = request.cookies["api_history"] unless request.cookies["api_history"].blank?

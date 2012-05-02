@@ -109,7 +109,7 @@
 <script>
 
 Platform.Utils.addEvent(window, 'load', function() {
-	initApiExplorer('<%=Platform::Config.api_explorer_app_id%>', '<%=Platform::Config.site_base_url%>', '<%=Platform::Config.api_base_url%>', '<%=@api_history%>');
+	initApiExplorer('<%=Platform::Config.api_explorer_app_id%>', '<%=Platform::Config.site_base_url%>', '/api', '<%=@api_history%>');
 	<% params.each do |key, value| %>
 	 <% next if ['controller', 'action', 'access_token', 'method', 'path', 'api_version'].include?(key) %>
 	 addPostField('<%=key%>', '<%=value%>');

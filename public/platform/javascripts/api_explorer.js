@@ -1,6 +1,6 @@
 var field_count = 0;
-var base_api_url = "";
-var base_site_url = "";
+var api_base_url = "/api";
+var oauth_base_url = "";
 var api_explorer_app_id = "";
 var api_history = {};
 var api_history_index = -1;
@@ -9,8 +9,8 @@ var api_result_object_keys = [];
 
 function initApiExplorer(app_id, site_url, api_url, api_history_string) {
 	api_explorer_app_id = app_id;
-	base_site_url = site_url;
-  base_api_url = api_url;
+	oauth_base_url = site_url;
+  api_base_url = api_url;
   api_history = JSON.parse(api_history_string);
   updateHistoryButtons();
 } 
@@ -29,7 +29,7 @@ function getAccessToken() {
   var height = 600;
   var top = (parseInt(window.innerHeight)-height)/2;
   var left = (parseInt(window.innerWidth)-width)/2;
-	var land_url = base_site_url + "/platform/developer/api_explorer/oauth_lander";
+	var land_url = oauth_base_url + "/platform/developer/api_explorer/oauth_lander";
 	if (land_url.indexOf("http") == -1) {
 		land_url = "http://" + land_url;
 	}
@@ -428,7 +428,8 @@ function submitRequest() {
 	}
 	
   var t0 = new Date();
-  Platform.Utils.ajax("http://" + base_api_url + path, {
+
+  Platform.Utils.ajax(api_base_url + path, {
      method: method,
      parameters: params,
      onSuccess: function(response) {
@@ -446,8 +447,8 @@ function submitRequest() {
 function updateApi(path, method, params) {
   hidePopups();
   
-  if (path.indexOf(base_api_url) != -1) {
-    var parts = path.split(base_api_url);
+  if (path.indexOf(api_base_url) != -1) {
+    var parts = path.split(api_base_url);
     path = parts[parts.length-1];
   }
 
@@ -600,7 +601,7 @@ function isURL(str) {
 
 function isApiCall(str) {
   str = "" + str;
-  return (str.indexOf(base_api_url) != -1);
+  return (str.indexOf(api_base_url) != -1);
 }
 
 function formatProperty(key, value) {
