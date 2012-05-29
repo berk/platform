@@ -71,10 +71,10 @@ namespace :platform do
 
 private
   def parse_date_param(param, default=:today)
-    param ||= default
+    date = ENV[param] || default
 
-    return Date.send(param) if Date.respond_to?(param.to_s)
-    Date.parse(param)
+    return Date.send(date) if Date.respond_to?(date.to_s)
+    Date.parse(date)
   end
 
   def rollup_interval(interval)
