@@ -50,9 +50,8 @@ namespace :platform do
   end
 
   task :rollup_daily_metrics => :environment do
-    start_date = ENV['since'] || Date.today.to_s
-    start_date = Date.parse(start_date)
-    end_date = Date.today
+    start_date = parse_date_param('since', :today)
+    end_date   = parse_date_param('until', :today)
     
     while start_date <= end_date do
       log_msg("Rolling up daily metrics for #{start_date}...")
@@ -70,8 +69,14 @@ namespace :platform do
     log_msg("Done.")
   end
 
-private  
-  
+private
+  def parse_date_param(param, default=:today)
+    param ||= default
+
+    return Date.send(param) if Date.respond_to?(param.to_s)
+    Date.parse(param)
+  end
+
   def rollup_interval(interval)
     interval_start = interval
     interval_end = interval_start + Platform::ApplicationUsageMetric.interval_duration
