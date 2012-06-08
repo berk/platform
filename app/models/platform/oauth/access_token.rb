@@ -51,7 +51,7 @@ protected
   end
 
   def lifetime
-    @lifetime ||= eval Registry.api.token_lifetime
+    @lifetime ||= Registry.api.token_lifetime
   end
 
 end
