@@ -1,0 +1,13 @@
+<!doctype html> 
+<html> 
+  <head> 
+    <title>XD</title> 
+  </head> 
+  <body onload="sendFragment()"> 
+    <script> 
+			function sendFragment() {
+				(window.opener || window.parent || window.top).postMessage("<%=params.to_query%>", "<%= params[:origin] %>");
+			}
+    </script> 
+  </body> 
+</html> 

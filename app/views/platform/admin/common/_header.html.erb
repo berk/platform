@@ -1,0 +1,32 @@
+<%=platform_scripts_tag %>
+
+<div class="translations_navigation" dir="ltr">
+  <div style="font-size:22px; font-weight: bold;padding-bottom:15px;">
+	  <%=trl("Platform Administration Tools", "Platform administration tools label")%>
+	</div>
+
+  <ul class="translations_tab_nav translations_tabs">
+      <% platform_admin_tabs.each do |tab| %>
+        <%  classes = []
+            current = (tab["controller"] == controller.controller_name)
+
+            classes << "current" if current
+            if platform_admin_tabs.first == tab
+              classes << "first" 
+              classes << "first_current" if current
+            elsif platform_admin_tabs.last == tab
+              classes << "last"
+              classes << "last_current" if current
+            end   
+        %>
+        
+        <li class="<%=classes.join(' ') %>">
+          <%=link_to(trl(tab["title"], tab["description"]), "/platform/admin/#{tab["controller"]}")%>
+        </li>
+
+      <% end %>
+  </ul>
+</div>
+
+<div class="platform platform_admin" dir="ltr">
+  

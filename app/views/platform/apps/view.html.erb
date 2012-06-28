@@ -1,0 +1,71 @@
+<%= render :partial => "/platform/apps/app_header" %>
+
+<div style="padding-left:10px;">
+	<% if params[:sec] == 'Info' %>
+		  <div class="apps_header" style="">
+		    <%=tr("Basic Information")%>
+		  </div>
+		  <div class="apps_section">
+		    <table style="width:100%;">
+		      <tr>
+		      	<th style="width:110px; text-align:left;">
+		      		<%=tr("Description:")%>
+		      	</th>
+						<td>
+							<%=@app.description%>
+						</td>
+		      </tr>
+					<% if @app.developer.about %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Developer Info:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.about%>
+		        </td>
+		      </tr>
+					<% end %>
+					<% if @app.developer.name %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Developer Name:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.name%>
+		        </td>
+		      </tr>
+					<% end %>
+					<% if @app.developer.url %>
+		      <tr>
+		        <th style="text-align:left;">
+		          <%=tr("Website:")%>
+		        </th>
+		        <td>
+		        	<%=@app.developer.url%>
+		        </td>
+		      </tr>
+					<% end %>
+		    </table>
+		  </div>
+	  <%= render :partial => "/platform/ratings/list" %>
+	<% end %>
+	
+	<% if params[:sec] == 'Reviews' %>
+	  <%= render :partial => "/platform/ratings/list" %>
+	<% end %>	
+	
+	<% if params[:sec] == 'Discussions' %>
+	  <% if @topic %>
+	    <%= render :partial => "/platform/forum/topic" %>
+		<% else %>  
+		  <% if params[:mode] == 'create' %>
+	      <%= render :partial => "/platform/forum/new_topic", :locals => {:include_cancel_button => true} %>
+			<% else %> 
+	      <%= render :partial => "/platform/forum/topics" %>
+			<% end %>	
+		<% end %>	
+	<% end %> 
+</div>
+
+<%= render :partial => "/platform/apps/app_footer" %>
+						

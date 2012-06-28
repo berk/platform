@@ -1,0 +1,105 @@
+<div style="background-color:#EFF8FF; border: 1px dotted #ccc; font-size: 12px; padding:5px; margin-top:3x; margin-bottom:10px; color: black;">
+  <%=tr("This application has {count||total user}.", "Dashboard section header", :count => (app.last_total_metric ? app.last_total_metric.user_count : 0))%>
+</div>
+
+<div style="font-size:14px; border-bottom:1px solid #ccc; margin-bottom:5px;">
+  <div style="float:right">
+    <%=platform_app_rank_tag(app)%>
+  </div>
+	
+  <%=platform_toggler_tag("stats_content_#{app.id}", "", true)%>
+	<%=tr("Application Statistics", "Dashboard section header") %>
+</div>
+
+<% 
+  end_date = Date.today
+  start_date = end_date - 6.days
+  index = 0
+  new_users_data = []
+  active_users_data = []
+  while start_date <= end_date do
+    metric = Platform::DailyApplicationMetric.find(:first, :conditions => ["application_id = ? and interval = ?", app.id, start_date])
+    new_user_count = metric ? metric.new_user_count : 0
+    active_user_count = metric ? metric.active_user_count : 0
+    new_users_data << [start_date.strftime("%m/%d"), new_user_count]   
+    active_users_data << [start_date.strftime("%m/%d"), active_user_count]   
+    start_date += 1
+    index += 1
+  end 
+%>
+
+<div id="stats_content_<%=app.id%>" style="">
+	<table style="width:100%">
+	  <tr>
+      <td style="width:50%; padding-top:3px; padding-right:3px; padding-bottom:10px;">
+					<div style="text-align:center; width:100%; border:1px dotted #ccc; background-color:white;">
+					  <div style="font-size:14px; padding:3px;"> 
+					    <%=tr("Daily Active Users", "Dashboard section header") %>
+					  </div>
+					  
+					  <!-- %= daily_new_users_chart(app)% -->
+					  <div id="daily_active_users_chart_<%=app.id%>">
+					  </div>
+					  
+					  <script type="text/javascript">
+					    var data = new google.visualization.DataTable();
+					    data.addColumn('string', 'Date');
+					    data.addColumn('number', 'Active Users');
+					    data.addRows(7);
+					    
+					    <% 
+					      active_users_data.each_with_index do |data, index|
+					    %>
+					      data.setValue(<%=index%>, 0, '<%=data.first%>');
+					      data.setValue(<%=index%>, 1, <%=data.last%>);
+					    <% 
+					      end 
+					    %>
+					
+					    var chart = new google.visualization.LineChart(document.getElementById("daily_active_users_chart_<%=app.id%>"));
+					    chart.draw(data, {width: 450, height: 200});
+					  </script>
+					
+					
+					  <div style="margin:10px; color:#ccc; text-align:center; width:100%;">
+					      <%=tr("The stats are calculated daily", "Dashboard section header")%>
+					  </div>
+					</div>
+      </td>      	  	
+	    <td style="width:50%;padding-top:3px; padding-bottom:10px;">
+          <div style="text-align:center; width:100%; border:1px dotted #ccc; background-color:white;">
+            <div style="font-size:14px; padding:3px;"> 
+              <%=tr("Daily New Users", "Dashboard section header") %>
+            </div>
+            
+            <!-- %= daily_new_users_chart(app)% -->
+            <div id="daily_new_users_chart_<%=app.id%>">
+            </div>
+            
+            <script type="text/javascript">
+              var data = new google.visualization.DataTable();
+              data.addColumn('string', 'Date');
+              data.addColumn('number', 'New Users');
+              data.addRows(7);
+              <% 
+               new_users_data.each_with_index do |data, index|
+              %>
+                data.setValue(<%=index%>, 0, '<%=data.first%>');
+                data.setValue(<%=index%>, 1, <%=data.last%>);
+              <% 
+                end 
+              %>
+              var chart = new google.visualization.LineChart(document.getElementById("daily_new_users_chart_<%=app.id%>"));
+              chart.draw(data, {width: 450, height: 200});
+            </script>
+          
+          
+            <div style="margin:10px; color:#ccc; text-align:center; width:100%;">
+                <%=tr("The stats are calculated daily", "Dashboard section header")%>
+            </div>
+          </div>
+			</td>        
+	  </tr>
+	</table>  
+</div>
+

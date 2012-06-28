@@ -1,0 +1,18 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+<div class="section_title">
+   <%= tr('Register New Application', 'Client application section title') %> 
+</div>
+
+<div class="app_fields">
+	<% form_for(:application, @app, :url => {:action => :create}, :html => {:method => :post, :multipart=>true}) do |form| %>
+	  <%= render :partial=>'form', :locals=>{:form=>form} %>
+		
+		<div style="text-align:center; padding:15px;">
+	    <%= submit_tag trl('Register Application', 'Client application action label'), :class=>'button super blue large' %>
+			<%=tr("or")%> <%=link_to(tr("Cancel"), :action => :index)%>
+		</div>
+	<% end %>
+</div>
+
+<%= render :partial => "/platform/developer/common/footer" %>

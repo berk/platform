@@ -1,0 +1,19 @@
+<%= render :partial => "/platform/developer/common/header" %>
+
+<div class="section_title">
+  <%= tr('New Version for "{app_name}"', 'API', :app_name => @app.name) %> 
+</div>
+
+<div class="app_fields">
+  <% form_for(:application, @app, :url => {:action => :version, :current_version_id => @current_app.id}, :html => {:method => :post, :multipart=>true}) do |form| %>
+    <%= render :partial=>'form', :locals=>{:form=>form} %>
+    
+    <div style="text-align:center; padding:15px;">
+      <%= submit_tag trl('Register New Version', 'Client application action label'), :class=>'button super blue large' %>
+      <%=tr("or")%> <%=link_to(tr("Cancel"), :action => :index, :id => @current_app.id)%>
+    </div>
+  <% end %>
+</div>
+
+
+<%= render :partial => "/platform/developer/common/footer" %>

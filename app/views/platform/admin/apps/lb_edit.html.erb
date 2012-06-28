@@ -1,0 +1,113 @@
+<div class="inner">
+    <div class="hd">
+        <div style="float:right;">
+            <%=link_to_function(image_tag("/tr8n/images/close.gif"), "tr8nLightbox.hide();") %>
+        </div>
+        	Update Application
+    </div>
+    <div class="bd">
+        <% form_for(:app, @app, :url => {:action => :update, :app_id => @app.id}, :html => {:id => 'tr8n_form', :method => :post, :class => "tr8n", :multipart=>true}) do |f| %>
+				<%=hidden_field_tag(:source_url, request.env['HTTP_REFERER'])%>
+        <table class="admin_table">
+          <tr>
+              <th>
+                  Name:
+              </th>
+              <td>
+                	<%= f.text_field :name, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Description:
+              </th>
+              <td>
+                	<%= f.text_area :description, :style=>"width:99%;height:100px;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  URL:
+              </th>
+              <td>
+                	<%= f.text_field :url, :style=>"width:99%;" %>
+              </td>
+          </tr>
+					<tr>
+				    <th>
+				      Icon:
+				    </th>
+				    <td>
+				      <div id="icon_field" style="display:none">
+				        <%= file_field_tag "new_icon", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_icon' %>
+				      </div>
+				      <div id="icon_preview"> 
+					    	<span style="float:right; font-size:10px;">
+					    		<%=link_to_function("Change icon", "$('icon_preview').hide();$('icon_field').show();")%>
+					    	</span>
+					      <%=image_tag(@app.icon_url, :style => "width:16px;height:16px;")%>
+							</div>	
+				    </td> 
+					</tr>	
+				    <th>
+				      Logo:
+				    </th>
+				    <td>
+				    	<div id="logo_field" style="display:none">
+				    		<%= file_field_tag "new_logo", :size=>"45", :accept => 'image/png,image/gif,image/jpeg', :id => 'new_logo' %>
+				    	</div>
+							<div id="logo_preview">	
+					      <span style="float:right; font-size:10px;">
+					        <%=link_to_function("Change logo", "$('logo_preview').hide();$('logo_field').show();")%>
+					      </span>
+					      <%=image_tag(@app.logo_url, :style => "width:75px;height:75px;")%>
+							</div>
+				    </td> 
+					</tr>	
+          <tr>
+              <th>
+                  Privacy Policy URL:
+              </th>
+              <td>
+                	<%= f.text_field :privacy_policy_url, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Terms of Service URL:
+              </th>
+              <td>
+                	<%= f.text_field :terms_of_service_url, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Canvas Name:
+              </th>
+              <td>
+                	<%= f.text_field :canvas_name, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Canvas URL:
+              </th>
+              <td>
+                	<%= f.text_field :canvas_url, :style=>"width:99%;" %>
+              </td>
+          </tr>
+          <tr>
+              <th>
+                  Canvas Auto Sign-in:
+              </th>
+              <td>
+                	<%= f.check_box :auto_signin %>
+              </td>
+          </tr>
+        </table>
+        <% end %>
+    </div>
+    <div class="ft">
+        <%= render :partial => "/tr8n/admin/common/lightbox_buttons" %>
+    </div>
+</div>

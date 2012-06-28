@@ -1,0 +1,14 @@
+<%= render :partial => "header" %>
+
+<style>
+  table.documentation_table img { max-width:150px; }
+  td  { padding:10px; }
+</style>
+
+<div class="documentation_section_title">
+  <%= tr("Branding Guidelines") %>
+</div>
+
+<%=render :partial => "/company/api_terms_of_use", :locals => {:title => false} %>
+
+<%= render :partial => "footer" %>

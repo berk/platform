@@ -1,0 +1,17 @@
+<script>
+function assignCategories(app_id) {
+  platformLightbox.show('/platform/admin/categories/category_assigner?app_id=' + app_id, {"width":"800", "height":"500"});
+}
+
+function assignCategory(app_id, category_id, checked) {
+  Platform.Utils.update("app_categories_" + app_id, "/platform/admin/categories/assign_category", {
+      parameters: {app_id:app_id, category_id: category_id, checked: checked}
+  });
+}
+
+function makeFeatured(app_id, app_category_id, checked) {
+  Platform.Utils.update("app_categories_" + app_id, "/platform/admin/categories/update_featured_flag", {
+      parameters: {app_id:app_id, app_category_id: app_category_id, checked: checked}
+  });
+}
+</script>

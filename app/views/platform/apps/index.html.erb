@@ -1,0 +1,148 @@
+<%= render :partial => "/platform/common/header" %>
+
+<style>
+  .apps_header {
+    padding-bottom:5px;
+    margin-bottom:5px;
+    font-size:14px;
+    border-bottom: 1px solid #ccc;
+    font-weight:bold;
+  }
+  
+  .apps_section {
+    text-align:left; 
+    border:1px dotted #ccc; 
+    padding:10px;
+    margin-bottom:10px;
+  }
+	
+  .apps_body {
+    padding:0px;
+    font-size:14px;
+    color:#666;
+    padding-bottom:10px;
+  }
+	
+  .cat_item {
+    padding-left:10px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+    border-bottom: 1px dotted #ccc;
+  }
+  
+  .cat_item_selected {
+    background:#406790;
+    color:white;
+  }
+
+  .cat_item_selected a {
+    color:white;
+  }	
+	
+  .sub_cat_item {
+    padding-left:30px;
+    padding-top:5px;
+    padding-bottom:5px;
+    font-size:12px;
+		background: #F4F4F4;
+  }
+  
+  .sub_cat_item_selected {
+    background:#406790;
+    color:white;
+  }
+
+  .sub_cat_item_selected a {
+    color:white;
+  } 
+	
+	td {
+		vertical-align:top;
+	}
+</style>
+
+<div class="module page_title lengthy">
+  <div class="inner">
+    <div class="hd">
+      <span style="float:right; padding-top:10px; font-size:12px;">
+			   <%=tr("Have an idea for an app?")%>
+			   <% if platform_current_user_is_developer? %>
+				  <%=link_to(tr('Create a new application!', 'Client application action label'), {:controller => "/platform/developer/apps", :action=>:index}) %>
+				 <% else %>
+           <%=link_to(tr('Become a developer!', 'Client application action label'), {:controller => "/platform/developer/apps", :action=>:index}) %>
+				 <% end %>
+      </span>
+    	
+      <h1><%= tr('Application Directory', 'Client application section title') %></h1>
+    </div>
+  </div>
+</div>
+
+<div class="module page_title lengthy">
+  <div class="inner">
+		<table style="width:100%">
+			<tr>
+				<td style="width:220px;">
+					<% form_tag({:action => :index}, :method => :get) do %>
+					 <%=text_field_tag(:search, params[:search], :style => "width:195px", :label => "Search Apps")%>
+					<% end %>
+					<div style="border: 1px dotted #ccc; padding-top:10px; margin-top:10px; margin-bottom:15px; background: #f9f8f7; vertical-align:top; width:200px;">
+	          <% @categories.each do |cat| %>
+	            <% if cat == @category %>
+	                <div class="cat_item cat_item_selected">
+	            <% else %>
+	                <div class="cat_item">    
+	            <% end %>
+	              <%=link_to(cat.name, {:cat_id=>cat.id}) %>
+	            </div>
+							<% if @category and (cat == @category or cat.children.include?(@category)) %>
+								<% cat.children.each do |sub_cat| %>
+		              <% if sub_cat == @category %>
+		                  <div class="sub_cat_item sub_cat_item_selected">
+		              <% else %>
+		                  <div class="sub_cat_item">    
+		              <% end %>
+		                <%=link_to(sub_cat.name, {:cat_id=>sub_cat.id}) %>
+		              </div>
+								<% end %>
+              <% end %>
+	          <% end %>						
+					</div>
+				</td>
+				<td>
+					  <% if @apps.empty? and @featured_apps.empty? and @search_apps.empty? %>
+						  <div style="padding:10px;text-align:center;font-size:14px;">
+						  	<%=tr("There are no applications in this category.")%>
+						  </div>
+						<% end %>
+
+            <% if Platform::Config.featured_apps_enabled?%>
+	            <div id="featured_apps">
+	              <%= render(:partial => 'featured_apps_module', :locals => {:apps => @featured_apps, :per_row => Platform::Config.featured_apps_per_row})%>
+							</div>
+						<% end %>	
+						
+            <div id="suggested_apps">
+  						<%= render(:partial => 'apps_module', :locals => {:apps => @apps, :per_row => Platform::Config.suggested_apps_per_row})%>
+						</div>	
+						
+            <div id="searched_apps">
+              <%= render(:partial => 'search_apps_module', :locals => {:apps => @search_apps})%>
+						</div>	
+				</td>
+			</tr>
+		</table>
+  </div>
+</div>	
+
+
+<script>
+	function goPage(module, page) {
+		if (page == "") return;
+		Platform.Utils.update(module, "/platform/apps/paginate_module", {
+			 parameters: {module:module, page:page, search:"<%=params[:search]%>", cat_id:"<%=@category ? @category.id : ''%>"}
+		});
+	}
+</script>
+<%= render :partial => "/platform/common/footer" %>

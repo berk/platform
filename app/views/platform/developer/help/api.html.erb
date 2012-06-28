@@ -1,0 +1,120 @@
+<%= render :partial => "header" %>
+
+<div class="documentation_section_title">
+  <%= @api[:title] || @api[:path] %>
+</div>
+
+<div class="documentation_section">
+  <p>
+	 <%= tr(@api[:description], "API description") %>
+	</p>
+	
+	<% if @api[:sample] %>
+		<h2><%=tr("Usage")%></h2>
+		<p>
+			<% if @api[:method] == 'POST' %>
+			 <p><%=tr("Requires POST.")%></p>
+			<% end %>
+			
+			<%= link_to(@api[:sample], @api[:sample]) %>
+		</p>
+  <% end %>
+	
+	<% if @api[:params] %>
+	  <% 
+      api_params = @api[:params]
+      unless @api[:params].is_a?(Hash) 
+        api_params = {}
+        root = @api[:parent]
+        selected_keys = []
+
+        if @api[:params].is_a?(String)
+	        if @api[:params] == "*"
+	          selected_keys = root[:fields].keys
+	        else 
+	          selected_keys = root[:param_groups][@api[:params]]
+	        end
+        elsif @api[:params].is_a?(Array)
+          selected_keys = @api[:params]
+        end
+
+        if selected_keys.is_a?(Array)
+	        selected_keys.each do |field_key|
+	          api_params[field_key] = root[:fields][field_key].clone
+	          api_params[field_key][:required] = false
+	        end
+        else
+          api_params = selected_keys
+        end
+      end
+    %> 
+	  <h2><%=tr("Parameters") %></h2>
+		<p>
+		<table class="documentation_table">
+			 <tr>
+			 	<th style="width:150px;"><%=tr("Name") %></th>
+        <th style="width:150px;"><%=tr("Type") %></th>
+				<th><%=tr("Description") %></th>
+				<th><%=tr("Required") %></th>
+			 </tr>
+		<% api_params.keys.sort.each do |key| %>
+		   <tr>
+		   	 <td><%=key%></td>
+         <td><%=documentation_field_type_tag(api_params[key])%></td>
+	       <td><%=tr(api_params[key][:description], "API field description")%></td>
+	       <td><%=api_params[key][:required]%></td>
+		   </tr>
+	  <% end %>
+		</table>
+		</p>
+	<% end %>
+	
+  <% if @api[:fields] %>
+    <% 
+      api_fields = @api[:fields]
+      unless @api[:fields].is_a?(Hash) 
+        api_fields = {}
+        root = @api[:parent]
+        selected_keys = []
+
+        if @api[:fields].is_a?(String)
+          if @api[:fields] == "*"
+            selected_keys = root[:fields].keys
+          else 
+            selected_keys = root[:field_groups][@api[:fields]]
+          end
+        elsif @api[:fields].is_a?(Array)
+          selected_keys = @api[:fields]
+        end
+
+        if selected_keys.is_a?(Array)
+	        selected_keys.each do |field_key|
+	          api_fields[field_key] = root[:fields][field_key].clone
+	        end
+        else
+          api_fields = selected_keys
+        end
+      end
+    %> 
+    <h2><%=tr("Returned Fields") %></h2>
+    <p>
+    <table class="documentation_table">
+       <tr>
+        <th style="width:150px;"><%=tr("Name") %></th>
+        <th style="width:150px;"><%=tr("Type") %></th>
+        <th><%=tr("Description") %></th>
+       </tr>
+    <% api_fields.keys.sort.each do |key| %>
+       <tr>
+         <td><%=key%> <%=platform_documentation_field_decorators_tag(api_fields[key]) %></td>
+         <td><%=documentation_field_type_tag(api_fields[key])%></td>
+         <td><%=tr(api_fields[key][:description], "API field description")%></td>
+       </tr>
+    <% end %>
+    </table>
+    <div class="documentaiton_note" style="padding-top:10px;">Note: Blank fields will not be returned to save bandwidth.</div>
+    </p>
+	<% end %>
+</div>
+
+<%= render :partial => "footer" %>

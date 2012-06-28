@@ -1,0 +1,30 @@
+  <div class="apps_header">
+    <% if @ratings.any? and params['sec'] != 'Reviews' %>
+    <span style="float:right; font-size:12px;">
+      <%=link_to("view all", :controller => "/platform/apps", :action => :view, :id => @app.id, :sec => 'Reviews')%>
+    </span>
+    <% end %>
+    
+    <%=tr("Reviews")%>
+  </div>
+
+  <div class="apps_section">
+     <%= render(:partial => "/platform/ratings/new", :locals => {:app => @app} )%>   
+     
+     <div style="margin-top:10px; border-top: 1px solid #ccc;">
+       <% if @ratings.any? %>
+          <table>
+             <% @ratings.each do |rating| %>
+             <tr>
+               <%= render(:partial => "/platform/ratings/rating", :locals => {:rating => rating} )%>   
+             </tr>  
+             <% end %>
+          </table>
+       <% else %>
+         <div style="padding:10px; text-align:center; color: #888;">  
+           <%= tr("This application has not been reviewed yet. Be the first one to review this app!") %>
+         </div>                       
+       <% end %>
+     </div>
+       
+  </div>  

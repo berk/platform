@@ -1,0 +1,292 @@
+<%= render :partial => "header" %>
+<div class="documentation_section_title">
+    <%= tr("Mobile Application Authorization Flow") %>
+</div>
+<div class="documentation_section">
+    <p>
+        <%=tr("Mobile authentication/authorization flow is very similar to the client-side flow, but it has a slightly different mechanism for handling the response data.") %>
+        <%=tr("This document provides details no how to integrate Geni into an iPhone application.") %>
+        <%=tr("Android and other mobile devices will work in a similar fashion.") %>
+    </p>
+    <h2><%=tr("Authentication & Authorization") %></h2>
+    <p>
+        <%=tr("To enter the authentication/authorization mobile flow, launch a browser from your mobile application and pass the following parameters to the authorization url:") %>
+    </p>
+    <h3><%=tr("Oauth URL") %></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize
+    </div>
+    <h3><%=tr("Parameters") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Required") %>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    client_id
+                </td>
+                <td>
+                    <%=tr("Application key generated during the app registration.") %>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    redirect_uri
+                </td>
+                <td>
+                    <%=tr("URL that the user's browser will be redirected back to once app authorization is completed.")%>  
+										<%=tr("You can specify a custom URL that will be recognized by your mobile device, which launch your application.")%> 
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    response_type
+                </td>
+                <td>
+                    <%=tr("For the mobile flow the response type should be set to \"token\".")%> 
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    display
+                </td>
+                <td>
+										<%=tr("For the mobile flow the display parameter should be set to \"mobile\".")%>
+                </td>
+                <td>
+                    true
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    scope
+                </td>
+                <td>
+                    <%=tr("A comma delimited list of permissions that the application needs.") %>
+                    <%=tr("By default the scope is set to a full data access.") %>
+                    <%=tr("This is subject to change in the upcoming releases.") %>
+                </td>
+                <td>
+                    false
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize?client_id=YOUR_APP_ID&redirect_uri=YOUR_APP_URL&response_type=token&display=mobile
+    </div>
+    <p>
+    	<%=tr("By setting the display parameter to \"mobile\", you ensure that the login and the authorization screens will use a mobile layout.")%>
+      <%=tr("The client_id parameter can be either your application key or your application id.")%>
+			<%=tr("Application ids are shorter and can be used as registered urls of your mobile application.")%>
+    </p>
+    <h3><%=tr("Configuring iOS Callback")%></h3>
+    <p>
+        <%=tr("To register a callback to your iOS application, you must open your application's properties file and configure a custom url:")%>
+    </p>
+    <pre class="code_snippet">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+&lt;plist version="1.0">
+&lt;dict>
+	...
+  &lt;key>CFBundleURLTypes&lt;/key>
+  &lt;array>
+    &lt;dict>
+      &lt;key>CFBundleTypeRole&lt;/key>
+      &lt;string>Editor&lt;/string>
+      &lt;key>CFBundleURLName&lt;/key>
+      &lt;string>&lt;/string>
+      &lt;key>CFBundleURLSchemes&lt;/key>
+      &lt;array>
+        &lt;string>YOUR_APP_ID&lt;/string>
+      &lt;/array>
+    &lt;/dict>
+  &lt;/array>
+	...
+&lt;/dict>
+&lt;/plist>
+</pre>
+    <p>
+        <%=tr("You now can provide a redirect URL that will identify your application.") %> <%=tr("See the following example:")%>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <pre class="code_snippet">
+NSString *geniOauthBaseURL = @"https://<%=Platform::Config.site_base_url %>/platform/oauth/authorize";
+
+NSString *yourAppURL = [NSString stringWithFormat: @"%@/authorize", YOUR_APP_ID];
+
+NSString *geniOauthURL = [NSString stringWithFormat:@"%@?client_id=%@&redirect_uri=%@&response_type=token&display=mobile", 
+                                                    geniOauthBaseURL, YOUR_APP_ID, yourAppURL];
+                         
+[[UIApplication sharedApplication] openURL:[NSURL URLWithString:geniOauthURL]];
+</pre>
+    <p>
+        <%=tr("If the user is already logged in, we validate the login cookie that we have stored on the user's browser and authenticate the user.") %><%=tr("If the user is not logged in, they are prompted to enter their credentials:") %>
+    </p>
+    <center>
+        <%=image_tag("/platform/images/help/login_iphone.png", :style=>"width:300px;") %>
+    </center>
+    <p>
+        <%=tr("Once we have successfully authenticated the user, we will prompt the user to authorize your application:") %>
+    </p>
+    <center>
+        <%=image_tag("/platform/images/help/auth_iphone.png", :style=>"width:300px;") %>
+    </center>
+    <h3><%=tr("Handling iOS Application Callback")%></h3>
+    <p>
+       <%=tr("To handle iOS application callback, add the following code to your iOS application delegate:")%> 
+    </p>
+    <pre class="code_snippet">
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *) url {
+	NSLog(@"Did come back from other application");
+	
+	// If the URL's structure doesn't match the structure used for Geni authorization, abort.
+	if (![[url absoluteString] hasPrefix:[NSString stringWithFormat:@"%@://authorize", YOUR_APP_ID]]) {
+	    return NO;
+	}
+	
+	NSString *query = [url fragment];
+	if (!query) {
+	    query = [url query];
+	}
+	
+	// parse parameters
+	NSArray *pairs = [query componentsSeparatedByString:@"&"];
+	NSMutableDictionary *params = [[[NSMutableDictionary alloc] init] autorelease];
+	for (NSString *pair in pairs) {
+	  NSArray *kv = [pair componentsSeparatedByString:@"="];
+	  NSString *val = [[kv objectAtIndex:1]
+	       stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	      
+	  [params setObject:val forKey:[kv objectAtIndex:0]];
+	}
+	
+	// get access token
+	NSString *accessToken = [params valueForKey:@"access_token"];
+	
+	// If the URL doesn't contain the access token, an error has occurred.
+	if (!accessToken) {  // handle error
+      
+	  return YES;
+	}
+	
+	// store access token
+	
+	return YES;
+}
+</pre>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    status
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("If user cancels the authorization flow, the status will be set to \"unauthorized\".") %>
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    message
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Error message") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        YOUR_APP_ID://authorize?status=unauthorized&message=user+canceled
+    </div>
+    <p>
+        <%=tr("If the user presses Allow, your app is authorized.") %>
+        <%=tr("The user will be redirected (via HTTP 302) to the special URL with an authorization code:") %>
+    </p>
+    <h3><%=tr("Returned Fields") %></h3>
+    <p>
+        <table class="documentation_table">
+            <tr>
+                <th style="width:150px;">
+                    <%=tr("Name") %>
+                </th>
+                <th style="width:150px;">
+                    <%=tr("Type") %>
+                </th>
+                <th>
+                    <%=tr("Description") %>
+                </th>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    access_token
+                </td>
+                <td style="widtd:150px;">
+                    String
+                </td>
+                <td>
+                    <%=tr("Access token to be used with every API request")%> 
+                </td>
+            </tr>
+            <tr>
+                <td style="widtd:150px;">
+                    expires_in
+                </td>
+                <td style="widtd:150px;">
+                    Number
+                </td>
+                <td>
+                    <%=tr("Seconds until the token will expire") %>
+                </td>
+            </tr>
+        </table>
+    </p>
+    <h3><%=tr("Example")%></h3>
+    <div class="code_snippet">
+        YOUR_APP_ID://authorize?access_token=ACCESS_TOKEN_GENERATED_BY_SERVER&expires_in=SECONDS_UNTIL_IT_IS_EXPIRED
+    </div>
+    <h3><%=tr("Geni iOS Client SDK")%></h3>
+    <p>
+    	<%=tr("{site_title} comes with a [link: full featured iOS library] that allows you to build dynamic iOS applications using the site data.", "", :site_title => Platform::Config.site_title, :link => ["/platform/developer/help/ios_sdk"])%>
+      <%=tr("It supports authentication, autherization and API calls to get the site data.")%>
+    </p>
+</div>
+<%= render :partial => "footer" %>

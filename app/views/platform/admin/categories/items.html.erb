@@ -1,0 +1,153 @@
+<%= stylesheet_link_tag("/wf/stylesheets/will_filter.css") -%>
+
+<% if @children %>
+	<div style="border-bottom:1px dotted #ccc; font-size: 12px;padding:5px; background:#eee;">
+	 <%=platform_toggler_tag("sub_categories_container")%> Sub Categories (<%=@children.size%>)
+	</div>
+  <div id="sub_categories_container">
+		<% if @children.size == 0 %>
+		  <div style="padding:10px;">None found</div>
+		<% else %>
+
+			<table class='wf_results_table'>
+			  <thead>
+			    <tr>
+			        <th class="" style="">
+			          <div class="table_head_container">Name</div>
+			        </th>
+              <th class="" style="">
+                <div class="table_head_container">Keyword</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Position</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Count</div>
+              </th>
+              <th class="" style="width:100px;">
+                <div class="table_head_container">Actions</div>
+              </th>
+			    </tr>
+			  </thead>
+				<tbody>  
+				  <%
+				    @children.each_with_index do |child, index|
+				        child_name = child.name.gsub("'", "\\'")
+				  %>
+				  <tr class='data_row <%=(index % 2 == 0) ? "wf_row_even" : "wf_row_odd"%>'>
+				    <td style="padding:3px;"><%=link_to_function(child_name, "javascript:openSubCategory(\"#{child.id}\", \"#{child_name}\");")%></td>
+				    <td style="padding:3px;"><%=child.keyword%></td>
+            <td style="padding:3px;"><%=child.position%></td>
+				    <td style="padding:3px;"><%=child.children.size%></td>
+				    <td style="padding:3px;text-align:right">
+				     <%=link_to_function("Edit", "editCategory('#{child.id}', '#{@parent.id}');")%>
+				    | <%=link_to_function("Delete", "deleteCategory('#{child.id}');")%>
+				    &nbsp;
+				    </td>
+				  </tr>
+				  <%  end %>
+        </tbody>				
+		  </table>
+		<%  end %>
+	</div>	
+<%  end %>
+
+<% if @featured_apps %>
+  <div style="border-bottom:1px dotted #ccc; font-size: 12px;padding:5px; background:#eee; margin-top:10px;">
+   <%=platform_toggler_tag("featured_items_container")%> Featured Applications (<%=@featured_apps.size%>)
+  </div>
+  
+  <div id="featured_items_container">
+    <% if @featured_apps.size == 0 %>
+      <div style="padding:10px;">None found</div>
+    <% else %>
+
+      <table class='wf_results_table'>
+        <thead>
+          <tr>
+              <th class="" style="width:20px;">
+                <div class="table_head_container">Icon</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Name</div>
+              </th>
+              <th class="" style="width:20px;">
+                <div class="table_head_container">Position</div>
+              </th>
+              <th class="" style="width:100px;">
+                <div class="table_head_container">Actions</div>
+              </th>
+          </tr>
+        </thead>
+        <tbody>  
+
+      <%
+        @featured_apps.each_with_index do |item, index|
+          next unless item.application
+      %>
+          <tr class='data_row <%=(index % 2 == 0) ? "wf_row_even" : "wf_row_odd"%>'>
+            <td style="padding:3px;"><%=link_to(image_tag(item.application.icon_url), :controller => "/platform/admin/apps", :action => :view, :app_id => item.application.id)%></td>
+            <td style="padding:3px;"><%=link_to(item.application.name, :controller => "/platform/admin/apps", :action => :view, :app_id => item.application.id)%></td>
+            <td style="padding:3px;"><%=item.position%></td>
+            <td style="padding:3px;text-align:right">
+               <%=link_to_function("Edit", "editApplicationCategory('#{item.category.id}', '#{item.application.id}');")%>
+                | <%=link_to_function("Delete", "deleteApplicationCategory('#{item.category.id}', '#{item.application.id}');")%>
+             &nbsp;
+            </td>
+            
+          </tr>
+      <%  end %>
+      </table>
+    <%  end %>
+  </div>
+<%  end %>
+
+<% if @apps %>
+	<div style="border-bottom:1px dotted #ccc; font-size: 12px;padding:5px; background:#eee; margin-top:10px;">
+	 <%=platform_toggler_tag("items_container")%> Applications (<%=@apps.size%>)
+	</div>
+	
+	<div id="items_container">
+		<% if @apps.size == 0 %>
+		  <div style="padding:10px;">None found</div>
+		<% else %>
+
+      <table class='wf_results_table'>
+        <thead>
+          <tr>
+              <th class="" style="width:20px;">
+                <div class="table_head_container">Icon</div>
+              </th>
+              <th class="" style="">
+                <div class="table_head_container">Name</div>
+              </th>
+              <th class="" style="width:20px;">
+                <div class="table_head_container">Position</div>
+              </th>
+              <th class="" style="width:100px;">
+                <div class="table_head_container">Actions</div>
+              </th>
+          </tr>
+        </thead>
+        <tbody>  
+
+		  <%
+		    @apps.each_with_index do |item, index|
+		      next unless item.application
+		  %>
+          <tr class='data_row <%=(index % 2 == 0) ? "wf_row_even" : "wf_row_odd"%>'>
+            <td style="padding:3px;"><%=link_to(image_tag(item.application.icon_url), :controller => "/platform/admin/apps", :action => :view, :app_id => item.application.id)%></td>
+            <td style="padding:3px;"><%=link_to(item.application.name, :controller => "/platform/admin/apps", :action => :view, :app_id => item.application.id)%></td>
+            <td style="padding:3px;"><%=item.position%></td>
+            <td style="padding:3px;text-align:right">
+               <%=link_to_function("Edit", "editApplicationCategory('#{item.category.id}', '#{item.application.id}');")%>
+                | <%=link_to_function("Delete", "deleteApplicationCategory('#{item.category.id}', '#{item.application.id}');")%>
+             &nbsp;
+            </td>
+						
+  			  </tr>
+		  <%  end %>
+		  </table>
+		<%  end %>
+  </div>
+<%  end %>

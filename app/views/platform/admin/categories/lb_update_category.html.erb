@@ -1,0 +1,64 @@
+<div style="font-weight:bold; border-bottom:1px solid #ccc;">
+	Category Details
+</div>
+<div style="margin-top:10px;">
+    <% form_for(:category, @category, :url =>  {:action => :update_category}, :html => {:method => 'post', :id => 'platform_form'}) do |form| %>
+    <div class="content">
+        <%= form.hidden_field :parent_id %>
+        <%= form.hidden_field :id %>
+        <table class="admin_table">
+            <tr>
+                <th width="150px">
+                    Parent Category:
+                </th>
+                <td>
+                    <%=@parent.name %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Name:
+                </th>
+                <td>
+                    <%= form.text_field :name, :size=>"50" %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Keyword:
+                </th>
+                <td>
+                    <%= form.text_field :keyword, :size=>"50" %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Position:
+                </th>
+                <td>
+                    <%= form.text_field :position, :size=>"50" %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Enable On:
+                </th>
+                <td>
+                    <%= form.text_field :enable_on, :size=>"50" %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Disable On:
+                </th>
+                <td>
+                    <%= form.text_field :disable_on, :size=>"50" %>
+                </td>
+            </tr>
+        </table>
+    </div>
+		
+		<%= render('/platform/admin/common/lightbox_buttons') %>
+		
+  <% end %>
+</div>

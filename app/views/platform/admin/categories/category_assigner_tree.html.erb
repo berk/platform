@@ -1,0 +1,81 @@
+<html>
+    <head>
+    	  <%=javascript_include_tag("/platform/javascripts/ua.js")%>
+        <%=javascript_include_tag("/platform/javascripts/ftiens4.js")%>
+        <style>
+            .tree_root {
+                font-size: 12pt;
+                font-family: verdana, helvetica;
+                text-decoration: none;
+                color: black;
+            }
+            
+            .tree_item {
+                font-size: 10pt;
+                font-family: verdana, helvetica;
+                text-decoration: none;
+                color: black;
+            }
+        </style>
+        <script>
+					function $(elmId) {
+						return document.getElementById(elmId);
+					}
+					
+					function hide(elmId) {
+						$(elmId).style.display = "none";
+					}
+					function show(elmId) {
+						$(elmId).style.display = "block";
+					}
+					
+					function setToLoading() {
+						hide("assignerTree");
+						show("loadingTree");
+					}
+					
+	        function assignCategory(chk) {
+	          category_id = chk.id.split("_")[1];
+						top.assignCategory('<%=@app.id%>', category_id, chk.checked);
+	        }
+	            	
+	        function checkCategory(id, flag) {
+	        	if ($(id)) {
+	        			$(id).checked = flag;
+	       		}	
+	        }
+	        
+					function checkAssignedCategories() {
+	        	<% 
+	            @app.categories.each do |category|
+							     next unless category
+	           %>
+		            checkCategory("check_<%=category.id%>", true);
+	           <% end %>
+	        }
+	            	
+	      	USETEXTLINKS = 0  
+	      	STARTALLOPEN = 0
+	      	HIGHLIGHT = 0
+	      	PRESERVESTATE = 1
+	      	USEICONS = 0
+	      	BUILDALL = 1
+	            	
+	       	<%= generate_categories_javascript(@root, true) %>
+        </script>
+    </head>
+    <body topmargin=0>
+	    <A style="font-size:7pt;text-decoration:none;color:silver;visibility:hidden;" href="http://www.treemenu.net/" target=_blank>Javascript Tree Menu</A>
+			<div id="loadingTree" style="display:none">
+				<center><br><br><br><img alt="Spinner" src="/images/spinner.gif" /></center>
+			</div>	
+			<div id="assignerTree" style=""> 
+		        <FORM name="ft" method="">
+		            <SCRIPT>
+		                initializeDocument();
+		                checkAssignedCategories();
+		            </SCRIPT>
+		        </FORM>
+			</div>
+    </body>
+</html>

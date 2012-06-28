@@ -1,0 +1,5 @@
+<div style="text-align:center;padding-top:10px;">
+   <%=link_to_function("<span>#{trl("Save", "Platform lightbox save button")}</span>", "Platform.Effects.submit('platform_form');", :class => "platform_grey_button platform_pcb") %>
+	  <%=trl('or')%>  
+   <%=link_to_function(trl("close", "Platform lightbox close button"), "platformLightbox.hide()", :class => "platform_cancel_link") %>
+</div>

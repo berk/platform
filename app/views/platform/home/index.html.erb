@@ -1,0 +1,291 @@
+<style>
+/*
+Theme Name: Geni Developer
+Theme URI: http://dev.geni.com
+Description: Custom WP Theme for Geni API documentation
+Version: 1.0
+Author: Geni.com
+Author URI: http://geni.com
+*/
+
+/* Layout */
+
+  body          { background: #fff; color: #333; font-family: arial, helvetica, sans-serif; font-size: 14px; margin: 0; padding: 0; }
+  #content      { width: 960px; margin: 0 auto; overflow: hidden; zoom: 1; }
+  #main-content { width: 700px; float: right; }
+  #sidebar      { width: 200px; float : left; }
+  
+  /* Header */
+    #header       { background: #f6f7fa; border-top: 5px solid #3d76bb; border-bottom: 1px solid #e2e6ea; position: relative; font-size: 12px; }
+    #header-wrap  { margin: 0 auto; padding: 10px 20px 2px 20px; width: 920px; }
+    #header h1    { font-size: 18px; margin: 0; padding: 0; }
+  /* /Header */
+  
+  /* Footer */
+    #footer { border-top: 1px solid #e2e6ea; font-size: 12px; padding: 10px; }
+    #footer-wrap  { width: 960px; margin: 0 auto; }
+  /* /Footer */
+  
+  /* Sidebar */
+    #sidebar  { margin-top: 20px; }
+    #sidebar ul { list-style-type: none; margin: 0; padding: 0; }
+    #sidebar>ul { border-bottom: 1px solid #e5e5e5; }
+    #sidebar>ul>li { border-top: 1px solid #e5e5e5; }
+    #sidebar h2.widgettitle { font-size: 14px; height: 18px; line-height: 18px; margin: 0; padding: 6px 6px 6px 10px; }
+    #sidebar li li  { font-size: 13px; height: 26px; line-height: 18px; margin: 0; padding: 0 0 0 25px; }
+  /* /Sidebar */
+  
+  /* Content */
+    h1.page-title { border-bottom: 1px solid #e5e5e5; padding: 10px; margin: 0 0 10px 0; }
+    ul.meta-list  { margin: 0; padding: 0; list-style-type: none; color: #666;}
+    .single-apps #main-content .apps .img { width: 160px; word-wrap: break-word; }
+  /* /Content */
+/* /Layout */
+
+/* Elements */
+
+  a   { color: #1166bb; text-decoration: none; }
+
+/* /Elements */
+
+/* Fancy Home Page */
+  /* Banner and animation */
+    #banner       { background: #f6f8ee; border: 1px solid #c2c2c2; color: #666; height: 325px; margin: 20px auto; overflow: hidden; position: relative; width: 938px; -webkit-border-radius: 11px; -moz-border-radius: 11px; border-radius: 11px; }
+    #banner-text  { margin: 30px 20px 0 500px; }
+    #banner h2    { color: #333; font-size: 30px; font-weight: normal; margin: 0; padding: 0; }
+    .node         { background: #FFFFFF; background: -moz-linear-gradient(top, #FFFFFF 0%, #EDEDED 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFFFFF), color-stop(100%,#EDEDED)); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFFFFF', endColorstr='#EDEDED',GradientType=0 ); border: 1px solid #c6c6c6; border-top-color: #dedede; border-left-color: #dedede; -moz-box-shadow: inset 0 0 3px #ffffff, 1px 1px 2px rgba(0,0,0,0.1); -webkit-box-shadow: inset 0 0 3px #ffffff, 1px 1px 2px rgba(0,0,0,0.1); box-shadow: inset 0 0 3px #ffffff, 1px 1px 2px rgba(0,0,0,0.1); cursor: pointer; height: 38px; position: absolute; width: 98px; z-index: 200; -moz-transition: all 0.4s ease-in-out; -o-transition: all 0.4s ease-in-out; -webkit-transition: all 0.4s ease-in-out; transition: all 0.4s ease-in-out; }
+    .node:hover   { -webkit-transform: scale(1.5); -moz-transform: scale(1.5); transform: scale(1.5); }
+    .node.m       { background: #D6F2F7; background: -moz-linear-gradient(top, #D6F2F7 0%, #A9D0E6 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D6F2F7), color-stop(100%,#A9D0E6)); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D6F2F7', endColorstr='#A9D0E6',GradientType=0 ); border-color: #62a7c4; border-top-color: #a9d0e6; border-left-color: #a9d0e6; }
+    .node.f       { background: #F6EAF6; background: -moz-linear-gradient(top, #F6EAF6 0%, #F8CBF6 100%); background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F6EAF6), color-stop(100%,#F8CBF6)); filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F6EAF6', endColorstr='#F8CBF6',GradientType=0 ); border-color: #ee89d0; border-top-color: #f8cbf6; border-left-color: #f8cbf6; }
+    #f            { top: 220px; left: 200px; }
+    #fw           { top: 220px; left: 50px; }
+    #fd           { top: 300px; left: 125px; }
+    #fb           { top: 220px; left: 350px; }
+    #ff           { top: 140px; left: 125px; }
+    #ffb          { top: 140px; left: -25px; }
+    #fm           { top: 140px; left: 275px; }
+    #ffm          { top: 60px; left: 200px; }
+    #ffmf         { top: -20px; left: 125px; }
+    #ffmm         { top: -20px; left: 275px; }
+    #fff          { top: 60px; left: 50px; }
+    .single-v     { position: absolute; border-left: 1px solid #ccc; height: 20px; width: 0; z-index: 100; }
+    .single-h     { position: absolute; border-top: 1px solid #ccc; width: 50px; height: 0; z-index: 100; }
+    .parent       { position: absolute; height: 20px; width: 150px; border: 1px solid #ccc; border-top: 0 none; z-index: 100; }
+    .sibling-r    { border-top: 1px solid #ccc; border-right: 1px solid #ccc; z-index: 100; position: absolute; width: 75px; height: 20px; }
+    .sibling-l    { border-top: 1px solid #ccc; border-left: 1px solid #ccc; z-index: 100; position: absolute; width: 75px; height: 20px; }
+    #f-line       { top: 200px; left: 250px; }
+    #ff-line      { top: 120px; left: 175px; }
+    #fp-line      { top: 180px; left: 175px; }
+    #ffp-line     { top: 100px; left: 100px; }
+    #fb-line      { top: 200px; left: 325px; }
+    #ffb-line     { left: 25px; top: 120px; }
+    #fwp-line     { top: 260px; left: 100px; }
+    #fd-line      { top: 280px; left: 175px; }
+    #ffm-line     { top: 40px; left: 250px; }
+    #ffmp-line    { top: 20px; left: 175px; }
+    #banner li  { margin-bottom: 1em; }
+  /* /Banner and animation */
+	/* /Fancy Home Page */
+  
+	/* Shared with geni.com */
+  .txt_r  { text-align: right; }
+  .txt_c  { text-align: center; }
+  .module h3  { margin: 0 0 4px 0; padding: 0; }
+  .flt_r  { float: right; }
+  .flt_l  { float: left; }
+  .strong { font-weight: bold; }
+
+  .line, .last_unit           {overflow:hidden;_overflow:visible;_zoom:1; }
+  .unit                       {float:left;_zoom:1;}
+  .size_1of3                  {width:33.33333%;}
+  .size_1of4                  {width:25%;}
+  .mod,.module                {margin:10px;}
+  
+  /* Module Skins */
+    .outset .inner              {border:1px solid #D7D7D7;border-color:#e9e9e9 #cdcdcd #a4a4a4;border-width:1px 1px 2px;padding:10px;}
+    .inset .inner               {border:1px solid #e1e5e8;border-color:#b1b3b7 #e1e5e8 #e1e5e8;border-width:2px 1px 1px;padding:10px;}
+    .simple .inner              {border:solid 1px #ccc;padding:10px;}
+    .simple.light_yellow .inner {border-color:DarkKhaki;}
+    .outline                    {border:solid 1px #ccc;padding:4px;background:#fbfbfb}
+    .outline .inner             {border:solid 1px #ddd;background:#fff;padding:10px;}
+    .basic .inner               {padding:10px;}
+    .basic_hd                   {border-bottom:solid 1px #ccc;}
+    .basic_hd h2                {margin:0 0 4px}
+    .basic_bd                   {padding:5px 0 0 0}
+    .lengthy                    {margin-bottom:20px !important;}
+    .xlengthy                   {margin-bottom:40px !important;}
+    .xxlengthy                  {margin-bottom:140px !important;}
+    .media                      {overflow:hidden;zoom:1;}
+    .media .img                 {float:left;margin-right:10px;}
+    .media .bd                  {display:table-cell}
+    .media .img img             {display:block;}
+    .media .img_ext             {float:right; margin-left:10px;}
+    .media .img.icn,
+    .media .img_icn             {margin-right:5px;}
+    .media .img_txt             {position:absolute;color:#fff;text-transform:uppercase;width:50%;height:50%;top:50%;left:25%;}
+
+
+    /* Module Backgrounds */
+      .light_blue                {background-color:AliceBlue;}
+      .light_blue_gradient       {background: #F0F8FF;background: -moz-linear-gradient(top, #F0F8FF 0%, #feffff 100%);background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#F0F8FF), color-stop(100%,#feffff));filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F0F8FF', endColorstr='#feffff',GradientType=0 );}
+      .light_yellow              {background-color:LightYellow;}
+      .white                     {background:white;}
+      .success                   {background-color:#f0fff0}
+      .grey                      {background:#f5f5f5}
+      .lightgrey                 {background:#fbfbfb}
+    /* /Module Backgrounds */
+  
+    /* Module Headers */
+      .pagination_hd             {border-bottom:solid 1px #ddd;padding:5px 0}
+      .action_hd                 {background:#fbfbfb;border-bottom:solid 1px #eee;padding:10px}
+      .highlight_hd              {background:#feffef;border-bottom:solid 1px #ddd;padding:10px;}
+      .section_hd                {background-color:#ecf2f9;border-bottom:1px solid #cad4de;border-top:1px solid #cad4de;padding:5px 10px 0px;}
+    /* /Module Headers */
+  
+    /* Module Bodies */
+      .message_bd                {padding:10px;background:#fbfbfb;border-bottom:solid 1px #eee}
+      .confirmation              {width:600px;margin:auto;}
+    /* /Module Bodies */
+  
+    /* Module Footers */
+      .action_ft                 {background:#fbfbfb;border-top:solid 1px #eee;padding:15px 20px;}
+      .pagination_ft             {border-top:solid 1px #ddd;padding:7px 0;margin-top:-1px;}
+      .module_ft                 {padding:7px 0;}
+      .basic_ft                  {border-top:1px solid #ccc;margin-top:7px;padding-top:7px;}
+    /* /Module Footers */
+  /* /Module Skins */
+  
+  /* Buttons */
+     button,
+     button::-moz-focus-inner    {border:0;padding:0;vertical-align:middle}
+    .button                      {-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;background-color: #222;border-bottom: 1px solid rgba(0, 0, 0, 0.25);color: white !important;cursor: pointer;display: inline-block;font-size: 13px;font-weight: bold;line-height: 1;overflow: visible;padding: 5px 15px 6px;position: ;text-decoration: none !important;width: auto;}
+    .super.button                {background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAeCAYAAADtlXTHAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAABYSURBVHjaZM27EcAgDANQSzZZgP0XpKLh20BM7mjS6J7kwrrWEuScgZQS2HsXjjHEdaqytfZ4kLXWU81lruAK9wqWUuBVvni3n+4Pc9nRnFOUZFQAcQswAI/sUZSGPd0tAAAAAElFTkSuQmCC) repeat-x 0 bottom;border:solid 1px #bbb; border: 1px solid rgba(0, 0, 0, 0.25);font-size: 12px;padding: 0px;}
+    .super.button                {line-height: 15px;padding:5px 10px;cursor:pointer !important}
+    .button img                  {vertical-align:text-top}
+    .ie7 .super.button           {padding:4px 9px 3px}
+    .super.small.button          {padding: 2px 5px 2px;font-size:11px;}
+    .super.large.button          {padding: 6px 18px 8px;font-size:15px;}
+    .super.xlarge.button         {padding: 10px 20px;font-size:17px;}
+    .full.button,
+    .full.large.button           {display:block;width:100%;margin-left:0;margin-right:0;padding-left:0;padding-right:0;text-align:center;}
+    .white.button                {background-color:#fff;color: #555 !important;background-position:0 4px !important;text-shadow:0 1px 0 #fff}
+    .white.button:hover          {background-position:0 8px !important;border-color:#ccc}
+    .grey.button                 {background-color:#fbfbfb;border-color:#bbb;color:#000 !important;background-image: -moz-linear-gradient(top, #ffffff, #ededed); background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #ffffff),color-stop(1, #ededed)); filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed');-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#ededed')"; /* IE8 */}
+    .grey.button:hover           {background:#fff;}
+    .green.button                {background-color: #91BD09;border-color:#6d8e06;text-shadow:0 -1px 0 #6d8e06}
+    .green.button:hover          {background-color:#aad033}
+    .blue.button                 {background-color:#5689c0;border-color:#406790;text-shadow:0 -1px 0 #406790}
+    .blue.button:hover           {background-color:#619ad8}
+    .teal.button                 {background-color:#55b0bf;border-color:#40838f;text-shadow:0 -1px 0 #40838f}
+    .teal.button:hover           {background-color:#60cddf}
+    .dark_teal.button            {background-color:#5d7e84;border-color:#3f5255;text-shadow:0 -1px 0 #3f5255}
+    .dark_teal.button:hover      {background-color:#608d95}
+  /* /Buttons */
+
+  /* Lists */
+    ul.horiz_list, li.horiz_list          { margin:0;padding:0;list-style-type:none;}
+    ol.simple_list li                     {list-style-type: decimal; margin-left:20px;padding:2px 0}
+    ul.simple_list li                     {list-style-type:disc; margin-left:20px;padding:2px 0}
+    .nav_list,
+    .action_list,
+    .horiz_list,
+    .right_horiz_list                     {overflow:hidden;text-align:left;}
+    .inline_list                          {overflow:hidden;display:-moz-inline-stack;display:inline-block}
+    .right_horiz_list.facebook_connect    {padding-top:3px;}
+    .right_horiz_list.facebook_connect img{margin-top:-3px;}
+    .nav_list li                          {margin-top:-1px;border-top:solid 1px #ced2e4;padding:3px 5px;zoom:1}
+    .nav_list li:hover                    {background-color:#e6edf3}
+    .nav_list li a                        {text-decoration:none;}
+    .action_list li                       {margin-top:-1px;border-top:solid 1px #ddd;padding:2px 5px;zoom:1;min-width:100px}
+    .action_list li:hover                 {background-color:#1166bb;}
+    .action_list li:hover a               {color:#fff}
+    .action_list li a                     {text-decoration:none;}
+    .horiz_list li                        {margin-left:-9px;border-left:solid 1px #ccc;padding:0px 8px;margin-right:8px;float:left;}
+    .right_horiz_list li                  {margin-right:-9px;border-right:solid 1px #ccc;padding:0px 8px;margin-left:8px;float:left;}
+    .inline_list li                       {display:inline;padding:2px}
+    .checklist li                         {overflow:hidden;padding:1px 0}
+    .checklist input                      {float:left;}
+    .checklist label                      {margin:0 0 5px 25px;display:block}
+    .segmented_list                       {overflow:hidden;}
+    .segmented_list li                    {padding:7px 0;border-bottom:solid 1px #eee;margin-bottom:-1px}
+    .text_list li                         {padding:1px 0 2px 0}
+    .block_list li                        {padding:3px 0 4px 0}
+    .block_list li.current a              {color:#444;}
+    .directory_list li                    {margin-bottom:10px;list-style-type:disc;margin-left:20px;padding-right:10px}
+    .remove_list                          {clear:both;overflow:hidden;zoom:1;color:#000;}
+    .remove_list li                       {overflow:hidden;zoom:1;}
+    .remove_list li:hover                 {background-color:LightGoldenrodYellow;}
+    .toolbar_controls li                  {margin:0 5px 0 -6px;padding:0px 5px;}
+    .toolbar_controls a                   {padding:5px 6px;float:left;color:#000;text-decoration:none;}
+    .toolbar_controls a:hover             {background:#f7f7f7;text-decoration:none;border:solid 1px #cbcbcb;border-color:#bbb #e4e2df #e4e2df #bbb;padding:4px 5px;}
+  /* /Lists */
+/* /Shared with Geni.com */
+</style>
+
+<div id="banner">
+  <div id="tree">
+    <div id="ffmm" class="node f"></div><div id="ffm-line" class="single-v"></div>
+    <div id="ffmf" class="node m"></div><div id="ffmp-line" class="parent"></div>
+    <div id="ff-line" class="single-v"></div><div id="fff" class="node m"></div>
+    <div id="ffp-line" class="parent"></div><div id="ffm" class="node f"></div>
+    <div id="ffb-line" class="sibling-l"></div><div id="ffb" class="node m"></div>
+    <div id="ff" class="node m"></div>
+    <div id="fp-line" class="parent"></div><div id="fm" class="node f"></div>
+    <div id="fwp-line" class="parent"></div><div id="fw" class="node f"></div>
+    <div id="f-line" class="single-v"></div><div id="f" class="node"></div>
+    <div id="fb-line" class="sibling-r"></div><div id="fb" class="node m"></div>
+    <div id="fd-line" class="single-v"></div><div id="fd" class="node f"></div>
+  </div>
+	
+	<div id="banner-text">
+      <h2>What could <em>you</em> build with access to the world&#8217;s family tree?</h2>
+      <p>Geni offers the world&#8217;s largest completely open and completely free API for genealogy data. Register your application and receive:</p>
+			<ul>
+				<li>Instant access to a market of more than <strong>6 million genealogists</strong> that use Geni</li>
+				<li>Genealogical data for more than <strong>100 million profiles</strong></li>
+			</ul>
+  </div>
+</div>
+
+<div id="content">
+	 <div class="line">
+	    <div class="unit size_1of3">
+	     <div class="module outline lightgrey">
+	       <div class="inner">
+	         <div class="hd basic_hd"><h3>Build for Websites</h3></div>
+	         <div class="bd" style="height:120px;">
+	         	 <img src="http://devstage.geni.com//wp-content/uploads/2011/04/register.png" style="margin-top:10px;float:left;margin-right:15px"/>
+	           <p><br/><%=tr("Integrate Geni into your website using Geni Connect or Geni Widgets.") %><br/></p>
+	           <p><%=link_to(tr("Read more"), {:controller => "/platform/developer/help", :action => "oauth_server_side", :subdomain => "dev"}, :class => "super blue button")%></p>
+	         </div>
+	       </div>
+	     </div>
+	   </div>
+   
+			<div class="unit size_1of3">
+	     <div class="module outline lightgrey">
+	       <div class="inner">
+	         <div class="hd basic_hd"><h3>Build for Mobile Apps</h3></div>
+	         <div class="bd" style="height:120px;">
+    					<img src="http://devstage.geni.com//wp-content/uploads/2011/04/docs.png" style="margin-top:10px;float:left;margin-right:15px"/>
+	            <p><br/><%=tr("Let users explore and connect with their families in mobile apps.") %><br/></p>
+	           <p><%=link_to(tr("Read more"), {:controller => "/platform/developer/help", :action => "oauth_mobile", :subdomain => "dev"}, :class => "super blue button")%></p>
+	         </div>
+	       </div>
+	     </div>
+	   </div>
+	   
+		 <div class="unit size_1of3">
+	     <div class="module outline lightgrey">
+	       <div class="inner">
+	         <div class="hd basic_hd"><h3>Build Apps on Geni</h3></div>
+	         <div class="bd" style="height:120px;">
+	           <img src="http://devstage.geni.com//wp-content/uploads/2011/04/discuss.png" style="margin-top:10px;float:left;margin-right:15px"/>
+	           <p><br/><%=tr("Embed your applications into Geni and integrate with our core experience.") %><br/></p>
+	           <p><%=link_to(tr("Read more"), {:controller => "/platform/developer/help", :action => "oauth_extensions", :subdomain => "dev"}, :class => "super blue button")%></p>
+	         </div>
+	       </div>
+	     </div>
+	   </div>
+</div>
+  

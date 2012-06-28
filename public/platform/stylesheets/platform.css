@@ -1,0 +1,177 @@
+/****************************************/
+/*** General guidelines
+/****************************************/
+
+.platform                                           {width:100%; font-size:11px; font-family:arial;}
+.platform div                                       {font-family:arial;}    
+.platform a                                         {text-decoration:none; color:#16b; outline:none; border:0px;}
+.platform a:hover                                   {text-decoration:underline}
+.platform a img                                     {border:0px;}
+.platform table                                     {width:100%;border-collapse: collapse; font-size:12px; padding:0px; margin:0px;}
+.platform td                                        {vertical-align:top; padding:0px; spacing:0px;}
+.platform th                                        {vertical-align:top;text-align:left; padding:0px; spacing:0px;}
+.platform input                                     {border:1px solid #ccc; padding:3px; margin: 0px;}    
+.platform textarea                                  {border:1px solid #ccc; padding:3px;}    
+.platform select                                    {border:1px solid #ccc; padding:3px;}
+.platform .pagination                               {text-align:left; padding:0px; margin:0px;}
+
+/****************************************/
+/*** Classes for the translatable elements
+/****************************************/
+
+.platform_not_translated                           {border-bottom: 2px solid red;}
+.platform_translated                               {border-bottom: 2px solid green;}
+.platform_fallback                                 {border-bottom: 2px solid yellow;}
+.platform_language_case                            {border: 1px dotted blue;}
+
+/****************************************/
+/*** Classes for the popup windows
+/****************************************/
+
+.section_title                                  {padding-top:10px; border-bottom: 1px solid #ccc; margin-bottom:10px; color:black;font-size:18px;}  
+.section_box                                    {border: 1px dotted #ccc; padding:10px; margin-top:10px; margin-bottom:15px;}
+.section_box.colored                            {background: #f9f8f7;}
+.section_box.locked                             {background: #F1FFEF;}
+     
+.small_section_title                            {padding-top:5px; border-bottom: 1px solid #ccc; margin-bottom:10px; color:black; font-size:12px; font-weight: bold;}  
+
+.topic_header                                   {color: grey; padding-bottom:5px;}
+.topic_value                                    {padding-top:5px; padding-bottom:5px;}
+
+.platform_right_horiz_list                          {float:right;overflow:hidden;text-align:left;list-style-type:none;font-family:arial;font-size:12px;margin-top:0px;}
+.platform_right_horiz_list li                       {margin-right:-11px;border-right:solid 1px #ccc;padding:0px 10px;margin-left:10px;float:left;}
+
+.translator_btn                                 {position:relative;border:0;padding:0;margin:0 2px 0 -2px;cursor:pointer;overflow:visible;background:transparent url('/platform/images/site_sprite.gif') no-repeat right -100px;font-size:11px;font-weight:bold;text-align:center;font-family:Arial;vertical-align:middle;}
+.translator_btn span                            {position:relative;display:block;white-space:nowrap;background:transparent url('/platform/images/site_sprite.gif') no-repeat left top;}
+button::-moz-focus-inner                        {border:none;}
+.translator_submit_btn                          {padding:0 10px 0 0;background-position:right -35px;}
+.translator_submit_btn span                     {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:14px;}
+.translator_small_btn                           {padding:0 10px 0 0;background-position:right -35px;}
+.translator_small_btn span                      {padding:0px 0 0px 10px;line-height:30px;height:30px;background-position:left 0;color:#fff;font-size:12px;}
+
+.language_selector_trigger                      {cursor: pointer; font-family:arial; font-size:12px; vertical-algin:middle}
+.language_selector                              {position: absolute;top: 0;left: 0;font-family: verdana;width: 14em;background: #f9f8f7;padding: 0;}
+
+.platform_lightbox_overlay                          {position: absolute; top: 0%; left: 0%; width: 100%; height: 100%; background-color: black; z-index:1001; -moz-opacity: 0.5; opacity:.50; filter: alpha(opacity=50); }
+.platform_lightbox                                  {position: absolute; top: 5%; left: 25%; width: 50%; height: 80%; padding: 16px; border:solid 2px #e8e8e8; border-color:#e8e8e8 #bababa #bababa #e8e8e8; background-color: white; z-index:1002; overflow: auto; }
+
+/****************************************/
+/*** Classes for the feature tabs
+/****************************************/
+   
+.translations_navigation                  {height:70px; position:relative; padding:15px 15px 0px; background-color:#f1f4f9; border:1px solid #ccc; margin:0px; margin-bottom:10px;}
+
+.translations_tab_nav                     {list-style-type:none;bottom:-1px !important;position:absolute;margin:0px;padding:0px;font-family:arial;}
+.translations_tab_nav li                  {float:left;margin-right:2px;cursor:pointer;text-align:bottom;}
+.translations_tab_nav li a                {display:block;padding:6px 0px 6px 10px; outline:none;}
+
+.translations_tabs                        {margin-left:5px;zoom:1}
+.translations_tabs li                     {background: url('/platform/images/site_sprite.gif') no-repeat right -255px;font-size:12px;font-weight:bold;margin:0;position:relative;z-index:1}
+.translations_tabs li a                   {padding:13px 30px 6px 6px;color:#1166bb;cursor:pointer;text-decoration:none;line-height:14px;}
+.translations_tabs li a:hover             {text-decoration:none}
+.translations_tabs li.current             {margin-left: -30px;background-position:right -360px;z-index:2}
+.translations_tabs li.current a           {padding-left:30px;background: url('/platform/images/site_sprite.gif') no-repeat left -325px;color: #333;font-size:13px;}
+.translations_tabs li.last                {background-position:right -290px;}
+.translations_tabs li.last a              {padding-right:30px;}
+.translations_tabs li.last_current        {margin-left: -25px;background-position:right -430px;}
+.translations_tabs li.last_current a      {padding-left:30px;color: #000;}
+.translations_tabs li.first a             {padding-left:30px;background:url('/platform/images/site_sprite.gif') no-repeat 0 -220px;}
+.translations_tabs li.first_current       {margin:0}
+.translations_tabs li.first_current a     {background-position:0 -395px;color: #000;}
+
+/****************************************/
+/*** Classes for the admin user page
+/****************************************/
+.platform_admin                                {font-size: 12px; font-family:arial}
+.platform_admin h1                             {font-size: 20px; font-weight:bold; border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom:3px; padding-top:5px; }
+.platform_admin h2                             {font-size: 16px; font-weight:bold; border-bottom: 1px solid #ccc; margin-bottom: 10px; padding-bottom:3px; padding-top:5px; }
+
+.platform .admin_table                         {width: 100%; font-size: 12px; border: 1px #e5e5e5 solid; border-collapse: collapse; background-color: white; margin-bottom: 10px; }
+.platform .admin_table td                      {padding: 5px; border: 1px solid #e5e5e5; vertical-align:top; text-align:left;}
+.platform .admin_table th                      {background-color: #efefef; border: none; border: 1px #e5e5e5 solid; font-weight:bold; padding: 5px; vertical-align:top; text-align:left;}
+.platform .admin_table tr:hover                {background-color: #eee; }
+.platform .admin_table td.numeric              {text-align: right; }
+.platform .admin_table th.numeric              {text-align: right; }
+
+/****************************************/
+/***  Pure CSS Buttons.
+/***  Learn more ~ http://www.halmatferello.com/lab/pure-css-buttons/
+/***  Licensed under GPL and MIT.
+/****************************************/
+
+.platform_pcb, .platform_pcb span                   {background: url('/platform/images/buttons.png') no-repeat; height: 23px; line-height: 23px; padding: 3px 0 7px 0; }
+.platform_pcb, a.platform_pcb:link, a.platform_pcb:visited  {color: #333; font-size: 12px; font-style:bold; font-family:arial; padding-left: 14px; text-decoration: none !important; }
+
+/* ie 6 hack */
+* html div#frame .platform_pcb                      {color: #333; padding-top: 0px; padding-bottom: 0px; text-decoration: none; }
+
+/* ie 7 hack */
+*:first-child+html .platform_pcb                    {color: #333; padding-top: 0px; padding-bottom: 0px; text-decoration: none; }
+
+.platform_pcb span                                  {background-position: right -326px; padding-right: 14px; }
+a.platform_grey_button                              {background-position: left -219px; padding-top: 3px; }
+a.platform_grey_button span                         {background-position: right -545px; padding-top: 3px; }
+a.platform_grey_button:hover                        {background-position: left -246px; }
+a.platform_grey_button:hover span                   {background-position: right -572px; }
+a.platform_grey_button:active, .grey_active_button  {background-position: left -273px; }
+a.platform_grey_button:active span, .grey_active_button span {background-position: right -599px; }
+body.platform_grey_disabled_button                  {background-position: left -300px; color: #bbb !important; }
+body.platform_grey_disabled_button span             {background-position: right -626px; }
+
+.platform_cancel_link                               {font-size:12px;font-family:arial;}
+
+
+.app_fields {
+  font-size:12px;
+  border: 1px dotted #ccc; 
+  padding:10px; 
+  background: #fafafa;
+  margin-bottom:20px; 
+}
+
+.app_fields th {
+  padding-top:5px;
+  padding-right:15px;
+  white-space: nowrap;
+}
+
+.app_fields td {
+  padding-top:5px;
+  padding-right:15px;
+}
+
+.comments {
+  color: #666;
+  font-size: 10px;
+}
+
+.platform td {
+  vertical-align:top;
+}
+
+.platform th {
+  vertical-align:top;
+  text-align:right;
+}
+
+.apps_header {
+  padding-bottom:5px;
+  margin-bottom:5px;
+  font-size:14px;
+  border-bottom: 1px solid #ccc;
+  font-weight:bold;
+}
+
+.app_fields_section_header {
+  background-color:#F0F2F7;
+  padding:5px;
+  margin-bottom:10px;
+  margin-top:10px;
+  border-top:1px dotted #ccc;
+} 
+
+.edit_section_header {
+  background-color:#eee;
+  padding:5px;width:100%;margin-bottom:10px;
+  border-top: 1px solid #ccc;
+} 

@@ -1,0 +1,24 @@
+<%= render :partial => "/platform/admin/common/header" %>
+<%= render :partial => "tabs" %>
+
+<%= will_filter(@permissions) %>
+
+<%=link_to_function("+ Add permission", "tr8nLightbox.show('/platform/admin/apps/lb_permission', {height:300})")%>
+
+<%= will_filter_table_tag(@permissions, :columns => [
+	[:icon,	lambda{|p|
+		image_tag(p.icon_url, :style => "width:16px;height:16px;")
+	}, 'width:20px'],
+	
+	:keyword, :description, :updated_at, 
+	
+  [:actions, lambda{|p|
+      html = [] 
+   	  html << link_to_function("edit", "tr8nLightbox.show('/platform/admin/apps/lb_permission?perm_id=#{p.id}', {height:300})")
+   	  html << link_to("delete", {:action => :delete_permission, :perm_id => p.id}, :confirm => "Are you sure you want to delete this permission?")
+      html.join(" | ").html_safe
+  }, 'padding:5px;text-align:right;white-space:nowrap;']
+	
+]) %>
+  
+<%= render :partial => "/platform/admin/common/footer" %>

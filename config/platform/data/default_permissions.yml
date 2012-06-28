@@ -1,0 +1,36 @@
+defaults: &defaults
+  user_basic:
+  family_basic:
+  user_extended:
+  family_extended:
+  user_email:
+  user_birthday:
+  family_birthday:
+  user_events:
+  family_events:    
+  user_photos:
+  family_photos:
+  user_videos:
+  family_videos:
+  add_events:
+  add_profiles:
+  
+#############################################################################
+# Environment Settings
+# You can overload any feature defined in the defaults for any environment
+#############################################################################
+development:
+  <<: *defaults
+  
+test:
+  <<: *defaults
+      
+qa:
+  <<: *defaults
+
+stage:
+  <<: *defaults
+
+production:
+  <<: *defaults
+

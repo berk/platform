@@ -1,0 +1,32 @@
+<%= render :partial => "/platform/developer/common/header" %>
+	
+	<% if @topic %>
+	  <div class="section_title">
+	
+	    <div style="float:right; padding-top:20px; font-size:12px; color: #ccc;">
+	      <%=link_to(image_tag("/tr8n/images/reply.png") + " " + tr("Reply", "Reply button for forum topics"), :topic_id => @topic.id, :page => params[:page], :anchor => :reply_message) %> 
+	      &nbsp; |  &nbsp; 
+	      <%=link_to(image_tag("/tr8n/images/plus.png") + " " + tr("Start a new discussion topic"), :mode => :create) %>
+	    </div>
+	
+	    <div style="color:grey;font-size:16px;font-weight:bold">
+        <%=link_to(tr("Developer Forum"), :action => :index)%>
+				 &raquo; <%=link_to(@topic.topic, :topic_id => @topic.id)%>
+	    </div>
+			
+	    <div style="color:grey;font-size:12px;font-style:italic;padding-top:3px;padding-bottom:3px;">
+	       <%= tr("Started by {user} on {date}", "", 
+	            {:user => [@topic.user, platform_user_tag(@topic.user, :linked => true)], :date => @topic.created_at.trl}) %>
+	    </div>
+	  </div>
+	  <%= render :partial => "messages" %>
+		<% unless platform_current_user_is_guest? %>
+	  	<%= render :partial => "new_message" %>  
+		<% end %>
+	<% else %>
+		<% unless platform_current_user_is_guest? %>
+	  	<%= render :partial => "new_topic", :locals => {:include_cancel_button => true} %>
+ 		<% end %>
+	<% end %>
+	
+<%= render :partial => "/platform/developer/common/footer" %>
