@@ -189,8 +189,8 @@ private
     if obj.is_a?(Array)
       hash = {'results' => obj}
       hash['page']          = page if page > 1 || limit == obj.size
-      hash['previous_page'] = prev_page if page > 1
-      hash['next_page']     = next_page if limit == obj.size
+      hash['previous_page'] = prev_page_url if page > 1
+      hash['next_page']     = next_page_url if limit == obj.size
       obj = hash
     end
     
@@ -384,11 +384,11 @@ private
   ############################################################################
   #### Navigation Params
   ############################################################################
-  def prev_page
+  def prev_page_url
     url_for(params.merge(navigation_params(page - 1)))
   end
 
-  def next_page
+  def next_page_url
     url_for(params.merge(navigation_params(page + 1)))
   end
 
