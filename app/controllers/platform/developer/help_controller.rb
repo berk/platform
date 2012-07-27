@@ -28,7 +28,9 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
   skip_filter :validate_developer
   
   def index
-    
+    unless request.url.index("developer")
+      return redirect_to(:controller=>"/platform/developer/help", :action=>"index")
+    end
   end
 
   def reference
