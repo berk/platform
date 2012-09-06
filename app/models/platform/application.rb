@@ -69,7 +69,7 @@
 #++
 
 class Platform::Application < ActiveRecord::Base
-  set_table_name :platform_applications
+  self.table_name = :platform_applications
 
   # useful methods - should be public
   include Platform::SimpleStringPermissions

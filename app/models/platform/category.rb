@@ -43,7 +43,7 @@
 #++
 
 class Platform::Category < ActiveRecord::Base
-  set_table_name :platform_categories
+  self.table_name = :platform_categories
 
   acts_as_tree :order => "position, name"
   has_many :application_categories, :class_name => "Platform::ApplicationCategory", :order => "position"

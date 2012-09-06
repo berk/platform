@@ -34,7 +34,7 @@ require 'pp'
     end
 end
 
-require File.join(File.dirname(__FILE__), 'extensions/object_extension')
+require File.join(File.dirname(__FILE__), 'extensions/active_record_extension')
 require File.join(File.dirname(__FILE__), 'extensions/hash_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_view_extension')
 require File.join(File.dirname(__FILE__), 'extensions/action_controller_extension')
@@ -42,6 +42,9 @@ require File.join(File.dirname(__FILE__), 'extensions/action_controller_extensio
 module Platform
   class Railtie < ::Rails::Railtie #:nodoc:
     initializer 'platform' do |app|
+      ActiveSupport.on_load(:active_record) do
+        ::ActiveRecord::Base.send :include, Platform::ActiveRecordExtension
+      end
       ActiveSupport.on_load(:action_view) do
         ::ActionView::Base.send :include, Platform::ActionViewExtension
       end

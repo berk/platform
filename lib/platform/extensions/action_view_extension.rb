@@ -24,7 +24,7 @@
 module Platform
   module ActionViewExtension
     extend ActiveSupport::Concern
-    module InstanceMethods
+
       def platform_user_login_tag(opts = {})
         opts[:class] ||= 'tr8n_right_horiz_list'
         render(:partial => '/platform/common/user_login', :locals => {:opts => opts})    
@@ -200,6 +200,5 @@ module Platform
         return platform_display_time(time, :monthname_abbr_year)
       end      
       
-    end
   end
 end

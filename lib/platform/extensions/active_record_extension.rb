@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2010-2011 Michael Berkovich
+# Copyright (c) 2010-2012 Michael Berkovich
 #
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
@@ -21,31 +21,25 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-class Object
-  
-  # makes the object API enabled and overwrites to_json and to_xml methods
-  def self.has_platform_api_proxy(opts = {})
-    self.class_eval do
-      def api_proxy(version=nil)
-        Platform::Api::Proxy.for(self, version)
+module Platform
+  module ActiveRecordExtension
+    extend ActiveSupport::Concern
+
+      def api_proxy(version=::Platform::Config.api_default_version)
+        @api_proxy ||= ::Platform::Api::Proxy::Base.proxy_class_for(self, version)
       end
 
-      def to_json(opts={})
-        api_proxy(opts[:api_version]).to_json(opts)
-      end
-
-      def to_xml(opts={})
-        api_proxy(opts[:api_version]).to_xml(opts)
-      end
-    
       def to_api_hash(opts={})
         api_proxy(opts[:api_version]).to_api_hash(opts)
       end
-    end
+
+      def to_api_json(opts={})
+        to_api_hash(opts).to_json(opts)
+      end
+
+      def to_api_xml(opts={})
+        to_api_hash(opts).to_xml(opts)
+      end
+
   end
-  
-  def self.api_proxy(version=nil)
-    Platform::Api::Proxy.proxy_class_for(self, version)
-  end
-  
 end

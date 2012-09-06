@@ -22,5 +22,5 @@
 #++
 
 module Platform
-  VERSION = "3.1.4"
+  VERSION = "3.1.5"
 end

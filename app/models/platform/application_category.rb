@@ -41,7 +41,7 @@
 #++
 
 class Platform::ApplicationCategory < ActiveRecord::Base
-  set_table_name :platform_application_categories
+  self.table_name = :platform_application_categories
 
   belongs_to :category, :class_name => "Platform::Category"
   belongs_to :application, :class_name => "Platform::Application"

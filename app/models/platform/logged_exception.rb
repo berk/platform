@@ -47,7 +47,7 @@
 #++
 
 class Platform::LoggedException < ActiveRecord::Base
-  set_table_name :platform_logged_exceptions
+  self.table_name = :platform_logged_exceptions
 
   serialize :cause
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id

@@ -64,7 +64,7 @@ module Platform
       ]
 
       rescue_from StandardError do |e|
-        pp e.backtrace
+        pp e.message, e.backtrace
         log_exception(e) if should_log_error?(e)
         render_exception(e)
       end
@@ -178,13 +178,41 @@ module Platform
       ############################################################################
       def render_response(obj, opts={})
         to_opts = params.merge(:max_models => limit, :viewer => current_user, :api_version => api_version)
-        obj = sanitize_results(obj, to_opts) if obj.is_a?(Array)
-    
-        respond_to do |format|
-          format.json   do
-            json = obj.to_json(to_opts)
-            validate_response_structure(json)
         
+        proc = Proc.new do |k, v| 
+          if v.kind_of?(Hash)  
+            v.delete_if(&proc)
+            nil
+          else 
+            v.blank? 
+          end
+        end
+
+        if obj.is_a?(ActiveRecord::Relation)
+          obj = obj.collect{|c| c.to_api_hash(opts)}
+        elsif obj.kind_of?(ActiveRecord::Base)
+          obj = obj.to_api_hash(opts)
+        end
+
+        if obj.is_a?(Array)
+          obj = obj.collect do |item|
+            if item.kind_of?(ActiveRecord::Base)
+              item.to_api_hash(opts).delete_if(&proc)
+            else
+              item
+            end
+          end
+          obj = sanitize_results(obj, opts)
+        elsif obj.is_a?(Hash)  
+          obj.delete_if(&proc)
+        end
+
+        # validate_response_structure(json)
+
+        respond_to do |format|
+          format.json do
+            json = obj.to_json
+
             if jsonp?
               script = "#{params[:callback].strip}(#{json})"
               render(:text => script)
@@ -198,7 +226,7 @@ module Platform
               obj = obj['error']
               opts[:xml_root] = 'error'
             end
-            render opts.merge(:text => obj.to_xml(to_opts.merge(:root => opts[:xml_root] || xml_root)))
+            render opts.merge(:text => obj.to_api_xml(to_opts.merge(:root => opts[:xml_root] || xml_root)))
           end
         end
     
@@ -211,7 +239,7 @@ module Platform
         if results.size == 1 and not only_list?
           results = results.first
         else
-          hash = {'results' => results.collect{|o| o.to_api_hash(opts)}}
+          hash = {'results' => results}
           hash['page']          = page if page > 1 || limit == results.size
           hash['previous_page'] = prev_page if page > 1
           hash['next_page']     = next_page if limit == results.size

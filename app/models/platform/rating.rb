@@ -42,7 +42,7 @@
 #++
 
 class Platform::Rating < ActiveRecord::Base
-  set_table_name :platform_ratings
+  self.table_name = :platform_ratings
 
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
   belongs_to :object, :polymorphic => true
