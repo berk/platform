@@ -23,10 +23,11 @@
 
 class Platform::Api::BaseController < ActionController::Base
   before_filter :ensure_api_enabled 
+  before_filter :cors_preflight_check
   before_filter :set_default_format
   before_filter :authenticate
   after_filter  :log_api_call
-  
+
   class ApiError < StandardError
     def status
       @status ||= self.class.name.split('::').last.sub('Error','').underscore.to_sym
@@ -519,5 +520,28 @@ private
     
     handle_document_structure_error("Unsupported or undocumented fields for API version #{api_version}, path #{path}: #{undocumented_fields.join(', ')}") if undocumented_fields.any?        
   end
-  
+
+  # If this is a preflight OPTIONS request, then short-circuit the
+  # request, return only the necessary headers and return an empty
+  # text/plain.
+  def cors_preflight_check
+    if request.method == :options
+      pp "CORS request received"
+
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+      headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version'
+      headers['Access-Control-Max-Age'] = '1728000'
+
+      render :text => '', :content_type => 'text/plain'
+    end
+  end
+
+  # Return the CORS access control headers.
+  def cors_set_access_control_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
+    headers['Access-Control-Max-Age'] = "1728000"
+  end
+
 end

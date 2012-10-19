@@ -26,7 +26,7 @@ class Platform::Developer::HelpController < Platform::Developer::BaseController
   before_filter :set_version
   skip_filter :validate_guest_user
   skip_filter :validate_developer
-  
+
   def index
     unless request.url.index("developer")
       return redirect_to(:controller=>"/platform/developer/help", :action=>"index")

@@ -39,7 +39,10 @@ module Platform
         end
 
         def update_attributes!(attrs)
-          instance.update_attributes!(attrs)
+          attrs.each do |key, value|
+            instance.send("#{key}=", value)
+          end
+          instance.save!
         end
 
         def to_json(options={})

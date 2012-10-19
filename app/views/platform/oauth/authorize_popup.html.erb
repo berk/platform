@@ -55,7 +55,7 @@
 		</div>
 			
 		<div class="module small quiet prose">
-			<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => [@client_application.terms_of_service_url], :link2 => [@client_application.privacy_policy_url])%>
+			<%=tr("By proceeding, you agree to the {application} [link1: Terms of Service] and [link2: Privacy Policy].", "", :application => @client_application.name, :link1 => lambda{|text| link_to(text, @client_application.terms_of_service_url, :target => "_new")}, :link2 => lambda{|text| link_to(text, @client_application.privacy_policy_url, :target => "_new")})%>
 		</div>
             
 	</div>
