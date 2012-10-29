@@ -306,11 +306,15 @@ private
       return render_response(:error_description => "refresh_token must be provided", :error => :invalid_request)
     end
     
-    refresh_token = Platform::Oauth::RefreshToken.find(:first, :conditions => ["application_id = ? and token = ? and invalidated_at is null", client_application.id, request_param(:refresh_token)])
+    refresh_token = Platform::Oauth::RefreshToken.find(:first, :conditions => ["application_id = ? and token = ?", client_application.id, request_param(:refresh_token)])
     unless refresh_token
       return render_response(:error_description => "invalid refresh token", :error => :invalid_request)
     end
-    
+
+    unless refresh_token.invalidated_at.nil?
+      return render_response(:error_description => "refresh token expired", :error => :invalid_request)
+    end
+
     access_token = refresh_token.exchange!
     refresh_token = client_application.create_refresh_token(:user=>access_token.user, :scope=>scope)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
@@ -428,7 +432,16 @@ private
     if jsonp?
       render(:text => "#{params[:callback].strip}(#{response_params.to_json})")
     else  
-      render(:json => response_params.to_json)
+      opts[:status] ||= begin
+        if response_params[:error] == :invalid_request
+          400
+        elsif response_params[:error] == :unauthorized_application
+          401
+        else
+          200
+        end
+      end
+      render(:json => response_params.to_json, :status => opts[:status])
     end
   end
   

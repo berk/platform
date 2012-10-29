@@ -46,7 +46,8 @@ module Platform
         end
 
         def to_json(options={})
-          Api::AlreadyJsonedString.new(to_api_hash(options).to_json(options))
+          hash = to_api_hash(options)
+          Api::AlreadyJsonedString.new(hash.to_json(options))
         end
 
         def to_xml(options={})

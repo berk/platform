@@ -446,10 +446,11 @@ function submitRequest() {
 
 function updateApi(path, method, params) {
   hidePopups();
-  
+
   if (path.indexOf(api_base_url) != -1) {
     var parts = path.split(api_base_url);
     path = parts[parts.length-1];
+    path = path.replace(/^\//, "");
   }
 
   logInfo("");
