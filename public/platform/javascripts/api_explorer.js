@@ -2,7 +2,7 @@ var field_count = 0;
 var api_base_url = "/api";
 var oauth_base_url = "";
 var api_explorer_app_id = "";
-var api_history = {};
+var api_history = [];
 var api_history_index = -1;
 var api_result_json = "";
 var api_result_object_keys = [];
@@ -11,7 +11,7 @@ function initApiExplorer(app_id, site_url, api_url, api_history_string) {
 	api_explorer_app_id = app_id;
 	oauth_base_url = site_url;
   api_base_url = api_url;
-  api_history = JSON.parse(api_history_string);
+  // api_history = JSON.parse(api_history_string);
   updateHistoryButtons();
 } 
   
@@ -151,10 +151,8 @@ function switchApiVersion() {
 ** API History Functions
 ************************************************************************************/
 function clearApiHistory() {
-  setCookie("api_history", "[]");
-  setCookie("api_history_index", "-1");
   api_history = [];
-  api_history_index = -1;
+  api_history_index = api_history.length;
   hidePopups();
   updateHistoryButtons();
 }
@@ -170,43 +168,33 @@ function callHistoricApi(index) {
 
 function makePreviousCall() {
   if (api_history.length == 0 || api_history_index == 0) return;
-  
-  if (api_history_index == -1) {
-    callHistoricApi(api_history.length - 1);
-    return;
-  }
-
-  callHistoricApi(api_history_index - 1);
+  api_history_index--;
+  callHistoricApi(api_history_index);
 } 
 
 function makeNextCall() {
-  if (api_history.length == 0 || api_history_index == -1) return;
-  if (api_history_index == api_history.length-1) return;
-
-  callHistoricApi(api_history_index + 1);
+  if (api_history_index>=api_history.length) return;
+  api_history_index++;
+  callHistoricApi(api_history_index);
 } 
 
 function updateHistoryButtons() {
-  if (api_history_index == -1) {
-    Platform.element("history_next").className = "button super gray small";
-    if (api_history.length == 0) {
-      Platform.element("history_previous").className = "button super gray small";
-    } else {
-      Platform.element("history_previous").className = "button super blue small";
-    }
-    return;
-  }
-  
-  if (api_history_index < api_history.length-1) {
-    Platform.element("history_next").className = "button super blue small";
-  } else {
-    Platform.element("history_next").className = "button super gray small";
-  }
-  
-  if (api_history_index > 0 && api_history.length > 1) {
-    Platform.element("history_previous").className = "button super blue small";
-  } else {
+  if (api_history.length == 0) {
     Platform.element("history_previous").className = "button super gray small";
+    Platform.element("history_next").className = "button super gray small";
+    return;
+  }  
+
+  if (api_history_index == api_history.length-1) {
+    Platform.element("history_next").className = "button super gray small";
+  } else {
+    Platform.element("history_next").className = "button super blue small";
+  }
+  
+  if (api_history_index == 0) {
+    Platform.element("history_previous").className = "button super gray small";
+  } else {
+    Platform.element("history_previous").className = "button super blue small";
   }
 }
 
@@ -226,10 +214,25 @@ function toggleApiHistory(trigger) {
     options.style.left = container_position.left;
     options.style.top = container_position.top;
     Platform.Effects.show("api_history");
-    
-    Platform.Utils.update("api_history_container", "/platform/developer/api_explorer/history", {
-      parameters: {api_history_index:api_history_index}
-    });
+
+    if (api_history.length == 0) {
+      Platform.element("api_history_container").innerHTML = "API history is empty.";
+      return;
+    }
+
+    var html = [];
+    html.push("<table>");
+    for(var i=0; i<api_history.length; i++) {
+      var call = api_history[i];
+      html.push("<tr style='border-bottom:1px solid #ccc; cursor:pointer;' onClick='callHistoricApi(" + i + ")'><td style='padding:2px;'>" + call.method + " /" + call.path + "</td></tr>");
+    }
+    html.push("</table>");
+
+    Platform.element("api_history_container").innerHTML = html.join("");
+
+    // Platform.Utils.update("api_history_container", "/platform/developer/api_explorer/history", {
+    //   parameters: {api_history_index:api_history_index}
+    // });
     
   } else {
     Platform.Effects.hide("api_history");
@@ -254,10 +257,9 @@ function saveCallToHistory(path, method, params) {
     params: params
   });
   
-  setCookie("api_history", JSON.stringify(api_history));
+  // setCookie("api_history", JSON.stringify(api_history));
   
-  if (api_history_index == -1 || api_history_index == (api_history.length-2))
-     api_history_index = api_history.length-1;
+  api_history_index = api_history.length-1;
   
   updateHistoryButtons();
 }
@@ -413,7 +415,7 @@ function submitRequest() {
 	// add version
 	params['api_version'] = Platform.value('api_version');
 	
-//  saveCallToHistory(Platform.value("api_path"), Platform.value("request_method"), params);
+  saveCallToHistory(Platform.value("api_path"), Platform.value("request_method"), params);
 
 	var path =  Platform.value("api_path");
 	var method = Platform.value("request_method");
