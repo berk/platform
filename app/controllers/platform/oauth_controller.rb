@@ -433,9 +433,9 @@ private
       render(:text => "#{params[:callback].strip}(#{response_params.to_json})")
     else  
       opts[:status] ||= begin
-        if response_params[:error] == :invalid_request
+        if [:unsupported_grant_type, :invalid_request, :invalid_token].include?(response_params[:error])
           400
-        elsif response_params[:error] == :unauthorized_application
+        elsif [:unauthorized_application].include?(response_params[:error])
           401
         else
           200
