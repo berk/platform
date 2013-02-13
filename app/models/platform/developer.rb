@@ -46,9 +46,12 @@ class Platform::Developer < ActiveRecord::Base
 
   belongs_to :user, :class_name => Platform::Config.user_class_name, :foreign_key => :user_id
   
-  has_many :applications, :class_name => "Platform::Application"
-  has_many :application_developers, :class_name => "Platform::ApplicationDeveloper"
+  has_many :application_developers, :class_name => "Platform::ApplicationDeveloper", :order => "updated_at desc"
+  has_many :applications, :class_name => "Platform::Application", :through => :application_developers
   
+  has_many :developer_roles, :class_name => "Platform::DeveloperRole"
+  has_many :roles, :class_name => "Platform::Role", :through => :developer_roles
+
   def self.for(user)
     return nil unless user and user.id 
     return nil if Platform::Config.guest_user?(user)

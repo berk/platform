@@ -228,6 +228,34 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.timestamps
     end
     add_index :platform_logged_exceptions, [:created_at], :name => "platform_ple_c"    
+
+    create_table :platform_roles do |t|
+      t.string :name
+      t.integer :level
+      
+      t.timestamps
+    end    
+
+    create_table :platform_developer_roles do |t|
+      t.integer :application_id
+      t.integer :developer_id
+      t.integer :role_id
+
+      t.timestamps
+    end
+
+    create_index :platform_developer_roles, [:application_id, :developer_id], :name => "platform_pdr_a_d"    
+
+    create_table :platform_developer_activities do |t|
+      t.integer   :developer_id
+      t.string    :key
+      t.text      :description
+      t.string    :target_type
+      t.integer   :target_id
+      t.timestamps
+    end
+
+    create_index :platform_developer_activities, [:developer_id], :name => "platform_pda_d"    
   end
 
   def self.down
@@ -247,5 +275,8 @@ class CreatePlatformTables < ActiveRecord::Migration
     drop_table :platform_application_permissions
     drop_table :platform_application_users
     drop_table :platform_logged_exceptions
+    drop_table :platform_roles
+    drop_table :platform_developer_roles
+    drop_table :platform_developer_activities
   end
 end

@@ -71,7 +71,8 @@ module Platform
             Platform::ApplicationMetric, Platform::DailyApplicationMetric, 
             Platform::WeeklyApplicationMetric, Platform::MonthlyApplicationMetric, 
             Platform::TotalApplicationMetric, Platform::ApplicationUsageMetric,
-            Platform::LoggedException
+            Platform::LoggedException,
+            Platform::DeveloperActivity, Platform::DeveloperRole, Platform::Role
         ]
       
         if user_class_name == "Platform::PlatformUser" # used for stand-alone deployment only

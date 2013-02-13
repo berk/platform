@@ -44,4 +44,16 @@ class Platform::ApplicationDeveloper < ActiveRecord::Base
   belongs_to :developer, :class_name => "Platform::Developer"
   belongs_to :application, :class_name => "Platform::Application"
   
+  def self.for(app, developer=Platform::Config.current_developer)
+    find(:first, :conditions => ["application_id = ? and developer_id = ?", app.id, developer.id])
+  end
+
+  def self.find_or_create(app, developer=Platform::Config.current_developer)
+    self.for(app, developer) || create(:application => app, :developer => developer)
+  end
+
+  def self.touch(app, developer=Platform::Config.current_developer)
+    find_or_create(app, developer).touch
+  end
+
 end
