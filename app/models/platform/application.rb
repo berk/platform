@@ -215,7 +215,7 @@ class Platform::Application < ActiveRecord::Base
   end
 
   def find_or_create_access_token(user, scope)
-    access_token = Platform::Oauth::AccessToken.find(:first, :conditions => ["application_id = ? and user_id = ? and scope = ? and valid_to > ?", 
+    access_token = Platform::Oauth::AccessToken.find(:first, :conditions => ["application_id = ? and user_id = ? and scope = ? and (valid_to is null or valid_to > ?)", 
                                                      self.id, user.id, scope, Time.now])
     access_token ||= Platform::Oauth::AccessToken.create(:application => self, :user => user, :scope => scope)
     Platform::ApplicationUser.touch(self, access_token.user)

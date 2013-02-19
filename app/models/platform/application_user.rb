@@ -42,4 +42,7 @@ class Platform::ApplicationUser < ActiveRecord::Base
     find_or_create(app, user).touch
   end
 
+  def access_token
+    @access_token ||= Platform::AccessToken.find(:first, :conditions => ["application_id = ? and user_id = ?", application_id, user_id], :sort => "created_at desc")
+  end
 end

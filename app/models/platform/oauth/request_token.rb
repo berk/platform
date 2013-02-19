@@ -26,7 +26,7 @@ class Platform::Oauth::RequestToken < Platform::Oauth::OauthToken
   validates_presence_of :user
 
   def exchange!(params={})
-    token = application.create_access_token(:user => user, :scope => scope)
+    token = application.find_or_create_access_token(user, scope)
     invalidate!
     token
   end
