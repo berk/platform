@@ -22,9 +22,9 @@
 #++
 
 class Platform::Api::BaseController < ActionController::Base
+  before_filter :set_default_format
   before_filter :ensure_api_enabled 
   before_filter :cors_preflight_check
-  before_filter :set_default_format
   before_filter :authenticate
   after_filter  :log_api_call
 
@@ -96,6 +96,7 @@ private
 
   def ensure_api_enabled
     raise ServiceUnavailableError.new('API Disabled') unless enabled?
+    raise ForbiddenError.new('The application is blocked') if client_app and client_app.blocked?
   end
 
   def client_app
