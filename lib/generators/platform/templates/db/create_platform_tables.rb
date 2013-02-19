@@ -244,7 +244,7 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_index :platform_developer_roles, [:application_id, :developer_id], :name => "platform_pdr_a_d"    
+    add_index :platform_developer_roles, [:application_id, :developer_id], :name => "platform_pdr_a_d"    
 
     create_table :platform_developer_activities do |t|
       t.integer   :developer_id
@@ -255,7 +255,7 @@ class CreatePlatformTables < ActiveRecord::Migration
       t.timestamps
     end
 
-    create_index :platform_developer_activities, [:developer_id], :name => "platform_pda_d"    
+    add_index :platform_developer_activities, [:developer_id], :name => "platform_pda_d"    
   end
 
   def self.down
