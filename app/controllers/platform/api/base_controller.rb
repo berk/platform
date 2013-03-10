@@ -161,7 +161,10 @@ private
   end
 
   def access_token_header
-    @access_token_header ||= request.headers["Authorization"]
+    @access_token_header ||= begin
+      auth = request.headers["Authorization"]
+      (auth and auth.index("Bearer")) ? auth : nil
+    end
   end
 
   def access_token_param
