@@ -103,9 +103,9 @@ class Platform::Application < ActiveRecord::Base
     app || Platform::Application.find_by_key(client_id)
   end
   
-  def self.find_token(token_key)
-    token = Platform::Oauth::OauthToken.find_by_token(token_key, :include => :application)
-    if token && token.authorized?
+  def self.find_access_token(token_key)
+    token = Platform::Oauth::AccessToken.find_by_token(token_key, :include => :application)
+    if token && token.valid_token?
       token
     else
       nil
@@ -129,14 +129,6 @@ class Platform::Application < ActiveRecord::Base
     permission_keywords.include?(key.to_s)
   end
 
-  def last_token_for_user(user)
-    Platform::Oauth::OauthToken.find(:first, :conditions => ["application_id = ? and user_id = ?", self.id, user.id], :order => "updated_at desc")
-  end
-
-  def valid_tokens_for_user(user)
-    Platform::Oauth::OauthToken.find(:all, :conditions => ["application_id = ? and user_id = ? and invalidated_at is null", self.id, user.id], :order => "created_at desc")
-  end
-
   def rate_limited(value=true)
     set_permission(:no_rate_limit, !value)
   end
@@ -148,6 +140,19 @@ class Platform::Application < ActiveRecord::Base
 
   def rate_limited?
     ! has_permission?(:no_rate_limit)
+  end
+
+  def trusted(value=true)
+    set_permission(:trusted, !value)
+  end
+
+  def trusted!(value=true)
+    trusted(value)
+    save!
+  end
+
+  def trusted?
+    has_permission?(:trusted)
   end
 
   # Ticket 19135
@@ -202,32 +207,83 @@ class Platform::Application < ActiveRecord::Base
     has_permission?(:add_without_premium)
   end
 
-  # If your application requires passing in extra parameters handle it here
-  def create_request_token(params={})
-    Platform::Oauth::RequestToken.create(params.merge(:application => self))
+  def create_request_token(user, callback_url, scope = 'basic', interval = 10.minutes)
+    token = Platform::Oauth::RequestToken.new
+    token.application = self
+    token.user = user
+    token.callback_url = callback_url
+    token.scope = scope
+    token.generate_key
+    token.expire_in(interval)
+    token.save!
+    token
   end
 
-  # deprecated
-  def create_access_token(params={})
-    access_token = Platform::Oauth::AccessToken.create(params.merge(:application => self))
-    Platform::ApplicationUser.touch(self, access_token.user)
-    access_token
+  def create_refresh_token(user, scope = 'basic', interval = nil)
+    token = Platform::Oauth::RefreshToken.new
+    token.application = self
+    token.user = user
+    token.scope = scope
+    token.generate_key
+    token.expire_in(interval)
+    token.save!
+    token
   end
 
-  def find_or_create_access_token(user, scope)
-    access_token = Platform::Oauth::AccessToken.find(:first, :conditions => ["application_id = ? and user_id = ? and scope = ? and (valid_to is null or valid_to > ?)", 
-                                                     self.id, user.id, scope, Time.now])
-    access_token ||= Platform::Oauth::AccessToken.create(:application => self, :user => user, :scope => scope)
-    Platform::ApplicationUser.touch(self, access_token.user)
-    access_token
+  def create_client_token(scope, interval = 1.hour)
+    token = Platform::Oauth::ClientToken.new
+    token.application = self
+    token.scope = scope
+    token.generate_key
+    token.expire_in(interval)
+    token.save!
+    token
   end
 
-  def create_refresh_token(params={})
-    Platform::Oauth::RefreshToken.create(params.merge(:application => self))
+  def invalidate_all_access_tokens(user)
+    tokens = Platform::Oauth::AccessToken.find(:all, :conditions => ["application_id = ? and user_id = ?", self.id, user.id])
+    tokens.each do |token|
+      token.destroy
+    end
   end
 
-  def create_client_token(params={})
-    Platform::Oauth::ClientToken.create(params.merge(:application => self))
+  def create_access_token(user, scope = 'basic', interval = Registry.api.token_lifetime)
+    invalidate_all_access_tokens(user)
+
+    token = Platform::Oauth::AccessToken.new
+    token.application = self
+    token.user = user
+    token.scope = scope
+    token.generate_key
+    token.expire_in(interval)
+    token.save!
+    token
+  end
+
+  def find_or_create_access_token(user, scope = 'basic', interval = Registry.api.token_lifetime)
+    tokens = Platform::Oauth::AccessToken.find(:all, :conditions => ["application_id = ? and user_id = ?", self.id, user.id])
+    valid_token = nil
+    tokens.each do |token|
+      if token.valid_token?(scope) and valid_token.nil?
+        valid_token = token
+      else
+        token.destroy
+      end
+    end
+
+    valid_token ||= begin 
+      token = Platform::Oauth::AccessToken.new
+      token.application = self
+      token.user = user
+      token.scope = scope
+      token.generate_key
+      token.expire_in(interval)
+      token.save!
+      token
+    end
+
+    Platform::ApplicationUser.touch(self, user)
+    valid_token
   end
 
   def admin_link
@@ -236,7 +292,7 @@ class Platform::Application < ActiveRecord::Base
 
   # deprecated
   def self.permissions
-    [:no_rate_limit, :grant_type_password, :unlimited_models, :add_without_premium]
+    [:no_rate_limit, :grant_type_password, :unlimited_models, :add_without_premium, :trusted]
   end
   
   def icon_url
@@ -323,9 +379,7 @@ class Platform::Application < ActiveRecord::Base
   end
   
   def deauthorize_user(user = Platform::Config.current_user)
-    valid_tokens_for_user(user).each do |token|
-      token.invalidate!
-    end
+    invalidate_all_access_tokens(user)
     app_user = Platform::ApplicationUser.for(self, user)
     app_user.destroy if app_user
     

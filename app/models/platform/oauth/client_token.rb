@@ -27,12 +27,4 @@ class Platform::Oauth::ClientToken < Platform::Oauth::OauthToken
     token
   end
 
-  protected
-
-  def generate_keys
-    self.token = Platform::Helper.generate_key(20)[0,20]
-    self.valid_to = 60.minutes.from_now
-    self.authorized_at = Time.now
-  end
-
 end

@@ -31,26 +31,50 @@ class Platform::Oauth::OauthToken < ActiveRecord::Base
   validates_presence_of   :application
   validates_presence_of   :token
 
-  before_validation :generate_keys, :on => :create
+  def valid_token?(requested_scope = nil)
+    return false if invalidated_at != nil
+    return false if Time.now > valid_to
+    return false if requested_scope and requested_scope != self.scope
+    true
+  end
 
   def invalidated?
-#    invalidate! if valid_to && invalidated_at.nil? && Time.now > valid_to
-#    invalidated_at.try(:<=, Time.now)
-    
     invalidated_at != nil
   end
 
+  def invalidate
+    self.invalidated_at = Time.now
+  end
+
   def invalidate!
-    update_attributes(:invalidated_at => Time.now)
+    invalidate
+    save!
   end
 
   def authorized?
     authorized_at && !invalidated?
   end
 
-protected
+  def authorize
+    self.authorized_at = Time.now
+  end
 
-  def generate_keys
+  def authorize!
+    authorize
+    save!
+  end
+
+  def expire_in(interval)
+    return if interval.nil?
+    self.valid_to = (Time.now + interval)
+  end
+
+  def expire_in!(interval)
+    expire_in(interval)
+    save!
+  end
+
+  def generate_key
     self.token = Platform::Helper.generate_key(40)[0,40]
   end
 

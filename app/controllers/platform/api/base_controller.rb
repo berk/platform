@@ -150,10 +150,10 @@ private
       if access_token_header
         parts = access_token_header.split(' ')
         if parts.first == 'Bearer'
-          @access_token = Platform::Application.find_token(parts.last) 
+          @access_token = Platform::Application.find_access_token(parts.last) 
         end  
       elsif access_token_param
-        @access_token = Platform::Application.find_token(access_token_param)
+        @access_token = Platform::Application.find_access_token(access_token_param)
       end  
     end
 
@@ -169,10 +169,6 @@ private
 
   def access_token_param
     @access_token_param ||= params[:access_token] || params[:oauth_token]
-  end
-
-  def logged_in?
-    not Platform::Config.current_user_is_guest?
   end
 
   def oauth_attempted_and_failed?
@@ -364,7 +360,7 @@ private
   end
 
   def cache_key
-    @cache_key ||= if logged_in?
+    @cache_key ||= unless Platform::Config.current_user_is_guest?
       "api_rate_limit_u_#{Platform::Config.current_user.id}"
     else
       "api_rate_limit_ip_#{request.ip}"

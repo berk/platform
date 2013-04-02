@@ -25,9 +25,9 @@ class Platform::Oauth::RefreshToken < Platform::Oauth::OauthToken
 
   def exchange!(params={})
     if user
-      token = application.create_access_token(:user => user, :scope => scope)
+      token = application.create_access_token(user, scope)
     else
-      token = application.create_client_token(:scope => scope)
+      token = application.create_client_token(scope)
     end    
     
     invalidate!
@@ -36,12 +36,6 @@ class Platform::Oauth::RefreshToken < Platform::Oauth::OauthToken
 
   def redirect_url
     callback_url
-  end
-
-  protected
-
-  def generate_keys
-    self.token = Platform::Helper.generate_key(20)[0,20]
   end
 
 end

@@ -455,6 +455,7 @@ class Platform::Config
   
   def self.guest_user?(user = current_user)
     return true unless user
+    
     begin
       user.send(site_user_info[:methods][:guest])
     rescue Exception => ex

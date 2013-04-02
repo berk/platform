@@ -6,6 +6,7 @@ var api_history = [];
 var api_history_index = -1;
 var api_result_json = "";
 var api_result_object_keys = [];
+var api_response_formatter;
 
 function initApiExplorer(app_id, site_url, api_url, api_history_string) {
 	api_explorer_app_id = app_id;
@@ -66,7 +67,12 @@ function copyToClipboard(trigger) {
     Platform.Effects.hide("api_clipboard");
   }
   
-  Platform.element("api_clipboard_text").value = api_result_json;
+  if (api_response_formatter) {
+    Platform.element("api_clipboard_text").value = api_response_formatter.rawData();
+  } else {
+    Platform.element("api_clipboard_text").value = "";
+  }
+
   Platform.element("api_clipboard_text").focus();
   Platform.element("api_clipboard_text").select();
 } 
@@ -477,155 +483,33 @@ function callApi(path, method, params) {
   submitRequest();
 }
 
-/************************************************************************************
-** Format Response Functions
-************************************************************************************/
-function S4() {
-   return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-}
-
-function guid() {
-   return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-}
-
-function showObject(obj_key, flag) {
-  if (flag) {
-    Platform.Effects.hide("no_object_" + obj_key);
-    Platform.Effects.show("object_" + obj_key);
-    Platform.element("expander_" + obj_key).innerHTML = "<img src='/platform/images/minus_node.png'>";
-  } else {
-    Platform.Effects.hide("object_" + obj_key);
-    Platform.Effects.show("no_object_" + obj_key);
-    Platform.element("expander_" + obj_key).innerHTML = "<img src='/platform/images/plus_node.png'>";
-  } 
-}
-
-function toggleObject(obj_key) {
-  showObject(obj_key, (Platform.element("object_" + obj_key).style.display == 'none'));
-}
-
-function expandAllResultObjects(flag) {
-  for (var i=0; i<api_result_object_keys.length; i++) {
-    showObject(api_result_object_keys[i], flag);
-  }
-}
-
 function formatResponse(response_text) {
-  api_result_json = response_text;
-  api_result_object_keys = [];
-  
   var response = response_text;
   
   if (typeof response_text == 'string') {
     try {
       response = eval("[" + response_text + "]")[0];
-    } 
-    catch (err) {
+    } catch (err) {
       Platform.element("response_data").innerText = response_text;
       return;
     }
   }
   
   if (typeof response == 'object') {
-    Platform.element("response_data").innerHTML = formatObject(response, 1);
+    Platform.element("response_data").innerHTML = "";
+    api_response_formatter = new JSONFormatter(response, "response_data", {'hide_toolbar': true, 'hide_border': true});    
   } else {
+    api_response_formatter = null;
     Platform.element("response_data").innerHTML = "Invalid response: " + response_text;
   }
 }
 
-function formatObject(obj, level) {
-  if (obj == null) return "{<br>}";
-
-  var html = [];
-  var obj_key = guid();  
-  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/platform/images/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>{...}</span> <span id='object_" + obj_key + "'>{");
-  api_result_object_keys.push(obj_key);
-
-  var keys = Object.keys(obj).sort();
-  
-  for (var i=0; i<keys.length; i++) {
-    key = keys[i];
-    if (isObject(obj[key])) {
-      if (isArray(obj[key])) {
-        html.push(createSpacer(level) + "<span class='obj_key'>" + key + ":</span>" + formatArray(obj[key], level + 1) + ",");
-      } else {
-        html.push(createSpacer(level) + "<span class='obj_key'>" + key + ":</span>" + formatObject(obj[key], level + 1) + ",");
-      }
-    } else {
-      html.push(createSpacer(level) + formatProperty(key, obj[key]) + ",");
-    }
-  }
-  html.push(createSpacer(level-1) + "}</span>");
-  return html.join("<br>");
+function expandAllResponseObjects() {
+  if (!api_response_formatter) return;
+  api_response_formatter.expandAll();
 }
 
-function formatArray(arr, level) {
-  var html = [];
-
-  var obj_key = guid();  
-  html.push("<span class='expander' id='expander_" + obj_key + "' onClick=\"toggleObject('" + obj_key + "')\"><img src='/platform/images/minus_node.png'></span> <span style='display:none' id='no_object_" + obj_key + "'>[...]</span> <span id='object_" + obj_key + "'>[");
-  api_result_object_keys.push(obj_key);
-
-  for (var i=0; i<arr.length; i++) {
-    if (isObject(arr[i])) {
-      if (isArray(arr[i])) {
-         html.push(createSpacer(level) + formatArray(arr[i], level + 1) + ","); 
-      } else {
-         html.push(createSpacer(level) + formatObject(arr[i], level + 1) + ",");  
-      }     
-    } else {
-      html.push(createSpacer(level) + formatProperty(null, arr[i]) + ",");
-    }
-  }  
-  html.push(createSpacer(level-1) + "]</span>");
-  return html.join("<br>");
-}
-
-function createSpacer(level) {
-  return "<img src='/platform/images/pixel.gif' style='height:1px;width:" + (level * 20) + "px;'>";
-}
-
-function isArray(obj) {
-  return !(obj.constructor.toString().indexOf("Array") == -1);
-}
-
-function isObject(obj) {
-  return (typeof obj == 'object');
-}
-
-function isString(obj) {
-  return (typeof obj == 'string');
-}
-
-function isURL(str) {
-  str = "" + str;
-  return (str.indexOf("http://") != -1) || (str.indexOf("https://") != -1);
-}
-
-function isApiCall(str) {
-  str = "" + str;
-  return (str.indexOf(api_base_url) != -1);
-}
-
-function formatProperty(key, value) {
-  var cls = "obj_value_" + (typeof value);
-  var value_span = "";
-  
-  if (isURL(value)) {
-    if (isApiCall(value)) {
-      value = "<a target='_new' class='api_url' href='#' onclick=\"callApi('" + value + "', 'GET', {}); return false;\">" + value + "</a>";
-    } else {
-      value = "<a target='_new' href='" + value + "'>" + value + "</a>";
-    }
-  }
-  
-  if (isString(value)) 
-    value_span = "<span class='" + cls + "'>\"" + value + "\"</span>";
-  else
-    value_span = "<span class='" + cls + "'>" + value + "</span>";
-     
-  if (key == null)
-    return value_span;
-    
-  return "<span class='obj_key'>" + key + ":</span>" + value_span;
+function collapseAllResponseObjects() {
+  if (!api_response_formatter) return;
+  api_response_formatter.collapseAll();
 }

@@ -95,7 +95,7 @@ class Platform::OauthController < Platform::BaseController
   
   def validate_token
     token = Platform::Oauth::OauthToken.find_by_token(request_param(:access_token))
-    if token && token.authorized?
+    if token && token.valid_token?
       render_response(:result => "OK")
     else
       render_response(:error => :invalid_token, :error_description => "invalid token")
@@ -158,8 +158,8 @@ class Platform::OauthController < Platform::BaseController
     if client_application.authorized_user?
       # add access token to the redirect
       # access_token = client_application.find_or_create_access_token(Geni.current_user, scope)
-      access_token = client_application.create_access_token(:user=>Geni.current_user, :scope=>scope)
-      refresh_token = client_application.create_refresh_token(:user=>Geni.current_user, :scope=>scope)
+      access_token = client_application.find_or_create_access_token(Geni.current_user, scope)
+      refresh_token = client_application.create_refresh_token(Geni.current_user, scope)
       return redirect_with_response(:status => "authorized", :access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
     end
     
@@ -177,7 +177,7 @@ private
   end
 
   def request_param(key)
-    params[key]
+    params[key].to_s.strip.blank? ? nil : params[key].to_s.strip
   end
 
   def client_application
@@ -247,87 +247,107 @@ private
   # request token with grant_type = authorization_code
   def oauth2_request_token_authorization_code
     if request_param(:code).blank?
-      return render_response(:error_description => "code must be provided", :error => :invalid_request)
+      return render_response(:error_description => "Code must be provided", :error => :invalid_request)
     end
     
     request_token = Platform::Oauth::RequestToken.find(:first, :conditions => ["application_id = ? and token = ? and valid_to > ? and invalidated_at is null", 
                                                              client_application.id, request_param(:code), Time.now])
     unless request_token
-      return render_response(:error_description => "invalid verification code", :error => :invalid_request)
+      return render_response(:error_description => "Invalid authorization code", :error => :invalid_request)
     end
     
+    unless request_token.valid_token?
+      return render_response(:error_description => "Authorization code expired", :error => :invalid_request)
+    end
+
     if request_token.callback_url != redirect_url
-      return render_response(:error_description => "redirection url must match the url used for the code request", :error => :invalid_request)
+      return render_response(:error_description => "Redirection url must match the url used for the code request", :error => :invalid_request)
     end
     
-    access_token = request_token.exchange!
-    refresh_token = client_application.create_refresh_token(:user=>access_token.user, :scope=>scope)
+    access_token = client_application.find_or_create_access_token(request_token.user, request_token.scope)   
+    refresh_token = client_application.create_refresh_token(access_token.user, access_token.scope)
+    request_token.destroy
+
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
   end
 
   # request token with grant_type = password
   def oauth2_request_token_password
     unless client_application.allow_grant_type_password?
-      return render_response(:error_description => "this application is not authorized to use grant_type password", :error => :unauthorized_application)
+      return render_response(:error_description => "This application is not authorized to use grant_type password", :error => :unauthorized_application)
     end
     
     if request_param(:username).blank?
-      return render_response(:error_description => "username must be provided", :error => :invalid_request)
+      return render_response(:error_description => "Username must be provided", :error => :invalid_request)
     end
     
     if request_param(:password).nil?
-      return render_response(:error_description => "password must be provided", :error => :invalid_request)
+      return render_response(:error_description => "Password must be provided", :error => :invalid_request)
     end
 
     user = authenticate_user(request_param(:username), request_param(:password))
     unless user
-      return render_response(:error_description => "invalid username and/or password", :error => :invalid_request)
+      return render_response(:error_description => "Invalid username and/or password combination", :error => :invalid_request)
     end
     
-    access_token = client_application.create_access_token(:user=>user, :scope=>scope)
-    refresh_token = client_application.create_refresh_token(:user=>user, :scope=>scope)
+    access_token = client_application.find_or_create_access_token(user, scope)
+    refresh_token = client_application.create_refresh_token(access_token.user, access_token.scope)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
   end
 
   # request token with grant_type = client_credentials
   def oauth2_request_token_client_credentials
     unless client_application.allow_grant_type_client_credentials?
-      return render_response(:error_description => "this application is not authorized to use grant_type client_credentials", :error => :unauthorized_application)
+      return render_response(:error_description => "This application is not authorized to use grant_type client_credentials", :error => :unauthorized_application)
     end
     
-    client_token = client_application.create_client_token(:scope=>scope)
-    refresh_token = client_application.create_refresh_token(:scope=>scope)
+    if request_param(:client_secret).blank?
+      return render_response(:error_description => "Application secret must be provided", :error => :invalid_request)
+    end
+
+    if request_param(:client_secret) != client_application.secret
+      return render_response(:error_description => "Invalid application secret", :error => :invalid_request)
+    end
+
+    client_token = client_application.create_client_token(scope)
+    refresh_token = client_application.create_refresh_token(nil, scope)
     render_response(:access_token => client_token.token, :refresh_token => refresh_token.token, :expires_in => (client_token.valid_to.to_i - Time.now.to_i))
   end
 
   # request token with grant_type = refresh_token
   def oauth2_request_token_refresh_token
     if request_param(:refresh_token).blank?
-      return render_response(:error_description => "refresh_token must be provided", :error => :invalid_request)
+      return render_response(:error_description => "Refresh token must be provided", :error => :invalid_request)
     end
     
     refresh_token = Platform::Oauth::RefreshToken.find(:first, :conditions => ["application_id = ? and token = ?", client_application.id, request_param(:refresh_token)])
     unless refresh_token
-      return render_response(:error_description => "invalid refresh token", :error => :invalid_request)
+      return render_response(:error_description => "Invalid refresh token", :error => :invalid_request)
     end
 
-    unless refresh_token.invalidated_at.nil?
-      return render_response(:error_description => "refresh token expired", :error => :invalid_request)
+    unless refresh_token.valid_token?
+      return render_response(:error_description => "Refresh token expired", :error => :invalid_request)
     end
 
-    access_token = refresh_token.exchange!
-    refresh_token = client_application.create_refresh_token(:user=>access_token.user, :scope=>scope)
+    if refresh_token.user
+      access_token = client_application.create_access_token(refresh_token.user, refresh_token.scope)
+    else
+      access_token = client_application.create_client_token(refresh_token.scope)
+    end    
+    refresh_token.destroy  
+
+    refresh_token = client_application.create_refresh_token(access_token.user, access_token.scope)
     render_response(:access_token => access_token.token, :refresh_token => refresh_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
   end
 
   # authorize with response_type = code
   def oauth2_authorize_code
-    if request.post?
+    if request.post? or client_application.trusted?
       remove_oauth_login_redirect_params
 
-      if params[:authorize] == '1'
+      if params[:authorize] == '1' or client_application.trusted?
         Platform::ApplicationUser.touch(client_application)
-        code = client_application.create_request_token(:user=>Platform::Config.current_user, :callback_url=>redirect_url, :scope => scope)
+        code = client_application.create_request_token(Platform::Config.current_user, redirect_url, scope)
         return redirect_with_response(:code => code.code, :expires_in => (code.valid_to.to_i - Time.now.to_i))
       end
       
@@ -343,12 +363,12 @@ private
 
   # authorize with response_type = token
   def oauth2_authorize_token
-    if request.post?
+    if request.post? or client_application.trusted?
       remove_oauth_login_redirect_params
 
-      if params[:authorize] == '1'
+      if params[:authorize] == '1' or client_application.trusted?
         Platform::ApplicationUser.touch(client_application)
-        access_token = client_application.create_access_token(:user=>Platform::Config.current_user, :scope=>scope)
+        access_token = client_application.find_or_create_access_token(Platform::Config.current_user, scope)
         return redirect_with_response(:access_token => access_token.token, :expires_in => (access_token.valid_to.to_i - Time.now.to_i))
       end
 
