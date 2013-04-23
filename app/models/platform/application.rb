@@ -219,7 +219,7 @@ class Platform::Application < ActiveRecord::Base
     token
   end
 
-  def create_refresh_token(user, scope = 'basic', interval = nil)
+  def create_refresh_token(user = nil, scope = 'basic', interval = nil)
     token = Platform::Oauth::RefreshToken.new
     token.application = self
     token.user = user

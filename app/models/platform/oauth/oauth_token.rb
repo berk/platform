@@ -33,7 +33,7 @@ class Platform::Oauth::OauthToken < ActiveRecord::Base
 
   def valid_token?(requested_scope = nil)
     return false if invalidated_at != nil
-    return false if Time.now > valid_to
+    return false if valid_to and Time.now > valid_to
     return false if requested_scope and requested_scope != self.scope
     true
   end
